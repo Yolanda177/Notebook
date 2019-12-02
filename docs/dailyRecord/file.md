@@ -17,6 +17,8 @@
 
 原始的表单上传很简单，不需要写 `js`，点击提交就可以了：
 
+
+
 ```js
   <form method="post" action="http://localhost:8100" enctype="multipart/form-data">
   <label for="f1">Choose file to upload</label>
@@ -28,6 +30,9 @@
 
 ```
 ### iframe 上传
+
+```js
+```
 
 ### input 标签上传
 
