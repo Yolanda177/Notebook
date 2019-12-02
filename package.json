@@ -1,16 +1,16 @@
 {
-  "name": "jecyu-notebook",
+  "name": "yolanda-notebook",
   "version": "2.1.1",
   "scripts": {
-    "dev": "vuepress dev docs",
+    "serve": "vuepress dev docs",
     "build": "vuepress build docs",
     "push": "bash push.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jecyu/Notebook"
+    "url": "git+https://github.com/Yolanda177/Notebook"
   },
-  "author": "Jecyu",
+  "author": "Yolanda",
   "license": "MIT",
   "engines": {
     "node": ">=8"

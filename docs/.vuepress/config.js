@@ -17,13 +17,12 @@ module.exports = {
     'vuepress-plugin-table-of-contents'
   ],
   base: "/Notebook/",
-  title: "Jecyu's Notebook",
+  title: "Yolanda's Notebook",
   description: "📝每天记录一点点",
-  head: [["link", { rel: "icon", href: "/images/logo.jpeg" }]],
+  head: [["link", { rel: "icon", href: "/images/mylogo.png" }]],
   themeConfig: {
     nav: [
       { text: "📝日常记录", link: "/dailyRecord/" },
-      // { text: "技术分享", link: "/dailyRecord/" },
       {
         text: "开发者",
         items: [
@@ -63,8 +62,8 @@ module.exports = {
         text: "🔗Github",
         items: [
           {
-            text: "Jecyu github",
-            link: "https://github.com/Jecyu"
+            text: "Yolanda github",
+            link: "https://github.com/Yolanda177"
           },
           {
             text: "英语学习",
@@ -83,7 +82,7 @@ module.exports = {
         {
           title: "日常记录",
           collapsable: true,
-          children: ["", "2018", "table"]
+          children: ["file", "2018", "table",""]
         },
         {
           title: "TechnologyDevelopment",
@@ -176,7 +175,7 @@ module.exports = {
         {
           title: "GIS",
           collapsable: false,
-          children: ["", "layer", "handleFile"]
+          children: ["", "layer", "handleFile", "learn"]
         }
       ]
     },

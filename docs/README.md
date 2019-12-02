@@ -10,5 +10,5 @@ features:
     details: 浏览器书签统一分类整理
   - title: 总结与分享
     details: 编码，思考，总结，分享
-footer: MIT Licensed | Copyright © 2018-present Linjy
+footer: MIT Licensed | Copyright © 2018-present Yolanda
 ---
