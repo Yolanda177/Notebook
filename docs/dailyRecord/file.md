@@ -437,6 +437,103 @@
 
 ### 大文件断点续传
 
+如果要上传的文件太大，我们可以考虑将文件分片上传。
+
+**思路** 是这样的： 选择上传一个 60+MB 的大文件，按每 10MB 进行分片，发送到服务器时携带一个标志(这里用的是时间戳，具体可以与后端协调)，服务端生成临时文件，在最后一个分片上传完成后，客户端发送一个文件上传结束并请求合并的请求，服务端将所有文件分片按照标志合并成一个文件，最后清理临时文件
+
+```js
+  let file
+  function submitUpload() {
+    const chunkSize = 10 * 1024 * 1000 // 分片大小，可设置为 10M，100M
+    file = document.getElementById('f1').files[0] // 获取文件对象
+    if (!file) {
+      alert('请选择上传文件')
+      return;
+    }
+    const chunks = Math.ceil(file.size / chunkSize) // 计算这个文件可以切成几块
+    const fileChunks = [] // 文件分片后组成一个数组
+    const token = (+ new Date()) // 文件唯一标识，用于最后合并文件
+
+    // Blob 它表示原始数据,也就是二进制数据，
+    // 同时提供了对数据截取的方法slice,而 File 继承了Blob的功能，所以可以直接使用此方法对数据进行分段截图
+    if (file.size > chunkSize) { // 开始拆分文件
+      const start = 0
+      const end = 0
+      while (true) {
+        end += chunkSize
+        const blob = file.slice(start, end)
+        start += chunkSize
+        if (!blob.size) {
+            break //拆分结束
+        }
+        fileChunks.push(blob)
+      }
+    } else {
+        fileChunks.push(file.slice(0))
+      }
+```
+文件分片结果：
+
+![](../.vuepress/public/images/file-slice.jpg)
+ 
+接着我们来看如何处理上传的逻辑：
+
+```js
+    const progressSpan = document.getElementById('progress').firstElementChild // 简单配一下进度条
+    progressSpan.style.width = '0'
+    progressSpan.classList.remove('green')
+
+    let i = 0
+    // 按顺序上传
+    const upLoadInOrder = async () => {
+        var fd = new FormData()   //构造FormData对象
+        fd.append('token', token) // 与后端协调分片需要传送过去的参数，一般是文件的标识id，分片长度，分片的序号、所占长度等等
+        fd.append('f1', fileChunks[i])
+        fd.append('index', i)
+        if (i === chunks) {
+          console.log('上传完成，发送合并请求')
+          const formD = new FormData()
+          formD.append('type', 'merge')
+          formD.append('token', token)
+          formD.append('chunks', chunks)
+          formD.append('filename', file.name)
+          axios.post('http://localhost:8100/upfile', formD).then((res) => {
+              if (res.status === 200) {
+                  console.log(res)
+                  alert('上传完成！')
+              }
+          })
+        } else if (i < chunks) {
+            const config = {
+              onUploadProgress: progressEvent => {
+                const complete = ((progressEvent.loaded + i * chunkSize) / file.size * 100 | 0)
+                progressSpan.style.width = complete + '%'
+                progressSpan.innerHTML = complete
+                if (complete === 100) { // 进度条变色
+                    progressSpan.classList.add('green')
+                }
+              }
+            }
+            const res = await axios.post('http://localhost:8100/upfile', fd, config)
+            console.log(res)
+            if (res.status === 200) {
+                i++
+                upLoadInOrder()
+            }
+            }
+        }
+    upLoadInOrder()
+    //绑定提交事件
+    document.getElementById('btn-submit').addEventListener('click', submitUpload);
+```
+
+这就是一个简单的文件分片上传的过程，但往往实际情况不会那么完美，如果上传分片的过程中网络中断，那之前上传的分片就会丢失，我们是不希望这种情况发生的，最好就是能够在上一次中断的地方继续上传文件，于是就有了断点续传这个概念。
+
+什么是断点续传呢？简单来讲就是上传文件过程出现线路中断，客户端再次上传时，能根据服务端返回的信息在中断的地方继续文件的上传，大大节省了时间也提高了效率。
+
+
+
+
 
 ## 下载
 后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，最常用的有三种：
