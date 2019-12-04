@@ -4,9 +4,8 @@
 
 前端进行 **上传** 的方式有很多种，我们会根据不同的需求选择不同方式实现上传的功能，下面是我总结的几种比较常用的上传方式，当然现在的很多组件库已经封装好这些工具方法，我们只需要调用就可以了，但有时候遇上问题又无从下手，还是要从新看一遍源码才行，所以以下都是实现上传比较原生的方式，简单栗子希望大家能够接受。
 
-- 表单上传
-- iframe 上传
-- input 标签上传
+- 表单上传(包括 iframe、jquery使用)
+- formData 上传
 - 拖拽上传
 - 粘贴上传
 - 图片预览上传
@@ -15,30 +14,422 @@
 
 ### 表单上传
 
-原始的表单上传很简单，不需要写 `js`，点击提交就可以了：
+我们都知道如果要上传一个文件，需要把 `form` 标签的 `enctype` 设置为 `multipart/form-data` ,同时 `method` 必须为 `post` 方法。那么这个 `multipart/form-data` 是什么意思呢？
 
+`multipart` 是指互联网上的混合资源，资源可以由多种元素组成，`form-data` 表示可以使用 `HTML Form` 和 `POST` 方法上传文件，具体的定义可以参考RFC 7578.
 
+如图：
+我们设置的 `enctype = "multipart/form-data"` 会被识别成 Request Headers 中的 `Content-type: multipart/form-data`，表示这次请求要上传文件，而boundary表示分隔符，如果要上传多个表单项，就要使用boundary分割
+
+![](../.vuepress/public/images/http.jpg)
+
+我们来看第一个栗子：这是一个非常原始的上传文件的方式，点击 `submit` 后页面会跳转刷新
 
 ```js
-  <form method="post" action="http://localhost:8100" enctype="multipart/form-data">
-  <label for="f1">Choose file to upload</label>
-    <input type="file" id="f1" name="f1" style="display:none;"/>
-    input 必须设置 name 属性，否则数据无法发送
-    标题：<input type="text" name="title"/>
+  <form id="form2" method="post" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
+    <div>Choose file to upload</div><br />
+    <!-- 如果是多文件上传，input 添加 multiple 属性即可 -->
+    单文件：<input type="file" id="f1" name="f1" /><br /><br />
+    多文件：<input type="file" id="f1" name="f1" multiple /><br /><br />
+    input 必须设置 name 属性，否则数据无法发送<br /><br />
+    <button type="submit" id="btn-0">上 传</button>
+    <button type="button" class="but2">上传2</button>
+  </form>
+```
+要解决刷新页面的问题，可以采用以下两种方式：
+
+```js
+  // 第一种
+  $(function () {
+    $(".but2").click(function () {
+      $('#form2').ajaxSubmit({
+        success: function (responseText) {
+          alert('上传成果！')
+          console.log(responseText)
+        }
+      })
+    })
+  })
+  // 第二种
+  <iframe id="temp-iframe" name="temp-iframe" src="" style="display:none;"></iframe>
+  <form method="post" target="temp-iframe" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
+  <div>Choose file to upload</div><br />
+  <input type="file" name="f1" id="f1" multiple /><br /><br />
   <button type="submit" id="btn-0">上 传</button>
   </form>
-
 ```
-### iframe 上传
+
+这是一个用 **koa** 框架写的服务端, 下面的栗子基本都采用这种方式，有特殊的地方会讲解到
+```js
+/**
+ * 服务入口
+ */
+  var http = require('http');
+  var koaStatic = require('koa-static');
+  var path = require('path');
+  var koaBody = require('koa-body');
+  var fs = require('fs');
+  var Koa = require('koa2');
+
+  var app = new Koa();
+  var port = process.env.PORT || '8100';
+
+  var uploadHost = `http://localhost:${port}/uploads/`;
+
+  app.use(koaBody({
+    formidable: {
+        //设置文件的默认保存目录，不设置则保存在系统临时目录下  os
+        uploadDir: path.resolve(__dirname, '../static/uploads')
+    },
+    multipart: true // 支持文件上传
+  }));
+
+  //开启静态文件访问
+  app.use(koaStatic(
+    path.resolve(__dirname, '../static')
+  ));
+
+  //二次处理文件，修改名称
+  app.use((ctx) => {
+    if (ctx.path === '/upload-form') {
+        var files = ctx.request.files.f1;//得到上传文件的数组
+        var result = [];
+        if (!Array.isArray(files)) {
+            files = [files];
+        }
+        files && files.forEach(item => {
+            console.log(item)
+            var path = item.path.replace(/\\/g, '/');
+            var fname = item.name;//原文件名称
+            var nextPath = path + fname;
+            if (item.size > 0 && path) {
+                //得到扩展名
+                var extArr = fname.split('.');
+                var ext = extArr[extArr.length - 1];
+                var nextPath = path + '.' + ext;
+                //重命名文件
+                fs.renameSync(path, nextPath);
+
+                result.push(uploadHost + nextPath.slice(nextPath.lastIndexOf('/') + 1));
+            }
+        });
+        ctx.body = `{
+            "fileUrl":${JSON.stringify(result)}
+        }`;
+    }
+    // 检测接口地址为 /upfile
+    if (ctx.path === '/upfile-jq') {
+        console.log(ctx.request.files);
+        var file = ctx.request.files ? ctx.request.files.f1 : null; //得到文件对象
+        if (file) {
+
+            var path = file.path.replace(/\\/g, '/');
+            var fname = file.name; //原文件名称
+            var nextPath = '';
+            if (file.size > 0 && path) {
+                //得到扩展名
+                var extArr = fname.split('.');
+                var ext = extArr[extArr.length - 1];
+                nextPath = path + '.' + ext;
+                //重命名文件
+                fs.renameSync(path, nextPath);
+            }
+            //以 json 形式输出上传文件的存储地址
+            ctx.body = getRenderData({
+                data: `${uploadHost}${nextPath.slice(nextPath.lastIndexOf('/') + 1)}`
+            });
+        } else {
+            ctx.body = getRenderData({
+                code: 1,
+                msg: 'file is null'
+            });
+        }
+    }
+  });
+
+/**
+ * 
+ * @param {设置返回结果} opt 
+ */
+  function getRenderData(opt) {
+    return Object.assign({
+        code: 0,
+        msg: '',
+        data: null
+    }, opt);
+  }
+  /**
+  * http server
+  */
+  var server = http.createServer(app.callback());
+  server.listen(port);
+  console.log('demo1 server start ......   ');
+```
+
+#### 总结
+
+
+### formData 异步上传
+
+上面讲到用 `form` 表单上传文件，当我们上传的文件比较大的时候，会出现服务器超时的情况，我们一般都会考虑采用异步上传的方式，以下是利用构造 FormData 对象模拟表单请求。
 
 ```js
+  function submitUpload() {
+      //获得文件列表，注意这里不是数组，而是对象
+      const fileList = document.getElementById('f1').files;
+      if (!fileList.length) {
+        alert('请选择文件');
+        return;
+      }
+      //构造FormData对象
+      const fd = new FormData();
+      //多文件上传需要遍历添加到 fromdata 对象
+      for (var i = 0; i < fileList.length; i++) {
+        fd.append('f1', fileList[i]);
+      }
+      axios.post('http://localhost:8100/upfile', fd).then((res) => {
+        if (res.status === 200) {
+          alert('上传成功')
+        }
+      })
+      // 原生使用 xhr
+      // const xhr = new XMLHttpRequest();   //创建对象
+      // xhr.open('POST', 'http://localhost:8100/upfile', true)
+      // //发送时  Content-Type默认就是: multipart/form-data; 
+      // xhr.send(fd)
+      // xhr.onreadystatechange = function () {
+      //     console.log('state change', xhr.readyState);
+      //     if (this.readyState == 4 && this.status == 200) {
+      //      var obj = JSON.parse(xhr.responseText);   //返回值
+      //       console.log(obj);
+      //       if (obj.fileUrl.length) {
+      //        alert('上传成功');
+      //       }
+      //     }
+      //  }
+  }
 ```
 
-### input 标签上传
+浏览器文件下载会自带进度显示，那我们文件上传也当然有对应的进度提醒，如何获取我们文件上传的进度呢？如果细心阅读过 [axios](https://www.npmjs.com/package/axios#request-config) 官方文档的小伙伴肯定知道,请求配置里有个 `onUploadProgress` 事件，就是这里我们能够实时的监听到文件上传的进度，使用上也很简单：
+
+```js
+  const progressSpan = document.getElementById('progress').firstElementChild
+  const config = {
+    onUploadProgress: progressEvent => {
+      const complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
+      progressSpan.style.width = complete + '0px'
+      progressSpan.innerHTML = complete
+      if (complete === 100) {//进度条变色
+        progressSpan.classList.add('green');
+      }
+    }
+  }
+  axios.post('http://localhost:8100/upfile', fd, config).then((res) => {
+    if (res.status === 200) {
+      alert('上传成功')
+    }
+  })
+
+  // 如果想要了解原生的 XMLHttpRequest2 进度条写法,可以参考下面栗子
+  const xhr = new XMLHttpRequest();   //创建对象
+  xhr.open('POST', 'http://localhost:8100/upfile', true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+      const obj = JSON.parse(xhr.responseText);   //返回值
+      if(obj.fileUrl.length){
+      //alert('上传成功');
+      }
+    }
+  }
+
+  xhr.onprogress = updateProgress;
+  xhr.upload.onprogress = updateProgress;
+  function updateProgress(event) {
+    console.log(event);
+    if (event.lengthComputable) {
+      const completedPercent = (event.loaded / event.total * 100).toFixed(2);
+      progressSpan.style.width = completedPercent + '%';
+      progressSpan.innerHTML = completedPercent
+      if (completedPercent === 100) {//进度条变色
+        progressSpan.classList.add('green');
+      }
+      console.log('已上传', completedPercent);
+    }
+  }
+  //注意 send 一定要写在最下面，否则 onprogress 只会执行最后一次 也就是100%的时候
+  xhr.send(fd);//发送时  Content-Type默认就是: multipart/form-data;
+```
+
+总结：如果是一次请求上传多个文件需要显示一个进度条，上面介绍的方法足以实现；如果是大文件分片上传多次请求的话，也是可以做到单进度提醒，后面会详细介绍。
 
 ### 拖拽上传
 
+拖拽上传的场景我们也会经常遇到，写法也很简单，就是利用好原生的拖拽事件，可以简单划分为几个步骤：
+
+- 定义一个允许拖放文件的区域 `div.drop-box` (如果是拖拽其他元素，是要设置 `draggable="true"`，这里上传文件所以不需要)
+- 取消有关拖拽事件的默认行为，也就是 `e.preventDefault()`
+- 为这个拖放区域添加拖拽样式
+- 在 `drop` 事件获取文件信息 `e.dataTransfer.files` 
+
+我们先从从一张图了解一下拖拽事件分别代表的是什么情况：
+
+- drag Source: 是我们拖拽的源元素
+- intermediate Element: 是拖拽过程可能经过的元素
+- drop Target: 是最终拖放的目标元素
+
+![](../.vuepress/public/images/dragEvent.png)
+
+(补充一个流程图)
+来看栗子：
+```js
+  // 这个是我们的拖放区域
+  const box = document.getElementById('drop-box');
+
+  //设置拖拽事件
+  function openDropEvent() {
+
+    box.addEventListener("dragover", function (e) {
+      e.preventDefault();
+    });
+
+    // 设置进入拖放区域样式
+    box.addEventListener("dragenter", function (e) {
+      console.log('element dragenter')
+      box.classList.add('hilight')
+      e.preventDefault()
+    })
+
+    // 设置离开拖放区域样式
+    box.addEventListener("dragleave", function (e) {
+      console.log('elemenet dragleave')
+      box.classList.remove('hilight')
+      e.preventDefault();
+    });
+
+    // 鼠标松开释放文件到拖放区域
+    box.addEventListener("drop", function (e) {
+      console.log('element drop')
+      box.classList.remove('hilight')
+      //取消浏览器默认拖拽效果，否则浏览器会默认打开文件
+      e.preventDefault();
+      //获取拖拽中的文件对象
+      const fileList = e.dataTransfer.files;
+      //用来获取文件的长度（其实是获得文件数量）
+      const len = fileList.length;
+      console.log('fielist is array?', Array.isArray(fileList));
+
+      //检测是否是拖拽文件到页面的操作
+      if (!len) {
+        box.classList.remove('over');
+        return;
+      }
+      // 因为是 FileList 对象 不能用 forEach
+      // 解决重复添加文件的处理
+      let files = window.willUploadFileList || []
+      for (var i = 0; i < fileList.length; i++) {
+        const fileName = fileList[i].name
+        if (files && !files.find(file => file.name === fileName)) {
+          files.push(fileList[i])
+        }
+      }
+      const dropBox = document.getElementById('drop-box')
+      dropBox.innerHTML = ""
+      files.forEach(file => {
+      const fileName = file.name
+      const divFileName = document.createElement('div')
+      divFileName.className = 'file-name'
+      divFileName.innerHTML = fileName
+      dropBox.appendChild(divFileName)
+      })
+       window.willUploadFileList = files
+  }, false);
+}
+
+```
+
+补充：
+
+这篇博客有助于我们更好的认识拖拽事件，感兴趣的可以去看看：[https://lotabout.me/2018/HTML-5-Drag-and-Drop/](https://lotabout.me/2018/HTML-5-Drag-and-Drop/)
+
 ### 粘贴上传
+
+什么是 `DataTransferItemList` 对象？
+![](../.vuepress/public/images/pastDataTransfer.png)
+
+```js
+  // 粘贴上传
+  const editorBox = document.getElementById('editor-box');
+
+  // 监听粘贴事件
+  editorBox.addEventListener('paste', (event) => {
+    const data = (event.clipboardData || window.clipboardData);
+    console.dir(data);
+
+    const { items } = data
+    const fileList = [];//存储文件数据
+    if (items && items.length) {
+      debugger
+      // 检索剪切板items
+      for (var i = 0; i < items.length; i++) {
+        console.log(items[i].getAsFile());
+        fileList.push(items[i].getAsFile());
+      }
+    }
+    console.log('data.items.length', data.items.length);
+    console.log('data.files.length', data.files.length);
+
+    window.willUploadFileList = fileList;
+    event.preventDefault();
+
+    submitPasteUpload();
+  });
+
+  function submitPasteUpload() {
+
+    const fileList = window.willUploadFileList || [];
+
+    if (!fileList.length) {
+      alert('请选择文件');
+      return;
+    }
+
+    const fd = new FormData();   //构造FormData对象
+
+    for (var i = 0; i < fileList.length; i++) {
+        fd.append('f1', fileList[i]);//支持多文件上传
+    }
+    // console.log(fileList)
+    axios.post('http://localhost:8100/upfile', fd).then((res) => {
+      if (res.status === 200) {
+        console.log(res)
+        if (res.data.fileUrl.length) {
+          const img = document.createElement('img')
+          img.src = res.data.fileUrl[0]
+          img.style.width = '100px'
+          insertNodeToEditor(editorBox, img)
+          console.log('上传成功')
+          }
+        }
+      })
+    }
+
+  //光标处插入 dom 节点
+  function insertNodeToEditor(editor, ele) {
+    //插入dom 节点
+    let range;//记录光标位置对象
+    const node = window.getSelection().anchorNode;
+    // 这里判断是做是否有光标判断，因为弹出框默认是没有的
+    if (node != null) {
+      range = window.getSelection().getRangeAt(0);// 获取光标起始位置
+      range.insertNode(ele);// 在光标位置插入该对象
+    } else {
+      editor.append(ele);
+    }
+  }
+```
+
+总结：粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最好一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
 
 ### 图片预览上传
 
@@ -370,10 +761,12 @@ location.href = '../downloads/cutegirl.jpg'
 [https://blog.csdn.net/tian_i/article/details/84327329](https://blog.csdn.net/tian_i/article/details/84327329)
 
 如果需要研究 docx 文档保存的小伙伴，还可以看看这个：
+
 [https://www.cnblogs.com/liuxianan/p/js-excel.html](https://www.cnblogs.com/liuxianan/p/js-excel.html)
 
-课外知识：
-通过 `node` 端下载的小栗子
+
+### node端下载
+
 ```js
   //  客户端 node 下载
   const excelDownloadNodeDom = document.getElementById('download-excel-node')

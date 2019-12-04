@@ -25,10 +25,5 @@
     "@vuepress/plugin-back-to-top": "^1.0.0-alpha.0",
     "doctoc": "^1.4.0",
     "husky": "^3.1.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "bash deploy.sh"
-    }
   }
 }
