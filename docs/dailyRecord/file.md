@@ -8,22 +8,21 @@
 - formData 上传
 - 拖拽上传
 - 粘贴上传
-- 图片预览上传
-- 多进度条上传
 - 大文件断点续传
 
 ### 表单上传
 
-我们都知道如果要上传一个文件，需要把 `form` 标签的 `enctype` 设置为 `multipart/form-data` ,同时 `method` 必须为 `post` 方法。那么这个 `multipart/form-data` 是什么意思呢？
+我们知道如果要用表单上传一个文件，有两点是必须设置的，一是需要把 `form` 标签的 `enctype` 设置为 `multipart/form-data` , 二是 `form` 标签的 `method` 必须为 `post` 方法。那么这个 `enctype` 代表的是什么？ `multipart/form-data` 又是什么意思呢？
 
-`multipart` 是指互联网上的混合资源，资源可以由多种元素组成，`form-data` 表示可以使用 `HTML Form` 和 `POST` 方法上传文件，具体的定义可以参考RFC 7578.
+`enctype` 属性规定了在发送到服务器之前应该如何对表单数据进行编码，默认情况下这个属性的值是： `application/x-www-form-urlencoded`,也就是对所有字符都会进行编码。而我们设置的 `mutipart/form-data` 就不会对字符编码。
+
 
 如图：
-我们设置的 `enctype = "multipart/form-data"` 会被识别成 Request Headers 中的 `Content-type: multipart/form-data`，表示这次请求要上传文件，而boundary表示分隔符，如果要上传多个表单项，就要使用boundary分割
+实际上，请求时表单设置的 `enctype = "multipart/form-data"` 会被识别成请求头(Request Headers)中的 `Content-type: multipart/form-data`，`multipart` 是指互联网上的混合资源，资源可以由多种元素组成，`form-data` 表示可以使用 `HTML Form` 和 `POST` 方法上传文件，而 `boundary` 表示分隔符，当我们要上传多个表单项时，就要使用 `boundary` 分割。
 
 ![](../.vuepress/public/images/http.jpg)
 
-我们来看第一个栗子：这是一个非常原始的上传文件的方式，点击 `submit` 后页面会跳转刷新
+我们来看第一个栗子：这是一个非常原始的上传文件的方式，点击 `submit` 后页面会跳转到表单 `action` 指向的页面，这种方式是需要改进的，否则页面的其他数据就会丢失。
 
 ```js
   <form id="form2" method="post" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
@@ -39,7 +38,7 @@
 要解决刷新页面的问题，可以采用以下两种方式：
 
 ```js
-  // 第一种
+  // 第一种 用 ajaxSubmit 提交数据
   $(function () {
     $(".but2").click(function () {
       $('#form2').ajaxSubmit({
@@ -51,6 +50,8 @@
     })
   })
   // 第二种
+  // 在 form 标签上添加 target 属性，值为 iframe 标签的 name值
+  // target 属性规定在何处打开 action URL，默认情况就是 _blank 在新的窗口打开，这里配置的是 iframe 的 name值，会在这个指定的 iframe 框架打开
   <iframe id="temp-iframe" name="temp-iframe" src="" style="display:none;"></iframe>
   <form method="post" target="temp-iframe" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
   <div>Choose file to upload</div><br />
@@ -59,7 +60,7 @@
   </form>
 ```
 
-这是一个用 **koa** 框架写的服务端, 下面的栗子基本都采用这种方式，有特殊的地方会讲解到
+接着介绍一下这次上传的服务端，用的是 **node js** + **fs**  + **koa** 框架写的服务端
 ```js
 /**
  * 服务入口
@@ -117,47 +118,7 @@
             "fileUrl":${JSON.stringify(result)}
         }`;
     }
-    // 检测接口地址为 /upfile
-    if (ctx.path === '/upfile-jq') {
-        console.log(ctx.request.files);
-        var file = ctx.request.files ? ctx.request.files.f1 : null; //得到文件对象
-        if (file) {
-
-            var path = file.path.replace(/\\/g, '/');
-            var fname = file.name; //原文件名称
-            var nextPath = '';
-            if (file.size > 0 && path) {
-                //得到扩展名
-                var extArr = fname.split('.');
-                var ext = extArr[extArr.length - 1];
-                nextPath = path + '.' + ext;
-                //重命名文件
-                fs.renameSync(path, nextPath);
-            }
-            //以 json 形式输出上传文件的存储地址
-            ctx.body = getRenderData({
-                data: `${uploadHost}${nextPath.slice(nextPath.lastIndexOf('/') + 1)}`
-            });
-        } else {
-            ctx.body = getRenderData({
-                code: 1,
-                msg: 'file is null'
-            });
-        }
-    }
   });
-
-/**
- * 
- * @param {设置返回结果} opt 
- */
-  function getRenderData(opt) {
-    return Object.assign({
-        code: 0,
-        msg: '',
-        data: null
-    }, opt);
-  }
   /**
   * http server
   */
@@ -168,10 +129,14 @@
 
 #### 总结
 
+表单上传文件是比较原始的一种方式，但也是比较基础的，在这个基础上发展了其他更方便的方式实现上传，很多组件库封装的上传组件也是根据这些原理上传文件。
+
 
 ### formData 异步上传
 
-上面讲到用 `form` 表单上传文件，当我们上传的文件比较大的时候，会出现服务器超时的情况，我们一般都会考虑采用异步上传的方式，以下是利用构造 FormData 对象模拟表单请求。
+[formData](https://developer.mozilla.org/zh-CN/docs/Web/API/FormData)一开始用于实现表单数据的序列化，能够将表单元素的 `name` 和 `value` 进行组合，减少表单元素的拼接上传；后来结合 `file` 对象用于异步请求上传文件。当我们上传的文件比较大的时候，会出现服务器超时的情况，所以我们一般都会考虑采用异步上传的方式，以下是利用构造 FormData 对象模拟表单上传。
+
+获取文件对象一般通过 `input` 标签就可以拿到，但这个样式不太美观，很多组件库封装的上传组件都有类似的功能拿到 `file` 对象
 
 ```js
   function submitUpload() {
@@ -185,7 +150,7 @@
       const fd = new FormData();
       //多文件上传需要遍历添加到 fromdata 对象
       for (var i = 0; i < fileList.length; i++) {
-        fd.append('f1', fileList[i]);
+        fd.append(`f${i + 1}`, fileList[i]);
       }
       axios.post('http://localhost:8100/upfile', fd).then((res) => {
         if (res.status === 200) {
@@ -243,8 +208,7 @@
     }
   }
 
-  xhr.onprogress = updateProgress;
-  xhr.upload.onprogress = updateProgress;
+  xhr.upload.onprogress = updateProgress; // 上传进度调用方法实现
   function updateProgress(event) {
     console.log(event);
     if (event.lengthComputable) {
@@ -261,11 +225,11 @@
   xhr.send(fd);//发送时  Content-Type默认就是: multipart/form-data;
 ```
 
-总结：如果是一次请求上传多个文件需要显示一个进度条，上面介绍的方法足以实现；如果是大文件分片上传多次请求的话，也是可以做到单进度提醒，后面会详细介绍。
+总结：如果是一次请求上传多个文件需要显示一个进度条，上面介绍的方法足以实现；如果是大文件分片上传多次请求的话，也是可以做到单进度提示，后面会详细介绍。
 
 ### 拖拽上传
 
-拖拽上传的场景我们也会经常遇到，写法也很简单，就是利用好原生的拖拽事件，可以简单划分为几个步骤：
+拖拽上传的场景我们也会经常遇到，主要是理解原生的拖拽事件，可以简单划分为几个步骤：
 
 - 定义一个允许拖放文件的区域 `div.drop-box` (如果是拖拽其他元素，是要设置 `draggable="true"`，这里上传文件所以不需要)
 - 取消有关拖拽事件的默认行为，也就是 `e.preventDefault()`
@@ -274,14 +238,18 @@
 
 我们先从从一张图了解一下拖拽事件分别代表的是什么情况：
 
-- drag Source: 是我们拖拽的源元素
-- intermediate Element: 是拖拽过程可能经过的元素
-- drop Target: 是最终拖放的目标元素
+- drag source: 是我们拖拽的源元素
+- intermediate zone: 是拖拽过程可能经过的区域
+- drop target: 是最终拖放的目标元素
 
-![](../.vuepress/public/images/dragEvent.png)
+![](../.vuepress/public/images/dragEvent.jpg)
 
-(补充一个流程图)
-来看栗子：
+![](../.vuepress/public/images/drag-start.png)
+![](../.vuepress/public/images/drag-enter.png)
+![](../.vuepress/public/images/drop.png)
+![](../.vuepress/public/images/drop-end.png)
+
+来看实际栗子：
 ```js
   // 这个是我们的拖放区域
   const box = document.getElementById('drop-box');
@@ -354,8 +322,8 @@
 
 ### 粘贴上传
 
-什么是 `DataTransferItemList` 对象？
-![](../.vuepress/public/images/pastDataTransfer.png)
+<!-- 什么是 `DataTransferItemList` 对象？ -->
+<!-- ![](../.vuepress/public/images/pastDataTransfer.png) -->
 
 ```js
   // 粘贴上传
@@ -363,13 +331,13 @@
 
   // 监听粘贴事件
   editorBox.addEventListener('paste', (event) => {
+    // IE浏览器只支持 windown.clipboardData获取粘贴板数据
     const data = (event.clipboardData || window.clipboardData);
     console.dir(data);
 
     const { items } = data
     const fileList = [];//存储文件数据
     if (items && items.length) {
-      debugger
       // 检索剪切板items
       for (var i = 0; i < items.length; i++) {
         console.log(items[i].getAsFile());
@@ -429,17 +397,16 @@
   }
 ```
 
-总结：粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最好一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
+总结：粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最后一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
 
-### 图片预览上传
-
-### 多进度条上传
 
 ### 大文件断点续传
 
 如果要上传的文件太大，我们可以考虑将文件分片上传。
 
-**思路** 是这样的： 选择上传一个 60+MB 的大文件，按每 10MB 进行分片，发送到服务器时携带一个标志(这里用的是时间戳，具体可以与后端协调)，服务端生成临时文件，在最后一个分片上传完成后，客户端发送一个文件上传结束并请求合并的请求，服务端将所有文件分片按照标志合并成一个文件，最后清理临时文件
+**思路** 是这样的： 选择上传一个 60+MB 的大文件，按每 10MB 进行分片，发送到服务器时携带一个标志(这里用的是时间戳，具体可以与后端协调)，服务端生成临时文件，在最后一个分片上传完成后，客户端发送一个上传结束请求合并文件的请求，服务端将所有文件分片按照标志合并成一个文件，最后清理临时文件
+
+![](../.vuepress/public/images/slice-file.jpg)
 
 ```js
   let file
@@ -510,9 +477,11 @@
                 progressSpan.style.width = complete + '%'
                 progressSpan.innerHTML = complete
                 if (complete === 100) { // 进度条变色
-                    progressSpan.classList.add('green')
+                  progressSpan.classList.add('green')
                 }
-              }
+              },
+              // 不是必须的 可以在这里告知服务端我上传的片段信息
+              headers: { 'Content-Range': `bytes ${i * chunkSize}-/${fileChunks[i].size + i * chunkSize}` }
             }
             const res = await axios.post('http://localhost:8100/upfile', fd, config)
             console.log(res)
@@ -531,18 +500,131 @@
 
 什么是断点续传呢？简单来讲就是上传文件过程出现线路中断，客户端再次上传时，能根据服务端返回的信息在中断的地方继续文件的上传，大大节省了时间也提高了效率。
 
+(补充一张解析流程图)
 
+```js
+const saveChunkKey = 'chunkUploaded'
+
+
+    //思路概括
+    //把大文件分成每10M 一块进行上传，发送到服务器同时携带一个标志 暂时用当前的时间戳 ，
+    //服务端生成临时文件，服务端接受一个文件结束的标志 ，然后将所有的文件进行合并成一个文件，清理临时文件。 返回结果（看情况）
+    function submitUpload() {
+        debugger
+        const chunkSize = 10 * 1000 * 1024;//2m
+
+        const file = document.getElementById('f1').files[0];
+        const chunks = Math.ceil(file.size / chunkSize) // 计算这个文件可以切成几块
+        console.log(`总共${chunks}个分片`)
+        const token = (+ new Date()) // 文件唯一标识，用于最后合并文件
+        const fileChunks = []
+
+        const progressSpan = document.getElementById('progress').firstElementChild // 简单配一下进度条
+        progressSpan.style.width = '0'
+        progressSpan.classList.remove('green')
+
+        if (!file) {
+            alert('请选择文件')
+            return
+        }
+
+        //拆分文件
+        if (file.size > chunkSize) {
+            //拆分文件
+            var start = 0, end = 0;
+            while (true) {
+                end += chunkSize;
+                var blob = file.slice(start, end);
+                console.log()
+                start += chunkSize;
+
+                if (!blob.size) {
+                    //拆分结束
+                    break;
+                }
+
+                fileChunks.push(blob);
+            }
+        } else {
+            fileChunks.push(file.slice(0));
+        }
+
+        const uploadedInfo = getUploadedFromStorage()
+        console.log(uploadedInfo);
+
+        let i = 0
+        const upLoadInOrder = async () => {
+            // const uploadedIndex = uploadedInfo.findIndex(up => up === true)
+            if (uploadedInfo[i]) {
+                // 说明有分片缓存
+                i++
+                upLoadInOrder()
+                return
+            }
+            const fd = new FormData()   //构造FormData对象
+            fd.append('token', token) // 与后端协调分片需要传送过去的参数，一般是文件的标识id，分片长度，分片的序号、所占长度等等
+            fd.append('f1', fileChunks[i])
+            fd.append('index', i)
+            if (i === chunks) {
+                console.log('上传完成，发送合并请求')
+                const formD = new FormData()
+                formD.append('type', 'merge')
+                formD.append('token', token)
+                formD.append('chunks', chunks.length)
+                formD.append('filename', file.name)
+                axios.post('http://localhost:8100/upfile', formD).then((res) => {
+                    if (res.status === 200) {
+                        console.log(res)
+                        alert('上传完成！')
+                    }
+                })
+            } else if (i < chunks) {
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        const complete = ((progressEvent.loaded + i * chunkSize) / file.size * 100 | 0)
+                        progressSpan.style.width = complete + '%'
+                        progressSpan.innerHTML = complete
+                        if (complete === 100) { // 进度条变色
+                            progressSpan.classList.add('green')
+                        }
+                    }
+                }
+                const res = await axios.post('http://localhost:8100/upfile', fd, config)
+                console.log(res)
+                if (res.status === 200) {
+                    console.log('sendChunkCount', i)
+                    setUploadedToStorage(i)
+                    i++
+                    upLoadInOrder()
+                }
+            }
+        }
+        upLoadInOrder()
+    }
+        //获得本地缓存的数据
+    function getUploadedFromStorage() {
+        return JSON.parse(localStorage.getItem(saveChunkKey) || "{}")
+    }
+
+    //写入缓存
+    function setUploadedToStorage(index) {
+        const uploaded = getUploadedFromStorage()
+        uploaded[index] = true
+        localStorage.setItem(saveChunkKey, JSON.stringify(uploaded))
+    }
+```
+
+总结： 断点续传的核心是对文件的分割和中断位置的获取，请求资源时请求头会携带一个 Range, 它会告知服务器应该返回文件的哪一部分；而响应头就会返回一个Content-Ranges 对应着上面请求头的大小信息
 
 
 
 ## 下载
-后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，最常用的有三种：
+后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，最常用的有以下几种：
 
 - a 标签下载
 - iframe 标签下载
 - location.href 下载
 - FileSaver 下载
-- node 端下载
 
 ### a标签下载
 
