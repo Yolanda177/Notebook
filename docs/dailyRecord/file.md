@@ -210,7 +210,6 @@
 
   xhr.upload.onprogress = updateProgress; // 上传进度调用方法实现
   function updateProgress(event) {
-    console.log(event);
     if (event.lengthComputable) {
       const completedPercent = (event.loaded / event.total * 100).toFixed(2);
       progressSpan.style.width = completedPercent + '%';
@@ -225,7 +224,8 @@
   xhr.send(fd);//发送时  Content-Type默认就是: multipart/form-data;
 ```
 
-总结：如果是一次请求上传多个文件需要显示一个进度条，上面介绍的方法足以实现；如果是大文件分片上传多次请求的话，也是可以做到单进度提示，后面会详细介绍。
+#### 总结
+如果是一次请求上传多个文件需要显示一个进度条，上面介绍的方法足以实现；如果是大文件分片上传多次请求的话，也是可以做到单进度提示，后面会详细介绍。
 
 ### 拖拽上传
 
@@ -292,15 +292,15 @@
         box.classList.remove('over');
         return;
       }
-      // 因为是 FileList 对象 不能用 forEach
+      // 因为是 FileList 对象 不能直接用 forEach
       // 解决重复添加文件的处理
       let files = window.willUploadFileList || []
-      for (var i = 0; i < fileList.length; i++) {
-        const fileName = fileList[i].name
+      Array.from(fileList).forEach(item => {
+        const fileName = item.name
         if (files && !files.find(file => file.name === fileName)) {
-          files.push(fileList[i])
+          files.push(item)
         }
-      }
+      })
       const dropBox = document.getElementById('drop-box')
       dropBox.innerHTML = ""
       files.forEach(file => {
@@ -316,7 +316,7 @@
 
 ```
 
-补充：
+#### 补充
 
 这篇博客有助于我们更好的认识拖拽事件，感兴趣的可以去看看：[https://lotabout.me/2018/HTML-5-Drag-and-Drop/](https://lotabout.me/2018/HTML-5-Drag-and-Drop/)
 
@@ -339,10 +339,9 @@
     const fileList = [];//存储文件数据
     if (items && items.length) {
       // 检索剪切板items
-      for (var i = 0; i < items.length; i++) {
-        console.log(items[i].getAsFile());
-        fileList.push(items[i].getAsFile());
-      }
+      Array.from(items).forEach(item => {
+        fileList.push(item.getAsFile())
+      })
     }
     console.log('data.items.length', data.items.length);
     console.log('data.files.length', data.files.length);
@@ -363,11 +362,10 @@
     }
 
     const fd = new FormData();   //构造FormData对象
+    Array.from(fileList).forEach((item, index) => {
+      fd.append(`f${index}`, item);//支持多文件上传
+    })
 
-    for (var i = 0; i < fileList.length; i++) {
-        fd.append('f1', fileList[i]);//支持多文件上传
-    }
-    // console.log(fileList)
     axios.post('http://localhost:8100/upfile', fd).then((res) => {
       if (res.status === 200) {
         console.log(res)
@@ -397,7 +395,9 @@
   }
 ```
 
-总结：粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最后一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
+#### 总结
+
+粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最后一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
 
 
 ### 大文件断点续传
@@ -620,16 +620,28 @@ const saveChunkKey = 'chunkUploaded'
         localStorage.setItem(saveChunkKey, JSON.stringify(uploaded))
     }
 ```
-问题：如果我们想要分片上传我们的大文件但又只想以一个进度条显示，请问要如何处理呢？有没有小伙伴想到？给一个提示 `onUploadProgress` 还是在这个地方处理
 
-答案：想要获取上传进度，还是要回到 `onUploadProgress` 这个 api 上获取进度
+#### 补充：
 
-总结： 断点续传的核心是对文件的分割和中断位置的获取，请求资源时请求头会携带一个 Range, 它会告知服务器应该返回文件的哪一部分；而响应头就会返回一个Content-Ranges 对应着上面请求头的大小信息
+当我们进行断点续传时，一般会在**请求头**添加 [Range](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Range) 如 `Range: byte=2000-4000`,告诉服务端我们要获取 2000byte 到 4000byte 的文件块数据；
+而服务端在返回的**响应头**就会携带一个 [Content-Range](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Range) 如 `Content-Range: 2000-4000/67589`, 显示的是一个数据片段在整个文件中的位置
+
+#### 问题：
+
+如果我们想要分片上传我们的大文件但又只想以一个进度条显示，请问要如何处理呢？有没有小伙伴想到？给一个提示 `onUploadProgress` 还是在这个地方处理
+
+#### 答案：
+
+想要获取上传进度，还是要回到 `onUploadProgress` 这个 api 上获取进度
+
+#### 总结： 
+
+断点续传的核心是对文件的分割和中断位置的获取，请求资源时请求头会携带一个 Range, 它会告知服务器应该返回文件的哪一部分；而响应头就会返回一个Content-Ranges 对应着上面请求头的大小信息
 
 
 
 ## 下载
-后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，最常用的有以下几种：
+后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，比较的有以下几种：
 
 - a 标签下载
 - iframe 标签下载
@@ -656,9 +668,9 @@ function downloadByA(url) { // 后端提供的文件 url
 
 那么如何解决跨域中 `download` 失效的问题呢？官网给我们指明了方向：使用 `blob:URL` 和 `data:URL`。其实a标签的`href`还可以接受除了相对和绝对路径之外的其他形式Url，也就是下面我们说到的 `blob: URL` 和 `data: URL`
 
-也许有的小伙伴还没有见过这两个东西，我也是初次了解，理解不对的话还麻烦大家指出
+<!-- 也许有的小伙伴还没有见过这两个东西，我也是初次了解，理解不对的话还麻烦大家指出
 
-现在一步步认识它们：
+现在一步步认识它们： -->
 
 #### API解析
 
@@ -668,7 +680,7 @@ function downloadByA(url) { // 后端提供的文件 url
 objectUrl = URL.createObjectURL(object) // 这里的 object 参数只能是 File 或 Blob 对象
 ```
 
-官网上的介绍是说 `URL.createObjectURL()` 静态方法会创建一个 `DOMString`，其中包含一个表示参数中给出对象的 URL。我理解是这个 URL 指向的就是我们提供的 File 或 Blob 对象的资源。这个 URL 是有生命周期的，它和创建它的窗口中的 document 绑定。所以，需要注意在每次调用 createObjectURL() 方法后，当我们不再需要这些 URL 对象时，必须通过调用 URL.revokeObjectURL() 方法来释放这些对象.
+官网的解释是说 `URL.createObjectURL()` 静态方法会创建一个 `DOMString`，其中包含一个表示参数中给出对象的 URL。我理解是这个 URL 指向的就是我们提供的 File 或 Blob 对象的资源。这个 URL 是有生命周期的，它和创建它的窗口中的 document 绑定。所以，需要注意在每次调用 createObjectURL() 方法后，当我们不再需要这些 URL 对象时，必须通过调用 URL.revokeObjectURL() 方法来释放这些对象.
 
 而 **[data:URL](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs)** 是一个包含内容编码的 URL , 可由 [fileReader.readAsDataURL(blob / file)](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader) 获得。它由四个部分组成：前缀(data:)、指示数据类型的MIME类型、如果非文本则为可选的base64标记、数据本身(如果是文本类型直接嵌入，如果是二进制数据则进行base64编码后嵌入)。
 
@@ -688,7 +700,7 @@ data:text/html,%3Ch1%3EHello%2C%20World!%3C%2Fh1%3E
 
 ⚠需要注意的是，blob:URL 是允许Blob对象用作图像，下载二进制数据链接等的URL源，但它只能在应用内部使用，是一种**伪协议URL**, URL的生命周期和创建它的窗口中的document绑定。data:URL是**前缀为 data: 协议的URL**，可以在浏览器上随意使用(blob:URL只是对浏览器存储在内存中或者磁盘上的Blob的一个简单引用)。
 
-简单介绍完这两种 url, 下面我们来看看实际是怎么运用起来的，一般情况下，图片能够使用 data:URL进行下载，就不需要再转换成 blob:URL再下载；但是其他文件类型就必须通过 blob:URL 进行下载
+<!-- 介绍完这两种 url, 下面我们来看看实际是怎么运用起来的，一般情况下，图片能够使用 data:URL 进行下载，就不需要再转换成 blob:URL 再下载；但是其他文件类型就必须通过 blob:URL 进行下载 -->
 
 举个栗子：下载一张来自网上的图片
 ```js
@@ -766,7 +778,6 @@ downloadPDF() {
   const base64ToBlob = (dataUrl) => {
     console.log(dataUrl)
     const arr = dataUrl.split(',')
-    debugger
     const mime = arr[0].match(/:(.*?);/)[1]
     const bStr = atob(arr[1])
     let n = bStr.length
@@ -782,7 +793,6 @@ downloadPDF() {
     headers: { 'Content-Type': 'application/pdf' }
   }).then(res => {
     const dataUrl = `data:application/pdf;base64,${res.data}`
-    console.log(dataUrl);
     const blob = base64ToBlob(dataUrl)
     // 如果 res 是一个 blob 数据，直接跳到这一步即可
     // 直接获取一个 blob:URL 进行下载操作
@@ -793,8 +803,9 @@ downloadPDF() {
   })
 }
 ```
-#### 小总结
-如果下载内容是图片，采用 data:Url 是比较简单的方式，不需要再做 blob 数据转换，如果是文本文件，可以直接获取文本内容，再通过 `new Blob([content])`获得一个 blob 对象，但是如果是处理其他文件类型，如 pdf 等，需要与后端协调好返回的数据格式，这样就能大大减少前端数据转换处理的工作。
+#### 总结
+
+a标签下载的方式还是很通用的，如果出现在线打开的问题，可以采用转换 URL 的方式实现保存下载；而如果需要我们自定义下载进度，可以再考虑通过 `axios` 请求获取进度， 再配合 data:URL 或 blob:URL 下载。但缺点是它不兼容 IE 浏览器，后面我们会讲解如何在 IE 上保存下载。
 
 
 #### 补充资料：
@@ -811,69 +822,36 @@ downloadPDF() {
 
 ### location.href下载
 
-这个用的比较少，实用性不是很强，简单介绍一下用法
+location.href 这种下载方式基本不使用，语法很简单，但适用性比较差
 
 ```js
 location.href = '../downloads/cutegirl.jpg'
 ```
-它的缺点是最明显的，浏览器支持在线预览的图片、文本文档、pdf文件都会在线打开不会提示下载，不能像 `a` 标签那样接受其他形式的 `URL`, 所以基本不会用上
+它的缺点是最明显的，浏览器支持在线预览的图片、文本文档、pdf文件都会在线打开不会提示下载，不能像 `a` 标签的 `href` 那样接受其他形式的 `URL`, 所以现在都比较少用到这种方式处理下载
 
 ### iframe下载
 
-`iframe` 下载相信很多小伙伴也用过，使用上与 `a` 标签有点相似，都是通过创建一个标签后进行下载。它的优点是能够实现无刷新下载，体验感较好。但它的缺点也是明显的，我们没办法预测到文件什么时候启动下载或完成下载，添加到页面 `body`上的 `iframe` 标签也无法监听删除。
+`iframe` 使用相信很多小伙伴都有用过，我们在处理在线预览 `pdf` 或者嵌入其他框架时会用到。除此之外，其实它还可以用作文件的下载，使用上与 `a` 标签有点相似，都是通过创建一个标签后进行下载。它的优点是能够实现无刷新下载，体验感较好。但它的缺点也是明显的，我们没办法预测到文件什么时候启动下载或完成下载，添加到页面 `body`上的 `iframe` 标签也无法监听删除。
 
 小栗子：
 ```js
   // 无闪现下载excel
-function download(url) {
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-    
-  const iframeLoad = () => {
-    console.log('iframe onload');
-    const win = iframe.contentWindow;
-    const doc = win.document;
-    if (win.location.href === url) {
-      if (doc.body.childNodes.length > 0) {
-       // response is error
-      }
-      iframe.parentNode.removeChild(iframe);
-    }
+  function handleDownIframe() {
+    // 缺点是无法监听下载进度，无法剔除 iframe 标签
+    // 如果文件类型是 图片、文本文档类型也不能出现保存下载
+    const iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    iframe.src = '../downloads/helpFile.docx'
+    document.body.appendChild(iframe)
   }
-  // iframe标签开始加载
-  // 浏览器兼容判断
-  if ('onload' in iframe) {
-    iframe.onload = iframeLoad();
-  } else if (iframe.attachEvent) {
-    iframe.attachEvent('onload', iframeLoad());
-  } else {
-    iframe.onreadystatechange = function onreadystatechange() {
-      if (iframe.readyState === 'complete') {
-        iframeLoad();
-      }
-    };
-  }
-  iframe.src = '';
-  document.body.appendChild(iframe);
-  setTimeout(function loadUrl() {
-    // 获取iframe里面的window对象 指定打开页面在这个iframe 框架中
-    iframe.contentWindow.location.href = url;
-  }, 50);
-}
-
-// 如果只是想验证下载功能，简化版代码 摘取关键代码
-function handleDownIframe() {
-  // 缺点是无法监听下载进度，无法剔除 iframe 标签
-  const iframe = document.createElement('iframe')
-  iframe.style.display = 'none'
-  iframe.src = '../downloads/helpFile.docx'
-  document.body.appendChild(iframe)
-}
 ```
+#### 总结
+
+iframe 下载和 location.href 的缺点都是不能保存下载浏览器支持预览的文件，也不能通过转换 URL 来处理，同时 iframe 不像 a 标签可以通过点击事件触发下载，它必须添加到页面才能触发下载，我们无法确定什么时候可以去掉这个 iframe 标签。值得学习的是， iframe 能支持多次点击下载，文件下载互不影响；而 a 标签是需要等待服务器响应才能进行下载操作，如果多次点击下载，结果只有最后一个文件是真正下载成功的
 
 ### FileSaver 下载
 
-如果后端返回的是以文件流的格式，前端只需在请求头设置一个 `responseType = 'blob'`，再通过上面所讲的方法进行下载即可，那这里为什么还要另外开一个内容呢？其实是除了 `a` 标签外，还有一些很好的方式进行下载，接下来介绍一下 [FileSaver](https://github.com/eligrey/FileSaver.js) 这个常用库。
+如果后端返回的是以文件流的格式，前端只需在请求头设置一个 `responseType = 'blob'`，再通过上面所讲的方法进行下载即可，那这里为什么还要另外开一个内容呢？其实是除了 `a` 标签外，还有一些兼容性更好的方式进行下载，接下来介绍一下 [FileSaver](https://github.com/eligrey/FileSaver.js) 这个常用库。
 
 首先，为什么需要用到这个库？上面讲到 `a` 标签下载会有个浏览器兼容的问题，下面这个是 `a` 标签的 download 属性的兼容性截图，可以看到这里的 **IE** 是不支持的，而我们无法保证用户在使用过程是用的哪类浏览器，所以需要一个更好的方式避免出现因兼容问题而不能下载文件的现象。而 **FileSaver** 就是能够在不使用 `a` 标签的情况下或者没有原生支持 `saveAs()` 的浏览器上实现客户端保存文件以及在线生成文件保存的需求。
 
@@ -885,7 +863,7 @@ function handleDownIframe() {
 
 ![](../.vuepress/public/images/fileSaver-compatibility.png)
 
-可以看到，**FileSaver** 能够兼容大部分的浏览器，而且支持保存的文件大小也能满足一般的业务需求，如果处理的是 **IE** 浏览器，我们还可以用到 [navigator.msSaveBlob()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob) 这个方法，这里就不详细介绍这个 api了。来看看 **FileSaver** 的运用
+可以看到，**FileSaver** 能够兼容大部分的浏览器，而且支持保存的文件大小也能满足一般的业务需求，如果处理的是 **IE** 浏览器，我们还可以用到 [navigator.msSaveBlob()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob) 这个方法。来看看 **FileSaver** 的运用
 
 ```js
   // 采用 cdn 引入
