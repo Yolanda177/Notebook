@@ -229,14 +229,14 @@
 
 ### 拖拽上传
 
-拖拽上传的场景我们也会经常遇到，主要是理解原生的拖拽事件，可以简单划分为几个步骤：
+拖拽上传的场景我们也会经常遇到，在 HTML 5 之前，想要实现 Drag and Drop（拖拽/拖放）一般需要求助于 JQuery，现在我们能简单的对任意元素实现拖放功能。核心是理解原生的拖拽事件，可以简单划分为几个步骤：
 
 - 定义一个允许拖放文件的区域 `div.drop-box` (如果是拖拽其他元素，是要设置 `draggable="true"`，这里上传文件所以不需要)
 - 取消有关拖拽事件的默认行为，也就是 `e.preventDefault()`
 - 为这个拖放区域添加拖拽样式
 - 在 `drop` 事件获取文件信息 `e.dataTransfer.files` 
 
-我们先从从一张图了解一下拖拽事件分别代表的是什么情况：
+我们先从从一张图了解一下拖拽分别会触发哪些事件：
 
 - drag source: 是我们拖拽的源元素
 - intermediate zone: 是拖拽过程可能经过的区域
@@ -264,6 +264,7 @@
     // 设置进入拖放区域样式
     box.addEventListener("dragenter", function (e) {
       console.log('element dragenter')
+      // 为什么不在 dragover 设置呢？因为触发太频繁了，Chrome 实测 1ms 左右触发；Firefox 大概是 300ms
       box.classList.add('hilight')
       e.preventDefault()
     })
