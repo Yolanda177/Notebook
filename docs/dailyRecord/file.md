@@ -325,6 +325,7 @@
 <!-- 什么是 `DataTransferItemList` 对象？ -->
 <!-- ![](../.vuepress/public/images/pastDataTransfer.png) -->
 
+核心是监听 `paste` 事件和获取粘贴板数据
 ```js
   // 粘贴上传
   const editorBox = document.getElementById('editor-box');
@@ -333,8 +334,6 @@
   editorBox.addEventListener('paste', (event) => {
     // IE浏览器只支持 windown.clipboardData获取粘贴板数据
     const data = (event.clipboardData || window.clipboardData);
-    console.dir(data);
-
     const { items } = data
     const fileList = [];//存储文件数据
     if (items && items.length) {
@@ -343,12 +342,8 @@
         fileList.push(item.getAsFile())
       })
     }
-    console.log('data.items.length', data.items.length);
-    console.log('data.files.length', data.files.length);
-
     window.willUploadFileList = fileList;
     event.preventDefault();
-
     submitPasteUpload();
   });
 
@@ -368,7 +363,6 @@
 
     axios.post('http://localhost:8100/upfile', fd).then((res) => {
       if (res.status === 200) {
-        console.log(res)
         if (res.data.fileUrl.length) {
           const img = document.createElement('img')
           img.src = res.data.fileUrl[0]
@@ -402,7 +396,7 @@
 
 ### 大文件断点续传
 
-如果要上传的文件太大，我们可以考虑将文件分片上传。
+上传的文件太大怎么处理呢？我们可以考虑将文件分片上传。
 
 **思路** 是这样的： 选择上传一个 60+MB 的大文件，按每 10MB 进行分片，发送到服务器时携带一个标志(这里用的是时间戳，具体可以与后端协调)，服务端生成临时文件，在最后一个分片上传完成后，客户端发送一个上传结束请求合并文件的请求，服务端将所有文件分片按照标志合并成一个文件，最后清理临时文件
 
@@ -456,7 +450,7 @@
     let i = 0
     // 按顺序上传
     const upLoadInOrder = async () => {
-        var fd = new FormData()   //构造FormData对象
+        const fd = new FormData()   //构造FormData对象
         fd.append('token', token) // 与后端协调分片需要传送过去的参数，一般是文件的标识id，分片长度，分片的序号、所占长度等等
         fd.append('f1', fileChunks[i])
         fd.append('index', i)
@@ -503,7 +497,7 @@
 
 这就是一个简单的文件分片上传的过程，但往往实际情况不会那么完美，如果上传分片的过程中网络中断，那之前上传的分片就会丢失，我们是不希望这种情况发生的，最好就是能够在上一次中断的地方继续上传文件，于是就有了断点续传这个概念。
 
-什么是断点续传呢？简单来讲就是上传文件过程出现线路中断，客户端再次上传时，能根据服务端返回的信息在中断的地方继续文件的上传，大大节省了时间也提高了效率。
+什么是断点续传呢？简单来讲就是上传文件过程出现线路中断，客户端再次上传时，能根据服务端返回的信息在中断的地方继续文件的上传，能够节省上传时间也提高了效率。
 
 ![](../.vuepress/public/images/slice-file-update.png)
 
@@ -636,12 +630,12 @@ const saveChunkKey = 'chunkUploaded'
 
 #### 总结： 
 
-断点续传的核心是对文件的分割和中断位置的获取，请求资源时请求头会携带一个 Range, 它会告知服务器应该返回文件的哪一部分；而响应头就会返回一个Content-Ranges 对应着上面请求头的大小信息
+断点续传的核心是对文件的分割和中断位置的获取
 
 
 
 ## 下载
-后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，比较的有以下几种：
+后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，比较常用的有以下几种：
 
 - a 标签下载
 - iframe 标签下载
@@ -666,7 +660,7 @@ function downloadByA(url) { // 后端提供的文件 url
 
 虽然只有区区几段代码，但里面学习的东西还是有很多，如这个h5的新属性 [download](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a) , 能够解决如图片、文本文档、pdf等浏览器自动在线预览而不能下载的问题。但它并没有想象中那么神通广大，遇上跨域的 url,它就失效了。
 
-那么如何解决跨域中 `download` 失效的问题呢？官网给我们指明了方向：使用 `blob:URL` 和 `data:URL`。其实a标签的`href`还可以接受除了相对和绝对路径之外的其他形式Url，也就是下面我们说到的 `blob: URL` 和 `data: URL`
+那么如何解决跨域中 `download` 失效的问题呢？官网给我们指明了方向：使用 `blob:URL` 和 `data:URL`。其实a标签的`href`还可以接受除了相对和绝对路径之外的其他形式Url，也就是下面我们说到的 `blob: URL` 和 `data: URL`，或许大家对这两个 URL 有点陌生，我们一步步学习它们
 
 <!-- 也许有的小伙伴还没有见过这两个东西，我也是初次了解，理解不对的话还麻烦大家指出
 
@@ -682,7 +676,7 @@ objectUrl = URL.createObjectURL(object) // 这里的 object 参数只能是 File
 
 官网的解释是说 `URL.createObjectURL()` 静态方法会创建一个 `DOMString`，其中包含一个表示参数中给出对象的 URL。我理解是这个 URL 指向的就是我们提供的 File 或 Blob 对象的资源。这个 URL 是有生命周期的，它和创建它的窗口中的 document 绑定。所以，需要注意在每次调用 createObjectURL() 方法后，当我们不再需要这些 URL 对象时，必须通过调用 URL.revokeObjectURL() 方法来释放这些对象.
 
-而 **[data:URL](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs)** 是一个包含内容编码的 URL , 可由 [fileReader.readAsDataURL(blob / file)](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader) 获得。它由四个部分组成：前缀(data:)、指示数据类型的MIME类型、如果非文本则为可选的base64标记、数据本身(如果是文本类型直接嵌入，如果是二进制数据则进行base64编码后嵌入)。
+而 **[data:URL](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/data_URIs)** 是一个包含内容编码的 URL , 可由 [fileReader.readAsDataURL(blob / file)](https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader) 获得。它由四个部分组成：前缀(data:)、指示数据类型的MIME类型、可选的base64标记、数据本身(如果是文本类型直接嵌入，如果是二进制数据则进行base64编码后嵌入)。
 
 ```js
 data:[<mediatype>][;base64],<data>
@@ -719,7 +713,7 @@ function downloadImg() {
     downloadUrlDom.setAttribute('href', imageDataUrl)
     // // 第二种方式 即将数据转为Blob，再将Blob生成BlobURL，使用a标签下载
     // // 在第一种方式基础上获得 blob:URL
-    // const imageBlobData = base64ToBlob(imageDataUrl)
+    // const imageBlobData = dataUrlToBlob(imageDataUrl)
     // console.log(imageBlobData);
     // const imageBlobUrl = URL.createObjectURL(imageBlobData)
     // downloadUrlDom.setAttribute('href', imageBlobUrl)
@@ -736,7 +730,7 @@ function downloadImg() {
 }
 
 // 将图片url转换成 base64
-// 原理： 利用canvas.toDataURL的API转化成base64
+// 原理： 利用canvas.toDataURL的API转化成 data:URL
 function imageUrlToBase64(img) {  
   const canvas = document.createElement("canvas");  
   canvas.width = img.width;  
@@ -749,8 +743,8 @@ function imageUrlToBase64(img) {
   return dataUrl;
 }
 
-data:URL 转 Blob数据
-其实就是利用 data:URL 最后一部分的编码数据进行转换
+// data:URL 转 Blob数据
+// 其实就是利用 data:URL 最后一部分的编码数据进行转换
 function dataUrlToBlob(dataUrl) {
   var arr = dataUrl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -779,11 +773,13 @@ downloadPDF() {
     console.log(dataUrl)
     const arr = dataUrl.split(',')
     const mime = arr[0].match(/:(.*?);/)[1]
+    // 经过 base-64 编码的字符串进行解码
     const bStr = atob(arr[1])
     let n = bStr.length
     const unit8Array = new Uint8Array(n)
     while (n--) {
-      unit8Array[n] = bStr.charCodeAt(n)
+      // 以对象的方式或使用数组下标索引的方式引用数组中的元素
+      unit8Array[n] = bStr.charCodeAt(n) //返回指定位置的字符的 Unicode 编码
     }
     return new Blob([unit8Array], { type: mime })
   }
@@ -822,7 +818,7 @@ a标签下载的方式还是很通用的，如果出现在线打开的问题，�
 
 ### location.href下载
 
-location.href 这种下载方式基本不使用，语法很简单，但适用性比较差
+location.href 这种下载方式基本不使用，语法很简单，但灵活性比较差
 
 ```js
 location.href = '../downloads/cutegirl.jpg'
@@ -907,7 +903,8 @@ iframe 下载和 location.href 的缺点都是不能保存下载浏览器支持�
   excelDownloadDom.addEventListener('click', () => {
     // 注意：XLSX.uitls.table_to_book( 放入的是table 的DOM 节点 )
     // sheetjs.xlsx 即为导出表格的名字，可修改
-    const wb = XLSX.utils.table_to_book(document.querySelector('#table-excel')); // 获取 workbook 对象
+    // 创建一个工作簿对象
+    const wb = XLSX.utils.table_to_book(document.querySelector('#table-excel'));
     const wopts = { bookType: 'xlsx', bookSST: true, type: 'array' } // 输出配置
     const wbout = XLSX.write(wb, wopts ); // 输出
     try {
@@ -918,8 +915,11 @@ iframe 下载和 location.href 的缺点都是不能保存下载浏览器支持�
   });
 
 ```
+**workbook**：
 
-`table_to_book` 是官方提供给我们的工具函数，能够将我们提供的数据转换成一个 `workbook` 对象，如上面的栗子，我们将一个 `table-dom`上的数据转换成了一个 `workbook` 对象
+![](../.vuepress/public/images/workbook-object.png)
+
+`table_to_book` 是官方提供给我们的工具函数，能够将我们提供的数据转换成一个 `workbook` 对象，如上面的栗子，我们将一个 `table-dom`上的数据转换成了一个 `workbook` 对象，通过打印信息可以看到，SheetNames里面保存了所有的sheet名字，然后Sheets则保存了每个sheet的具体内容（我们称之为Sheet Object）。每一个sheet是通过类似A1这样的键值保存每个单元格的内容，我们称之为单元格对象（Cell Object）
 
 `XLSX.wirte` 就是将我们的 `workbook` 对象按照指定的文件类型输出
 
@@ -934,7 +934,7 @@ iframe 下载和 location.href 的缺点都是不能保存下载浏览器支持�
 [https://www.cnblogs.com/liuxianan/p/js-excel.html](https://www.cnblogs.com/liuxianan/p/js-excel.html)
 
 
-### node端下载
+<!-- ### node端下载
 
 ```js
   //  客户端 node 下载
@@ -974,4 +974,4 @@ iframe 下载和 location.href 的缺点都是不能保存下载浏览器支持�
     fs.unlinkSync(tmpExcel);
 })
 
-```
+``` -->
