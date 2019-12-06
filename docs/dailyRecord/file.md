@@ -27,7 +27,7 @@
 ```js
   <form id="form2" method="post" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
     <div>Choose file to upload</div><br />
-    <!-- 如果是多文件上传，input 添加 multiple 属性即可 -->
+    如果是多文件上传，input 添加 multiple 属性即可
     单文件：<input type="file" id="f1" name="f1" /><br /><br />
     多文件：<input type="file" id="f1" name="f1" multiple /><br /><br />
     input 必须设置 name 属性，否则数据无法发送<br /><br />
@@ -149,9 +149,9 @@
       //构造FormData对象
       const fd = new FormData();
       //多文件上传需要遍历添加到 fromdata 对象
-      for (var i = 0; i < fileList.length; i++) {
-        fd.append(`f${i + 1}`, fileList[i]);
-      }
+      Array.from(fileList).forEach((item, index) => {
+        fd.append(`f${index + 1}`, item);
+      })
       axios.post('http://localhost:8100/upfile', fd).then((res) => {
         if (res.status === 200) {
           alert('上传成功')
@@ -242,7 +242,7 @@
 - intermediate zone: 是拖拽过程可能经过的区域
 - drop target: 是最终拖放的目标元素
 
-![](../.vuepress/public/images/dragEvent.jpg)
+![](../.vuepress/public/images/dragEvent.png)
 
 ![](../.vuepress/public/images/drag-start.png)
 ![](../.vuepress/public/images/drag-enter.png)
@@ -411,7 +411,7 @@
 ```js
   let file
   function submitUpload() {
-    const chunkSize = 10 * 1024 * 1000 // 分片大小，可设置为 10M，100M
+    const chunkSize = 20 * 1024 * 1000 // 分片大小，可设置为 10 20 100
     file = document.getElementById('f1').files[0] // 获取文件对象
     if (!file) {
       alert('请选择上传文件')
@@ -421,10 +421,10 @@
     const fileChunks = [] // 文件分片后组成一个数组
     const token = (+ new Date()) // 文件唯一标识，用于最后合并文件
 
-    // Blob 它表示原始数据,也就是二进制数据，
-    // 同时提供了对数据截取的方法slice,而 File 继承了Blob的功能，所以可以直接使用此方法对数据进行分段截图
-    if (file.size > chunkSize) { // 开始拆分文件
-      const start = 0
+    // File 对象继承了 Blob 的属性方法，而 Blob 它表示原始数据,也就是二进制数据
+    // 提供了对数据截取的方法 slice，所以可以直接使用此方法对文件进行分段
+    if (file.size > chunkSize) { // 判断文件大小是否大于 约定分片的大小
+      const start = 0            // 开始分片
       const end = 0
       while (true) {
         end += chunkSize
@@ -439,9 +439,12 @@
         fileChunks.push(file.slice(0))
       }
 ```
+文件对象：
+![](../.vuepress/public/images/file-object.png)
+
 文件分片结果：
 
-![](../.vuepress/public/images/file-slice.jpg)
+![](../.vuepress/public/images/file-slice-result.png)
  
 接着我们来看如何处理上传的逻辑：
 
@@ -457,12 +460,12 @@
         fd.append('token', token) // 与后端协调分片需要传送过去的参数，一般是文件的标识id，分片长度，分片的序号、所占长度等等
         fd.append('f1', fileChunks[i])
         fd.append('index', i)
-        if (i === chunks) {
+        if (i === fileChunks.length) {
           console.log('上传完成，发送合并请求')
           const formD = new FormData()
           formD.append('type', 'merge')
           formD.append('token', token)
-          formD.append('chunks', chunks)
+          formD.append('chunks', fileChunks.length)
           formD.append('filename', file.name)
           axios.post('http://localhost:8100/upfile', formD).then((res) => {
               if (res.status === 200) {
@@ -473,7 +476,7 @@
         } else if (i < chunks) {
             const config = {
               onUploadProgress: progressEvent => {
-                const complete = ((progressEvent.loaded + i * chunkSize) / file.size * 100 | 0)
+                const complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
                 progressSpan.style.width = complete + '%'
                 progressSpan.innerHTML = complete
                 if (complete === 100) { // 进度条变色
@@ -486,6 +489,8 @@
             const res = await axios.post('http://localhost:8100/upfile', fd, config)
             console.log(res)
             if (res.status === 200) {
+                progressSpan.style.width = '0'
+                progressSpan.classList.remove('green')
                 i++
                 upLoadInOrder()
             }
@@ -500,7 +505,9 @@
 
 什么是断点续传呢？简单来讲就是上传文件过程出现线路中断，客户端再次上传时，能根据服务端返回的信息在中断的地方继续文件的上传，大大节省了时间也提高了效率。
 
-(补充一张解析流程图)
+![](../.vuepress/public/images/slice-file-update.png)
+
+判断文件中断上传的位置这里用的是 `localStorage` 保存上传分片成功的信息，在项目中，这个信息一般是由后端提供，前端只需要调用一个查询缓存的接口，获取当前文件在服务器上的缓存信息，返回已缓存文件的标识和大小，这个大小就是用来决定我们从文件哪里进行续传
 
 ```js
 const saveChunkKey = 'chunkUploaded'
@@ -570,7 +577,7 @@ const saveChunkKey = 'chunkUploaded'
                 const formD = new FormData()
                 formD.append('type', 'merge')
                 formD.append('token', token)
-                formD.append('chunks', chunks.length)
+                formD.append('chunkCount', chunks.length)
                 formD.append('filename', file.name)
                 axios.post('http://localhost:8100/upfile', formD).then((res) => {
                     if (res.status === 200) {
@@ -581,7 +588,7 @@ const saveChunkKey = 'chunkUploaded'
             } else if (i < chunks) {
                 const config = {
                     onUploadProgress: progressEvent => {
-                        const complete = ((progressEvent.loaded + i * chunkSize) / file.size * 100 | 0)
+                        const complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
                         progressSpan.style.width = complete + '%'
                         progressSpan.innerHTML = complete
                         if (complete === 100) { // 进度条变色
@@ -613,6 +620,9 @@ const saveChunkKey = 'chunkUploaded'
         localStorage.setItem(saveChunkKey, JSON.stringify(uploaded))
     }
 ```
+问题：如果我们想要分片上传我们的大文件但又只想以一个进度条显示，请问要如何处理呢？有没有小伙伴想到？给一个提示 `onUploadProgress` 还是在这个地方处理
+
+答案：想要获取上传进度，还是要回到 `onUploadProgress` 这个 api 上获取进度
 
 总结： 断点续传的核心是对文件的分割和中断位置的获取，请求资源时请求头会携带一个 Range, 它会告知服务器应该返回文件的哪一部分；而响应头就会返回一个Content-Ranges 对应着上面请求头的大小信息
 
@@ -719,15 +729,16 @@ function imageUrlToBase64(img) {
   const canvas = document.createElement("canvas");  
   canvas.width = img.width;  
   canvas.height = img.height;  
+  // 返回一个 CanvasRenderingContext2D 对象，使用它可以绘制到 Canvas 元素中
   const ctx = canvas.getContext("2d");  
-  ctx.drawImage(img, 0, 0, img.width, img.height);  
-  const mime = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();  
-  const dataUrl = canvas.toDataURL("image/" + mime);  
+  ctx.drawImage(img, 0, 0, img.width, img.height); // 向画布上面绘制图片
+  const mime = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase(); // 获取图片的具体类型
+  const dataUrl = canvas.toDataURL("image/" + mime); // 最后利用返回一个包含图片展示的 data URI 
   return dataUrl;
 }
 
-// data:URL 转 Blob数据
-// 其实就是利用 data:URL 最后一部分的编码数据进行转换
+data:URL 转 Blob数据
+其实就是利用 data:URL 最后一部分的编码数据进行转换
 function dataUrlToBlob(dataUrl) {
   var arr = dataUrl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -735,7 +746,8 @@ function dataUrlToBlob(dataUrl) {
       n = bStr.length,
       unit8Array = new Uint8Array(n);
   while (n--) {
-    unit8Array[n] = bStr.charCodeAt(n);
+    // 以对象的方式或使用数组下标索引的方式引用数组中的元素
+    unit8Array[n] = bStr.charCodeAt(n); //返回指定位置的字符的 Unicode 编码
   }
   return new Blob([unit8Array], { type: mime });
 } 
@@ -797,6 +809,14 @@ downloadPDF() {
 
 [msSaveBlob](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob)
 
+### location.href下载
+
+这个用的比较少，实用性不是很强，简单介绍一下用法
+
+```js
+location.href = '../downloads/cutegirl.jpg'
+```
+它的缺点是最明显的，浏览器支持在线预览的图片、文本文档、pdf文件都会在线打开不会提示下载，不能像 `a` 标签那样接受其他形式的 `URL`, 所以基本不会用上
 
 ### iframe下载
 
@@ -836,6 +856,7 @@ function download(url) {
   iframe.src = '';
   document.body.appendChild(iframe);
   setTimeout(function loadUrl() {
+    // 获取iframe里面的window对象 指定打开页面在这个iframe 框架中
     iframe.contentWindow.location.href = url;
   }, 50);
 }
@@ -849,15 +870,6 @@ function handleDownIframe() {
   document.body.appendChild(iframe)
 }
 ```
-
-### location.href下载
-
-这个用的比较少，实用性不是很强，简单介绍一下用法
-
-```js
-location.href = '../downloads/cutegirl.jpg'
-```
-它的缺点是最明显的，浏览器支持在线预览的图片、文本文档、pdf文件都会在线打开不会提示下载，不能像 `a` 标签那样接受其他形式的 `URL`, 所以基本不会用上
 
 ### FileSaver 下载
 
@@ -873,7 +885,7 @@ location.href = '../downloads/cutegirl.jpg'
 
 ![](../.vuepress/public/images/fileSaver-compatibility.png)
 
-可以看到，**FileSaver** 能够兼容大部分的浏览器，而且支持保存的文件大小也能满足一般的业务需求，如果处理的是 **IE** 浏览器，我们还可以用到 [navigaFtor.msSaveBlob()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob) 这个方法，这里就不详细介绍这个 api了。来看看 **FileSaver** 的运用
+可以看到，**FileSaver** 能够兼容大部分的浏览器，而且支持保存的文件大小也能满足一般的业务需求，如果处理的是 **IE** 浏览器，我们还可以用到 [navigator.msSaveBlob()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob) 这个方法，这里就不详细介绍这个 api了。来看看 **FileSaver** 的运用
 
 ```js
   // 采用 cdn 引入
