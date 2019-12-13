@@ -22,7 +22,7 @@
 
 ![](../.vuepress/public/images/http.jpg)
 
-我们来看第一个栗子：这是一个非常原始的上传文件的方式，点击 `submit` 后页面会跳转到表单 `action` 指向的页面，这种方式是需要改进的，否则页面的其他数据就会丢失。
+第一个栗子：这是一个非常原始的上传文件的方式，点击 `submit` 后页面会跳转到表单 `action` 指向的页面，这种方式是需要改进的，否则页面的其他数据就会丢失。
 
 ```js
   <form id="form2" method="post" action="http://localhost:8100/upload-form" enctype="multipart/form-data">
@@ -60,7 +60,7 @@
   </form>
 ```
 
-接着介绍一下这次上传的服务端，用的是 **node js** + **fs**  + **koa** 框架写的服务端
+介绍一下这次上传的服务端，用的是 **node js** + **fs**  + **koa** 框架写的服务端
 ```js
 /**
  * 服务入口
@@ -175,7 +175,7 @@
   }
 ```
 
-浏览器文件下载会自带进度显示，那我们文件上传也当然有对应的进度提醒，如何获取我们文件上传的进度呢？如果细心阅读过 [axios](https://www.npmjs.com/package/axios#request-config) 官方文档的小伙伴肯定知道,请求配置里有个 `onUploadProgress` 事件，就是这里我们能够实时的监听到文件上传的进度，使用上也很简单：
+浏览器文件下载会自带进度显示，那我们文件上传也当然有对应的进度提醒，如何获取我们文件上传的进度呢？如果细心阅读过 [axios](https://www.npmjs.com/package/axios#request-config) 官方文档肯定知道,请求配置里有个 `onUploadProgress` 事件，就是这里我们能够实时的监听到文件上传的进度：
 
 ```js
   const progressSpan = document.getElementById('progress').firstElementChild
@@ -236,7 +236,7 @@
 - 为这个拖放区域添加拖拽样式
 - 在 `drop` 事件获取文件信息 `e.dataTransfer.files` 
 
-我们先从从一张图了解一下拖拽分别会触发哪些事件：
+先从一张图了解一下拖拽分别会触发哪些事件：
 
 - drag source: 是我们拖拽的源元素
 - intermediate zone: 是拖拽过程可能经过的区域
@@ -392,8 +392,7 @@
 
 #### 总结
 
-粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最后一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是支持的
-
+粘贴上传的场景比较少，所以实际测试的栗子也不多，这里还存在两个问题，暂时没想到怎么解决：一是粘贴多个文件只能成功复制最后一个文件，也就是只有最后一个文件成功上传；二是 `windows` 系统不支持磁盘复制文件上传， `mac`系统是可以支持的
 
 ### 大文件断点续传
 
@@ -441,7 +440,7 @@
 
 ![](../.vuepress/public/images/file-slice-result.png)
  
-接着我们来看如何处理上传的逻辑：
+接着是处理上传的逻辑：
 
 ```js
     const progressSpan = document.getElementById('progress').firstElementChild // 简单配一下进度条
@@ -623,11 +622,26 @@ const saveChunkKey = 'chunkUploaded'
 
 #### 问题：
 
-如果我们想要分片上传我们的大文件但又只想以一个进度条显示，请问要如何处理呢？有没有小伙伴想到？给一个提示 `onUploadProgress` 还是在这个地方处理
+如果我们想要分片上传我们的大文件但又只想以一个进度条显示，请问要如何处理呢？ `onUploadProgress` 还是在这个地方处理
 
 #### 答案：
 
-想要获取上传进度，还是要回到 `onUploadProgress` 这个 api 上获取进度
+```js
+  const config = {
+      onUploadProgress: progressEvent => {
+          const complete = (progressEvent.loaded / file.size * 100 | 0)
+          // 如果有缓存 tempSize
+          // const complete = (progressEvent.loaded / (file.size - tempSize) * 100 | 0)
+          // 或者
+          // const complete = ((progressEvent.loaded + tempSize) / file.size * 100 | 0)
+          progressSpan.style.width = complete + '%'
+          progressSpan.innerHTML = complete
+          if (complete === 100) { // 进度条变色
+              progressSpan.classList.add('green')
+          }
+      }
+  }
+```
 
 #### 总结： 
 
@@ -800,6 +814,11 @@ downloadPDF() {
   })
 }
 ```
+
+#### 疑问
+
+或许会有人感到疑惑，如果 `data:URL` 就能够解决**资源跨域**的问题为什么还要继续用`blob:URL`呢？ 首先， `data:URL` 是一个包含内容编码的 URL, 如果编码数据过长，有可能会超过浏览器的限制而出现报错。其次，一般情况下，我们能够在请求时，设置 `responseType = blob`来获取我们需要的 `blob`格式的数据，在这种情况下转换成 `blob:URL`是比较简单方便的。
+
 #### 总结
 
 a标签下载的方式还是很通用的，如果出现在线打开的问题，可以采用转换 URL 的方式实现保存下载；而如果需要我们自定义下载进度，可以再考虑通过 `axios` 请求获取进度， 再配合 data:URL 或 blob:URL 下载。但缺点是它不兼容 IE 浏览器，后面我们会讲解如何在 IE 上保存下载。
