@@ -42,6 +42,7 @@ module.exports = {
           { text: "🌍GIS", link: "/gis/" },
           { text: "️️🖱️软件", link: "/software/" },
           { text: "️️🐛网络工程", link: "/network/",  },
+          { text: "🚗C#", link: "/csharp/"}
         ]
       },
       { text: "设计", items: [
@@ -82,7 +83,7 @@ module.exports = {
         {
           title: "日常记录",
           collapsable: true,
-          children: ["file", "2018", "table",""]
+          children: ["2020", "file", "2018", "table",""]
         },
         {
           title: "TechnologyDevelopment",
@@ -139,7 +140,7 @@ module.exports = {
         {
           title: "前端",
           collapsable: false,
-          children: [ "browser", "css", "js", "es6", "react", "vue", "webpack", "", "architecture", "authentication", "chrome","noJQ", "performance", "npm", "lodash"]
+          children: [ "browser", "css", "js", "es6", "react", "vue", "webpack", "", "modulization", "architecture", "authentication", "chrome","noJQ", "performance", "npm", "lodash"]
         }
       ],
       "/rethink/": [
@@ -176,6 +177,13 @@ module.exports = {
           title: "GIS",
           collapsable: false,
           children: ["", "layer", "handleFile", "learn"]
+        }
+      ],
+      "/csharp/": [
+        {
+          title: "C#",
+          collapsable: false,
+          children: [""]
         }
       ]
     },

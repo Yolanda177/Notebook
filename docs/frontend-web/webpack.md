@@ -2,15 +2,139 @@
 
 ## 基础
 
-使用 webpack4，至少只需要安装 webpack 和 webpack cli。
+使用 webpack4，至少只需要安装 webpack 和 webpack-cli。新版本的 webpack 4.35.* 必须同步安装 webpack-cli
+
+webpack 支持 `es6`，`CommonJS`，`AMD`
 
 ### 打包 JS
 
-#### 检验 webpack 规范支持
+**如何运行 webpack ？**
+- 安装 webpack 后，找到 package.json 文件，增加 "scripts":{ "build": "webpack ./webpack.config.js"}
+- 命令行敲 yarn build 就能打包我们需要的 bundle.js 文件
 
-`webpack` 支持 `es6`，`CommonJS`，`AMD`。
+```js
+{
+  "name": "my-webpack-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack ./webpack.config.js"
+  },
+  "devDependencies": {
+    "webpack": "4.15.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "babel-polyfill": "6.26.0",
+    "babel-runtime": "6.26.0"
+  }
+}
+```
 
 ### 编译 ES6
+
+安装所需包：
+1. `babel-loader`: 负责`es6`语法转化
+2. `babel-preset-env`: 包含`es6`、`es7`等版本的语法转化规则
+3. `babel-polyfill`: `es6`内置方法和函数转化垫片
+4. `babel-plugin-transform-runtime`: 避免`polyfill`污染全局变量
+
+
+为什么需要这些依赖呢？
+
+因为在我们的项目中，不可避免地使用到`es6`的语法和API，我们需要对这些代码进行转化保证能在低版本的浏览器上运行，而`babel`就是这个作用，帮助我们将`es6`的语法转化
+
+**`babel-loader`和`babel-polyfill`的区别：**
+
+`babel-loader`和`babel-polyfill`的区别是，前者负责语法转化，如箭头函数；后者负责内置方法和函数，如 `new Set()`而单独使用一个`babel-loader`是不够的，需要配合`babel-polyfill`、`babel-preset-env`、`babel-runtime`使用
+
+`babel-polyfill`会模拟一个`es2015+`环境，用于应用程序的开发而不是库文件，可以使用`Promise`之类的新的内置组件、`Array.from`和`Object.assigh`等静态方法，以及一些`Array.prototype.includes`实例方法、`polyfill`将添加到全局范围和本地原型中，导致污染全局变量
+
+**引入`babel-polyfill`的四种方式：**
+1. 直接在`main.js`顶部使用: ```import "@babel/polyfill"```
+2. 设置`.babelrc`: 
+```js
+{
+  "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": 2
+        }
+      ]
+    ]
+}
+```
+并在`main.js`顶部使用```import "@babel/polyfill"```
+3. 设置`.babelrc`:
+```js
+{
+  "preset": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": false
+      }
+    ]
+  ]
+}
+```
+然后在`webpack.config.js`中入口配置：
+```js
+entry: {
+  app: [
+    "@babel/polyfill",
+    "./main.hs:
+  ]
+}
+```
+4. 设置`.babelrc`，无需再引用`@babel/polyfill`(按需引入，前三种是全部引入)
+```js
+{
+  "preset": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 2
+      }
+    ]
+  ]
+}
+```
+该配置会自动加载项目中需要的`polifill`，而不是全部引入
+
+**`babel-runtime`和`babel-plugin-transform-runtime`**
+`babel-runtime`为生产依赖而`babel-plugin-transform-runtime`为开发依赖，`babel-runtime`包含了所有的核心帮助函数，举个栗子，当我们需要使用`Promise`时，就需要在项目文件中引入所需要的帮助函数：
+```js
+import Promise from "babel-runtime/core.js/promise"
+let promise = new Promise(function(resolve, reject) {
+  console.log('Promise)
+  resolve() 
+})
+promise.then(function() {
+  console.log('resolved')
+})
+```
+但手动引入是比较繁琐的，就需要`babel-transform-runtime`插件，帮助我们分析项目代码，自动引入所需的垫片API，使用方式：在`.babelrc`设置：
+```
+  {
+    "plugins: [
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "corejs": 2 // 默认值为 false，为达到自动引入的效果需要改成 2
+        }
+      ]
+    ]
+  }
+```
+并安装依赖`npm install --save @babel/runtime-corejs2`
+需要注意的是，`babel-runtime`不能模拟实例方法，即内置对象原型上的方法，如`Array.prototype.concat`，如果`babel`版本 >= 7.4.0，设置`"corejs": 3`，同样需要安装依赖`npm install --save @babel/runtime-corejs3`就能正常使用实例方法了
+
+
 
 ### 多页面解决方案——提取公共代码
 
