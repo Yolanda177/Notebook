@@ -1591,13 +1591,84 @@ eg:
 
 ### 为委托添加方法
 
+使用+=运算符为委托**添加**方法：实际上是创建了一个新的委托，其调用列表是左边的委托加上右边的方法的组合，然后将这个新的委托赋值给delVar
+
+eg:
+```cs
+    MyDel delVar = inst.MyM1; // 创建并初始化
+    delVar += SCl.m3; // 增加方法
+    delVar += X.Act; // 增加方法
+```
+
+![](../.vuepress/public/images/13-7.png)
+
+
 ### 为委托移除方法
+
+使用-=运算符为委托**移除**方法：实际上也是创建了一个新的委托。新的委托是旧委托的副本，只是没有了已移除方法的引用，注意的是：
+- 如果在调用列表中的方法有多个实例，-=运算符会从列表最后开始搜索，并移除第一个与方法匹配的实例
+- 试图删除委托中不存在的方法是没有效果
+- 试图调用空委托会抛出异常，可以通过把委托和null进行比较来判断委托的调用列表是否为空，如果为空则委托是null
+
+![](../.vuepress/public/images/13-8.png)
 
 ### 调用委托
 
+可以像调用方法一样简单地调用委托：用于调用委托的参数将会调用调用列表中的每一个方法（除非有输出参数），如果一个方法在调用列表中出现多次，当委托被调用时，每次在列表中遇到这个方法时它都会被调用一次
+
+eg:
+```cs
+    MyDel delVar = inst.MyM1;
+    delVar += SCl.m3;
+    delVar += X.Axt;
+    ...
+    delVar(55); // 调用委托
+```
+![](../.vuepress/public/images/13-9.png)
+
 ### 委托的示例
 
+eg:
+```cs
+    class Test
+    {
+        public void Print1()
+        {
+            Console.WriteLine("Print1 -- instance");
+        }
+        public static void Print2()
+        {
+            Console.WriteLine("Print2 -- static");
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+        {
+            Test t = new Test();
+            PrintFunction pf;
+            pf = t.Print1;
+            pf += Test.Print2;
+            pf += t.Print1;
+            pf += Test.Print2;
+
+            if (null != pf)
+                pf();
+            else
+                Console.WriteLine("Delegate is empty");
+
+                // Print1 -- instance
+                // Print2 -- static
+                // Print1 -- instance
+                // Print2 -- static
+        }
+    }
+```
+
 ### 调用带返回值的委托
+
+如果委托有返回值且调用列表中的方法有一个以上，会出现：
+- 调用列表中最后一个方法返回的值就是委托调用返回的值
+= 调用列表中所有其他方法的返回值都会被忽略
 
 ### 调用带引用参数的委托
 
