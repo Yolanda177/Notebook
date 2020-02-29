@@ -1,36 +1,297 @@
 # webpack
 
+webpack作为一个模块打包机,能做什么?
+
+- 代码转换: TypeScript编译成JavaScript、SCSS,LESS编译成CSS
+- 文件优化: 压缩JS、CSS、HTML代码,压缩合并图片
+- 代码分割: 提取多个页面的公共代码、提取首屏不需要执行部分的代码使其异步加载
+- 模块合并: 在采用模块化的项目里会有很多个模块和文件,需要构建功能把模块分类合并成一个文件
+- 自动刷新: 监听本地源代码的变化,自动重新构建、刷新浏览器
+
 ## 基础
 
-使用 webpack4，至少只需要安装 webpack 和 webpack-cli。新版本的 webpack 4.35.* 必须同步安装 webpack-cli
+使用 webpack4，因为抽离了webpack-cli, 所以需要安装 webpack 和 webpack-cli。
 
 webpack 支持 `es6`，`CommonJS`，`AMD`
 
 ### 打包 JS
 
 **如何运行 webpack ？**
-- 安装 webpack 后，找到 package.json 文件，增加 "scripts":{ "build": "webpack ./webpack.config.js"}
-- 命令行敲 yarn build 就能打包我们需要的 bundle.js 文件
+
+**首先**需要创建一个<webpack.config.js>文件,添加基础配置:
 
 ```js
-{
-  "name": "my-webpack-demo",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "build": "webpack ./webpack.config.js"
-  },
+// webpack.config.js
+  const path = require('path')
+  module.exports = {
+    mode: 'development',
+    entry: './src/index.js', // 以当前目录为根目录
+    output: {
+      path: path.join(__dirname, './dist'),
+      filename: 'bundle.js'
+    },
+    module: {
+      rules: [
+        {
+          test: 正则表达式,
+          use: [对应的loader]
+        }
+      ]
+    },
+    plugin: {}
+  }
+```
+(这个其实就是一个模块包,很明显符合CommonJS规范)
+
+**配置说明**
+- `entry`: 代表入口文件, webpack会找到该文件进行解析
+- `output`: 代表输出文件配置
+- `module`: 打包规则,不同后缀的文件用不同的包来处理
+- `plugins`: 实现一些功能用到的插件
+
+**其次**
+```
+// 安装 webpack 后，找到 package.json 文件，增加 "scripts":{ "build": "webpack ./webpack.config.js"}
+webpack 4版本以上 直接运行 `npx webpack` 命令就能打包文件
+// 命令行敲 yarn build 就能打包我们需要的 bundle.js 文件
+```
+
+**npm包版本**
+```js
   "devDependencies": {
-    "webpack": "4.15.1",
-    "webpack-cli": "^3.3.11"
+    "@babel/core": "^7.8.6",
+    "autoprefixer": "^9.7.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "7",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "core-js": "3",
+    "css-loader": "^3.4.2",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^1.1.3",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "babel-polyfill": "6.26.0",
-    "babel-runtime": "6.26.0"
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15"
+  }
+```
+
+**可能遇到的报错**
+
+1. babel-loader 与 babel-core 版本兼容性问题:
+
+babel-loader 版本8.x
+
+babel-core 版本6.x
+
+报错:
+![](../.vuepress/public/images/babel-error.png)
+
+将babel-loader卸载再安装`yarn add babel-loader@7 --dev`就正常了
+
+### 多页面解决方案——提取公共代码
+
+**结构目录**
+```
+  |-src
+    |-index.js
+    |-login.js
+    |-utils.js
+```
+
+**js文件**
+```js
+// index.js
+import * as _ from 'lodash'
+import {sum} from './utils'
+
+const value = sum (1 , 2)
+console.log(_)
+console.log("At page Index:", _)
+
+export default {
+  value
+}
+
+// login.js
+import * as _ from 'lodash'
+import {sum} from './utils'
+
+sum(1,2)
+console.log(sum(1,2))
+console.log("At page Login:", _)
+```
+
+**webpack.config.js文件**
+```js
+const path = require('path') 
+const {CleanWebpackPlugin} = require('clean-webpack-plugin') // 打包前清空 dist文件夹 注意新用法 https://github.com/johnagan/clean-webpack-plugin#options-and-defaults-optional
+
+module.exports = {
+  mode: 'development',
+  devtool: 'source-map', // 默认为 eval,为了调试时能回到源代码而不是编译或压缩后的代码,source-map提供了将压缩文件中的代码映射回源文件的原始位置的方法
+  // entry: ['./src/index.js', './src/login.js'] // 多入口文件合并打包
+  entry: { // 多入口文件 如果要分开输出则以对象形式,如要合并打包则以数组形式
+    index: './src/index.js',
+    login: './src/login.js'
+  },
+  output: {
+    filename: '[name].js', // 多文件分开打包后将出口文件和入口文件名一一对应
+    path: path.resolve('dist')
+  }, // 出口文件
+  module: {
+    rules: [
+      { // 编译ES6
+        test: /\.js$/,
+        use: 'babel-loader',
+        include: /src/, // 只转化src目录下的js文件
+        exclude: /node_modules/ //排除node_modules, 优化打包速度
+      }
+    ]
+  }, // 处理对应模块
+  plugins: [ // 对应的插件
+    new CleanWebpackPlugin()
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: { // 抽离第三方插件
+          test: /node_modules/, // 指定是node_modules下的第三方包
+          chunks: 'initial',
+          name: 'vendor', //打包后的文件名 可任意
+          priority: 10 // 设置优先级 防止和自定义的公共代码提取时被覆盖,不进行打包
+        },
+        utils: { // 抽离自己写的公共代码
+          chunks: 'initial',
+          name: 'utils',
+          minSize: 0 // 只要超出0字节就生成一个新包
+        }
+      }
+    }
   }
 }
 ```
+
+
+
+
+
+
+### webpack 其他配置
+
+```js
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin') // 使打包后的bundle文件自动插入指定的html 
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')  // 将css以link方式插入html
+const {CleanWebpackPlugin} = require('clean-webpack-plugin') // 打包前清空 dist文件夹 注意新用法 https://github.com/johnagan/clean-webpack-plugin#options-and-defaults-optional
+const webpack = require('webpack')
+
+module.exports = {
+  mode: 'development',
+  devtool: 'source-map', // 默认情况为 eval ,为了调试时能回到源代码调试而不是编译或压缩后的代码,source-map提供了将压缩文件中的代码映射回源文件的原始位置的方法
+  entry: './src/index.js', // 单入口文件
+  // entry: ['./src/index.js', './src/login.js'] // 多入口文件合并打包
+  // entry: { // 多入口文件 如果要分开输出则以对象形式,如要合并打包则以数组形式
+  //   index: './src/index.js',
+  //   login: './src/login.js'
+  // },
+  output: {
+    filename: 'bundle.[hash:4].js', // 添加[hash:4]可以防止文件缓存,每次都会生成4位hash串
+    // filename: '[name].js', // 多文件分开打包后将出口文件和入口文件名一一对应
+    path: path.resolve('dist')
+  }, // 出口文件
+  module: {
+    rules: [
+      { // 解析css
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'postcss-loader' // 添加CSS3前缀,即一些需要兼容写法的属性添加响应前缀
+          }
+        ],
+        use: ExtractTextWebpackPlugin.extract({
+          use: 'css-loader'
+        }),
+        // publicPath: '../' // 如果是在css文件里引入背景图 则需要指定相对路径
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192, // 小于8k的图片自动转成base64格式,并且不会存在实体图片
+              outputPath: 'images/' //图片打包后存放的路径
+            }
+          }
+        ]
+      },
+      { // 编译ES6
+        test: /\.js$/,
+        use: 'babel-loader',
+        include: /src/, // 只转化src目录下的js文件
+        exclude: /node_modules/ //排除node_modules, 优化打包速度
+      }
+    ]
+  }, // 处理对应模块
+  plugins: [ // 对应的插件
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+      chunks: ['vendor','index']
+      // hash: true
+    }),
+    new ExtractTextWebpackPlugin('css/style.css'),
+    new CleanWebpackPlugin(),
+    new webpack.HotModuleReplacementPlugin(), // 配置自动更新 需要在index.js文件也做相关处理
+    // new HtmlWebpackPlugin({
+    //   template: './src/login.html',
+    //   filename: 'login.html',
+    //   chunks: ['vendor','login']
+    //   // hash: true
+    // })
+  ],
+  // optimization: { // 提取公共模块需要配置
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: { // 抽离第三方插件
+  //         test: /node_modules/, // 指定是node_modules下的第三方包
+  //         chunks: 'initial',
+  //         name: 'vendor', //打包后的文件名 可任意
+  //         priority: 10 // 设置优先级 防止和自定义的公共代码提取时被覆盖,不进行打包
+  //       },
+  //       utils: { // 抽离自己写的公共代码
+  //         chunks: 'initial',
+  //         name: 'utils',
+  //         minSize: 0 // 只要超出0字节就生成一个新包
+  //       }
+  //     }
+  //   }
+  // },
+  devServer: { // 开发服务器配置
+    contentBase: './dist',
+    host: 'localhost', // 默认使localhost
+    port: 3000, // 端口
+    open: true, // 自动打开浏览器
+    hot: true // 开启热更新
+  }
+}
+```
+
+## 进阶
 
 ### 编译 ES6
 
@@ -53,6 +314,7 @@ webpack 支持 `es6`，`CommonJS`，`AMD`
 
 **引入`babel-polyfill`的四种方式：**
 1. 直接在`main.js`顶部使用: ```import "@babel/polyfill"```
+
 2. 设置`.babelrc`: 
 ```js
 {
@@ -68,6 +330,7 @@ webpack 支持 `es6`，`CommonJS`，`AMD`
 }
 ```
 并在`main.js`顶部使用```import "@babel/polyfill"```
+
 3. 设置`.babelrc`:
 ```js
 {
@@ -90,6 +353,7 @@ entry: {
   ]
 }
 ```
+
 4. 设置`.babelrc`，无需再引用`@babel/polyfill`(按需引入，前三种是全部引入)
 ```js
 {
@@ -107,6 +371,7 @@ entry: {
 该配置会自动加载项目中需要的`polifill`，而不是全部引入
 
 **`babel-runtime`和`babel-plugin-transform-runtime`**
+
 `babel-runtime`为生产依赖而`babel-plugin-transform-runtime`为开发依赖，`babel-runtime`包含了所有的核心帮助函数，举个栗子，当我们需要使用`Promise`时，就需要在项目文件中引入所需要的帮助函数：
 ```js
 import Promise from "babel-runtime/core.js/promise"
@@ -135,71 +400,58 @@ promise.then(function() {
 需要注意的是，`babel-runtime`不能模拟实例方法，即内置对象原型上的方法，如`Array.prototype.concat`，如果`babel`版本 >= 7.4.0，设置`"corejs": 3`，同样需要安装依赖`npm install --save @babel/runtime-corejs3`就能正常使用实例方法了
 
 
-
-### 多页面解决方案——提取公共代码
-
-### Webpack 环境配置
-
-## 进阶
-
 ### 分析打包结果
 
-设置 devtool 属性改为 `source-map`。
-源文件中的所有 `import` 和 `export` 都会转换成对应的辅助函数。
+**源文件**
+
+![](../.vuepress/public/images/source-dc.png)
+
+**结果文件**
+
 ```js
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define("PackDataStructuresAlogrithms", [], factory);
-	else if(typeof exports === 'object')
-		exports["PackDataStructuresAlogrithms"] = factory();
-	else
-		root["PackDataStructuresAlogrithms"] = factory();
-})(window, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache // 模块缓存
 /******/ 	var installedModules = {};
 /******/
-/******/ 	// The require function
+/******/ 	// The require function // 请求函数
 /******/ 	function __webpack_require__(moduleId) {
 /******/
-/******/ 		// Check if module is in cache
+/******/ 		// Check if module is in cache  // 检查模块是否在缓存
 /******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
 /******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
+/******/ 		// Create a new module (and put it into the cache) // 创建新的模块并放进缓存
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/
-/******/ 		// Execute the module function
+/******/ 		// Execute the module function // 执行模块函数 this 模块对象本身 模块对象的exports属性 请求函数最终返回
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/
-/******/ 		// Flag the module as loaded
+/******/ 		// Flag the module as loaded // 标志模块已经加载完
 /******/ 		module.l = true;
 /******/
-/******/ 		// Return the exports of the module
+/******/ 		// Return the exports of the module // 返回模块输出
 /******/ 		return module.exports;
 /******/ 	}
 /******/
 /******/
-/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	// expose the modules object (__webpack_modules__)  // 暴露所有模块对象
 /******/ 	__webpack_require__.m = modules;
 /******/
-/******/ 	// expose the module cache
+/******/ 	// expose the module cache // 暴露模块缓存
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// define getter function for harmony exports
+/******/ 	// define getter function for harmony exports // 为ES6 export定义 getter函数
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
 /******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
 /******/ 	};
 /******/
-/******/ 	// define __esModule on exports
+/******/ 	// define __esModule on exports // 在exports定义_esModule
 /******/ 	__webpack_require__.r = function(exports) {
 /******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
@@ -207,11 +459,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 	};
 /******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
+/******/ 	// create a fake namespace object // 创建代用命名空间对象
+/******/ 	// mode & 1: value is a module id, require it // value是一个模块Id,必须使用
+/******/ 	// mode & 2: merge all properties of value into the ns // 合并value属性到ns
+/******/ 	// mode & 4: return value when already ns object // ns已经是对象时返回value
+/******/ 	// mode & 8|1: behave like require // 表现如require
 /******/ 	__webpack_require__.t = function(value, mode) {
 /******/ 		if(mode & 1) value = __webpack_require__(value);
 /******/ 		if(mode & 8) return value;
@@ -223,7 +475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		return ns;
 /******/ 	};
 /******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules // 用于兼容非ES6模块的 getModuleExports函数
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
 /******/ 			function getDefault() { return module['default']; } :
@@ -239,294 +491,82 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/index.js");
+/******/ 	// Load entry module and return exports // 加载入口文件并返回 exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/js/data-structures/stack-array.js":
-/*!***********************************************!*\
-  !*** ./src/js/data-structures/stack-array.js ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return StackArray; });
-// LIFO：只能用 push, pop 方法添加和删除栈中元素，满足 LIFO 原则
-class StackArray {
-  constructor() {
-    this.items = [];
-  }
-  /**
-   * @description 向栈添加元素，该方法只添加元素到栈顶，也就是栈的末尾。
-   * @param {*} element 
-   * @memberof Stack
-   */
 
 
-  push(element) {
-    this.items.push(element);
-  }
-  /**
-   * @description 从栈移除元素
-   * @returns 移出最后添加进去的元素
-   * @memberof Stack
-   */
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
+var _utils = __webpack_require__(/*! ./utils */ "./src/utils.js");
 
-  pop() {
-    return this.items.pop();
-  }
-  /**
-   * @description 查看栈顶元素
-   * @returns 返回栈顶的元素
-   * @memberof Stack
-   */
+var value = (0, _utils.sum)(1, 2);
 
-
-  peek() {
-    return this.items[this.items.length - 1];
-  }
-  /**
-   * @description 检查栈是否为空
-   * @returns
-   * @memberof Stack
-   */
-
-
-  isEmpty() {
-    return this.items.length === 0;
-  }
-  /**
-   * @description 返回栈的长度
-   * @returns
-   * @memberof Stack
-   */
-
-
-  size() {
-    return this.items.length;
-  }
-  /**
-   * @description 清空栈元素
-   * @memberof Stack
-   */
-
-
-  clear() {
-    this.items = [];
-  }
-
-}
+exports.default = {
+  value: value
+};
 
 /***/ }),
 
-/***/ "./src/js/data-structures/stack.js":
-/*!*****************************************!*\
-  !*** ./src/js/data-structures/stack.js ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./src/utils.js":
+/*!**********************!*\
+  !*** ./src/utils.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Stack; });
-/**
- * @description 创建一个基于 JavaScript 对象的 Stack 类
- * 使用 JavaScript 对象来存储所有的栈元素，保证它们的顺序并且遵循 LIFO 原则。
- * @class Stack
- */
-class Stack {
-  constructor() {
-    this.count = 0; // 记录栈的大小，以及帮助我们从数据结构中添加和删除元素。保证顺序
-
-    this.items = {};
-  }
-  /**
-   * @description 向栈中插入元素
-   * @param {*} element
-   * @memberof Stack
-   */
 
 
-  push(element) {
-    this.items[this.count] = element;
-    this.count++;
-  }
-  /**
-   * @description 从栈中弹出元素
-   * @returns 移出最后添加进去的元素
-   * @memberof Stack
-   */
-
-
-  pop() {
-    if (this.isEmpty()) {
-      // {1}检验栈是否空
-      return undefined; // 如果为空，则返回 undefined
-    }
-
-    this.count--; // 如果栈不为空的话，我们会讲 count 属性减1
-
-    const result = this.items[this.count]; // 保存栈顶的
-
-    delete this.items[this.count]; // 删除该属性
-
-    return result;
-  }
-  /**
-   * @description 返回栈的长度
-   * @returns
-   * @memberof Stack
-   */
-
-
-  size() {
-    return this.count;
-  }
-  /**
-   * @description 检查栈是否为空
-   * @returns
-   * @memberof Stack
-   */
-
-
-  isEmpty() {
-    return this.count === 0;
-  }
-  /**
-  * @description 查看栈顶元素
-  * @returns 返回栈顶的元素
-  * @memberof Stack
-  */
-
-
-  peek() {
-    if (this.isEmpty()) {
-      return undefined;
-    }
-
-    return this.items[this.count - 1];
-  }
-  /**
-   * @description 清空栈元素
-   * @memberof Stack
-   */
-
-
-  clear() {
-    this.items = {};
-    this.count = 0; // 或者 LIFO 原则
-    // while (!this.isEmpty()) { this.pop(); }
-  }
-  /**
-   * @description 打印栈的内容
-   * @returns
-   * @memberof Stack
-   */
-
-
-  toString() {
-    if (this.isEmpty()) {
-      return ''; // 如果栈是空的，我们只需返回一个空字符串
-    }
-
-    let objString = `${this.items[0]}`; // 如果不是空的，就用它底部的第一个元素作为字符串的初始值
-
-    for (let i = 1; i < this.count; i++) {
-      // 迭代整个栈的键
-      objString = `${objString},${this.items[i]}`;
-    }
-
-    return objString;
-  }
-
-}
-
-/***/ }),
-
-/***/ "./src/js/index.js":
-/*!*************************!*\
-  !*** ./src/js/index.js ***!
-  \*************************/
-/*! exports provided: StackArray, Stack, decimalToBinary */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _data_structures_stack_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data-structures/stack-array */ "./src/js/data-structures/stack-array.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "StackArray", function() { return _data_structures_stack_array__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _data_structures_stack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data-structures/stack */ "./src/js/data-structures/stack.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Stack", function() { return _data_structures_stack__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _others_base_converter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./others/base-converter */ "./src/js/others/base-converter.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "decimalToBinary", function() { return _others_base_converter__WEBPACK_IMPORTED_MODULE_2__["decimalToBinary"]; });
-
-// stack
-
-
-
-
-
-/***/ }),
-
-/***/ "./src/js/others/base-converter.js":
-/*!*****************************************!*\
-  !*** ./src/js/others/base-converter.js ***!
-  \*****************************************/
-/*! exports provided: decimalToBinary */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "decimalToBinary", function() { return decimalToBinary; });
-/* harmony import */ var _data_structures_stack__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data-structures/stack */ "./src/js/data-structures/stack.js");
-
-function decimalToBinary(decNumber) {
-  const remStack = new _data_structures_stack__WEBPACK_IMPORTED_MODULE_0__["default"]();
-  let number = decNumber; // 十进制数字
-
-  let rem; // 余数
-
-  let binaryString = '';
-
-  while (number > 0) {
-    // 当结果不为0，获得一个余数
-    rem = Math.floor(number % 2);
-    remStack.push(rem); // 入栈
-
-    number = Math.floor(number / 2);
-  }
-
-  while (!remStack.isEmpty()) {
-    binaryString += remStack.pop().toString();
-  }
-
-  return binaryString;
-}
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var sum = exports.sum = function sum(a, b) {
+  return a + b;
+};
 
 /***/ })
 
 /******/ });
-});
-//# sourceMappingURL=PackDataStructuresAlogrithms.min.js.map
+//# sourceMappingURL=bundle.6777.js.map
 ```
-- import 对应 `__webpack_require`
-- export 对应 `__webpack_exports__['defalut']` 直接赋值和 `__webpack_require__.d`。
 
-整理一下整个流程：
-1. 定义 `__webpack_require__`及其辅助函数。
-2. 使用 `__webpack_require__`引入入口模块。
-3. `__webpack_require__`函数载入模块，将模块放到模块缓存。
-4. 调用模块
-   1. 同样使用 `__webpack_require__`读取依赖（回到第3步）。
-   2. 运行模块内部功能。
-   3. 使用`__webpack_exports__['default']` 直接赋值和 `__webpack_require__.d`输出。
-5. 运行结束。
+**需要设置 `devtool` 属性为 `source-map`**
+源文件中的所有`import`和`export`都会转换为对应的辅助函数:
+- `import` 对应 `__webpack_require__`
+- `export` 对应 `__webpack_exports__['default']`直接赋值 和 `__webpack_require__.d`输出
+
+整个流程:
+1. 定义`__webpack_require__`及其辅助函数
+2. 使用`__webpack_require__`引入入口文件
+3. `__webpack_require__`函数载入模块,将模块放到模块缓存
+4. 调用模块:
+  - 同样使用`__webpack_require__`读取依赖(回到第3步)
+  - 运行模块内部功能
+  - 使用`__webpack_exports__['default']`直接赋值和`__webpack_require__.d`输出
+5. 运行结束
+
+**打包结果**
+
+![](../.vuepress/public/images/build-result.png)
+
+参考:
+
+- [四大维度解锁Webpack3.0前端工程化](https://coding.imooc.com/class/chapter/171.html#Anchor) -- 由浅入深 webpack。
+- [webpack 最简打包结果分析](https://segmentfault.com/a/1190000018205656) -- 清晰明了，说明 webapck 的打包文件流程。
 
 ### 优化打包速度
 
@@ -536,7 +576,4 @@ function decimalToBinary(decNumber) {
 
 ## 原理
 
-## 参考资料
 
-- [四大维度解锁Webpack3.0前端工程化](https://coding.imooc.com/class/chapter/171.html#Anchor) -- 由浅入深 webpack。
-- [webpack 最简打包结果分析](https://segmentfault.com/a/1190000018205656) -- 清晰明了，说明 webapck 的打包文件流程。

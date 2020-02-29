@@ -208,11 +208,11 @@ namespace HelloWorld
 - 五种访问级别：public、private、protected、internal、protected internal
 - 必须对每个成员指定访问级别，不指定默认为private
 - 成员不能比所在类有更高的访问性，如果类仅限于所在的程序集访问，则它成员也不能从程序集外部访问
-![](../.vuepress/public/images/7-16.png)
-![](../.vuepress/public/images/7-17.png)
-![](../.vuepress/public/images/7-18.png)
-![](../.vuepress/public/images/7-19.png)
-![](../.vuepress/public/images/7-20.png)
+![](../.vuepress/public/images/cSharp/7-16.png)
+![](../.vuepress/public/images/cSharp/7-17.png)
+![](../.vuepress/public/images/cSharp/7-18.png)
+![](../.vuepress/public/images/cSharp/7-19.png)
+![](../.vuepress/public/images/cSharp/7-20.png)
 
 **总结**：
 - private：只在类的内部可访问
@@ -221,7 +221,7 @@ namespace HelloWorld
 - protected internal：对所有继承该类或在该程序集内声明的类可访问
 - public：对任何类可访问
 
-![](../.vuepress/public/images/7-2.png)
+![](../.vuepress/public/images/cSharp/7-2.png)
 
 ### 抽象成员
 
@@ -330,7 +330,7 @@ namespace HelloWorld
 - 扩展方法本身必须声明为`static`
 - 扩展方法必须包含关键字`this`作为它的第一个参数类型，并在后面跟着它所扩展的类的名称
 
-![](../.vuepress/public/images/7-22.png)
+![](../.vuepress/public/images/cSharp/7-22.png)
 
 ```cs
 sealed class MyData
@@ -401,7 +401,7 @@ eg:
 ```
 
 **整数字面量**最常用的字面量，没有小数点，带可选的后缀，指明整数类型
-![](../.vuepress/public/images/8-1.png)
+![](../.vuepress/public/images/cSharp/8-1.png)
 
 **实数字面量**组成：
 - 十进制数字
@@ -430,7 +430,7 @@ eg:
     char c3 = '\x0061'; // 十六进制转义序列
     char c4 = '\u005a'; // Unicode转义序列
 ```
-![](../.vuepress/public/images/8-3.png)
+![](../.vuepress/public/images/cSharp/8-3.png)
 
 **字符串字面量**由双引号标记，分为两种：
 - 常规字符串字面量
@@ -448,7 +448,7 @@ eg：
 ### 求值顺序
 
 **运算符优先级**
-![](../.vuepress/public/images/8-4.png)
+![](../.vuepress/public/images/cSharp/8-4.png)
 
 **运算符结合性**：当两个连续的运算符有相同的优先级时，根据操作结合性判断优先级：
 - 左结合运算符从左至右求值
@@ -752,19 +752,19 @@ eg:
 
 
 ### if语句
-![](../.vuepress/public/images/9-1.png)
+![](../.vuepress/public/images/cSharp/9-1.png)
 
 ### if...else语句
-![](../.vuepress/public/images/9-2.png)
+![](../.vuepress/public/images/cSharp/9-2.png)
 
 ### while语句
-![](../.vuepress/public/images/9-3.png)
+![](../.vuepress/public/images/cSharp/9-3.png)
 
 ### do循环
-![](../.vuepress/public/images/9-4.png)
+![](../.vuepress/public/images/cSharp/9-4.png)
 
 ### for循环
-![](../.vuepress/public/images/9-5.png)
+![](../.vuepress/public/images/cSharp/9-5.png)
 
 **for循环**表达式：
 ```cs
@@ -789,7 +789,7 @@ eg:
 
 ### switch语句
 
-![](../.vuepress/public/images/9-6.png)
+![](../.vuepress/public/images/cSharp/9-6.png)
 
 **注意**：
 - 一个`switch`语句可以有任意数目的分支，包括没有分支，`default`段不是必须的，但有`default`段可以捕获潜在错误，是个好习惯
@@ -880,7 +880,7 @@ eg:
 
 ### 其他语句
 
-![](../.vuepress/public/images/9-16.png)
+![](../.vuepress/public/images/cSharp/9-16.png)
 
 ## 十.结构
 
@@ -926,7 +926,7 @@ eg：
     }
 ```
 
-![](../.vuepress/public/images/10-1.png)
+![](../.vuepress/public/images/cSharp/10-1.png)
 
 ### 对结构赋值
 
@@ -954,7 +954,7 @@ eg：
         }
     }
 ```
-![](../.vuepress/public/images/10-2.png)
+![](../.vuepress/public/images/cSharp/10-2.png)
 
 ### 构造函数和析构函数
 
@@ -967,7 +967,7 @@ eg：
     - 在显式设置数据之后，才能使用它们的值，否者编译器会报错
     - 在对所有数据成员赋值之后，才能*调用任何*函数成员
 
-![](../.vuepress/public/images/10-4-1.png)
+![](../.vuepress/public/images/cSharp/10-4-1.png)
 
 **静态构造函数**：创建并初始化静态数据成员，不能引用实例成员：
 - 调用显式声明的构造函数
@@ -1081,13 +1081,13 @@ eg:
         - 可以有不同长度的子数组
         - 为数组的每一个维度使用一对方括号：`int y = jagArray[2][7][4]`
 
-![](../.vuepress/public/images/12-2.png)
+![](../.vuepress/public/images/cSharp/12-2.png)
 
 ### 数组是对象
 
 数组实例是从`System.Array`继承的对象，继承了很多有用的方法如：Rank(返回数组维度数的属性)、Length(返回数组的长度)；数组也是**引用类型**，但数组元素可以是值类型或引用类型
 
-![](../.vuepress/public/images/12-4.png)
+![](../.vuepress/public/images/cSharp/12-4.png)
 
 ### 一维数组和矩形数组
 
@@ -1114,7 +1114,7 @@ eg：
     MyClass[] mcArr = new MyClass[4]; // mcArr数组是包含4个MyClass引用的一维数组
 ```
 
-![](../.vuepress/public/images/12-5.png)
+![](../.vuepress/public/images/cSharp/12-5.png)
 
 ### 访问数组元素
 
@@ -1179,7 +1179,7 @@ eg: `int[] intArr = new int[] {10, 20, 30, 40};`
 eg: 
 
 `int[,] intArray2 = new int[,] { {10, 1}, {2, 10}, {11, 9} };`
-![](../.vuepress/public/images/12-8.png)
+![](../.vuepress/public/images/cSharp/12-8.png)
 
 ```
 int[,,] intArray3 = new int[4, 3, 2] {
@@ -1236,7 +1236,7 @@ eg:
 
 eg:
 `int[][] jagArr = new int[3][]; // 一个二维的3个int数组的交错数组`
-![](../.vuepress/public/images/12-10.png)
+![](../.vuepress/public/images/cSharp/12-10.png)
 
 **声明交错数组**：
 - 每一个维度都有一对独立的方括号，方括号数决定了数组的秩
@@ -1259,10 +1259,10 @@ eg:
     jagArr[1] = new int[] {40, 50, 60, 70}; // 3. 
     jagArr[2] = new int[] {80, 90, 100, 110, 120}; // 4.
 ```
-![](../.vuepress/public/images/12-12.png)
+![](../.vuepress/public/images/cSharp/12-12.png)
 
 **交错数组中的子数组**：由于子数组本身就是数组，可能包含矩形数组
-![](../.vuepress/public/images/12-13.png)
+![](../.vuepress/public/images/cSharp/12-13.png)
 
 eg:
 ```cs
@@ -1305,7 +1305,7 @@ eg:
 一个3*3的矩形数组和一个长度为3的一维数组构成的交错数组比较：
 - 两个数组都保存了9个整数，但结构不同
 - 矩形数组只有单个的数组对象，而交错数组有4个数组对象
-![](../.vuepress/public/images/12-14.png)
+![](../.vuepress/public/images/cSharp/12-14.png)
 
 ### foreach语句
 
@@ -1315,7 +1315,7 @@ eg:
 - Identifier 是迭代变量的名字
 - ArrayName 是数组的名字
 - Statement 是要为数组中的每一个元素执行一次单条语句或语句块
-![](../.vuepress/public/images/12-15.png)
+![](../.vuepress/public/images/cSharp/12-15.png)
 
 ```cs
     int[] arr1 = { 10, 11, 12, 13 };
@@ -1429,12 +1429,12 @@ eg:交错数组（每一个维度使用独立的foreach语句）
         }
     }
 ```
-![](../.vuepress/public/images/12-15-1.png)
+![](../.vuepress/public/images/cSharp/12-15-1.png)
 
 ### 数组继承的有用成员
 数组继承很多有用的属性和方法：
 
-![](../.vuepress/public/images/12-16.png)
+![](../.vuepress/public/images/cSharp/12-16.png)
 
 eg:
 ```cs
@@ -1471,7 +1471,7 @@ eg:
 - 克隆引用类型数组会产生指向相同对象的两个数组
 - 克隆方法返回Object类型的引用，它必须被强制转换成数组类型
 
-![](../.vuepress/public/images/12-17.png)
+![](../.vuepress/public/images/cSharp/12-17.png)
 
 ```cs
     class A {
@@ -1487,11 +1487,11 @@ eg:
         }
     }
 ```
-![](../.vuepress/public/images/12-17-1.png)
+![](../.vuepress/public/images/cSharp/12-17-1.png)
 
 ### 比较数组的类型
 
-![](../.vuepress/public/images/12-18.png)
+![](../.vuepress/public/images/cSharp/12-18.png)
 
 ## 十三.委托
 
@@ -1526,7 +1526,7 @@ eg:
 
 **委托**与类一样，是一种用户自定义的类型；但类表示的是数据和方法的集合，而委托则持有一个或多个方法，以及一系列预定义操作
 
-![](../.vuepress/public/images/13-1.png)
+![](../.vuepress/public/images/cSharp/13-1.png)
 
 也可以将*委托*看作一个包含有序方法列表的对象，这些方法有相同的签名和返回类型：
 - 方法的列表称为调用列表
@@ -1536,7 +1536,7 @@ eg:
 - 调用列表中的方法可以是实例方法也可以是静态方法
 - 在调用委托时，会执行其调用列表中的所有方法
 
-![](../.vuepress/public/images/13-2.png)
+![](../.vuepress/public/images/cSharp/13-2.png)
 
 ### 声明委托类型
 
@@ -1559,7 +1559,7 @@ delegate void MyDel(int x); // 声明了一个只会接受不返回值并且有�
 - 第二种是快捷语法，仅由方法说明符构成：`delVAr = SClass.OtherM2`
     - 因为方法名称和其对应的委托类型之间存在隐式转换，所以能够使用快捷语法
 
-![](../.vuepress/public/images/13-4.png)
+![](../.vuepress/public/images/cSharp/13-4.png)
 
 ### 给委托赋值
 
@@ -1572,7 +1572,7 @@ delegate void MyDel(int x); // 声明了一个只会接受不返回值并且有�
     MyDel = SClass.OtherM2;
 ```
 
-![](../.vuepress/public/images/13-5.png)
+![](../.vuepress/public/images/cSharp/13-5.png)
 
 ### 组合委托
 
@@ -1587,7 +1587,7 @@ eg:
 
 注意：委托是**恒定**的，委托对象被创建后不能再被改变，所以作为操作数的委托没有被改变
 
-![](../.vuepress/public/images/13-6.png)
+![](../.vuepress/public/images/cSharp/13-6.png)
 
 ### 为委托添加方法
 
@@ -1600,7 +1600,7 @@ eg:
     delVar += X.Act; // 增加方法
 ```
 
-![](../.vuepress/public/images/13-7.png)
+![](../.vuepress/public/images/cSharp/13-7.png)
 
 
 ### 为委托移除方法
@@ -1610,7 +1610,7 @@ eg:
 - 试图删除委托中不存在的方法是没有效果
 - 试图调用空委托会抛出异常，可以通过把委托和null进行比较来判断委托的调用列表是否为空，如果为空则委托是null
 
-![](../.vuepress/public/images/13-8.png)
+![](../.vuepress/public/images/cSharp/13-8.png)
 
 ### 调用委托
 
@@ -1624,7 +1624,7 @@ eg:
     ...
     delVar(55); // 调用委托
 ```
-![](../.vuepress/public/images/13-9.png)
+![](../.vuepress/public/images/cSharp/13-9.png)
 
 ### 委托的示例
 
@@ -1667,11 +1667,519 @@ eg:
 ### 调用带返回值的委托
 
 如果委托有返回值且调用列表中的方法有一个以上，会出现：
-- 调用列表中最后一个方法返回的值就是委托调用返回的值
-= 调用列表中所有其他方法的返回值都会被忽略
+- 调用列表中执行到最后一个方法返回的值就是委托调用返回的值
+- 调用列表中所有其他方法的返回值都会被忽略
+
+eg:
+```cs
+    delegate int MyDel();
+    class Example13
+    {
+        int IntValue = 5;
+        public int Add2()
+        {
+            IntValue += 2;
+            return IntValue;
+        }
+        public int Add3()
+        {
+            IntValue += 3;
+            return IntValue;
+        }
+    }
+    class Program() {
+        static void Main() {
+            Example13 ex = new Example13();
+            MyDel mDel = ex.Add2;
+            mDel += ex.Add3;
+            mDel += ex.Add2;
+            Console.WriteLine("Value {0}", mDel()); // 12
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/13-10.png)
 
 ### 调用带引用参数的委托
 
+如果委托有**引用参数**,参数值会根据调用列表中的一个或多个方法的返回值而改变.即在调用委托列表中的下一个方法时,参数的新值会传给下一个方法.
+
+eg:
+```cs
+    delegate void MyDel(ref int x); // 注意是 void 类型
+    class CatchArg
+    {
+        public void Add2(ref int x)
+        {
+            x += 2;
+        }
+        public void Add3(ref int x)
+        {
+            x += 3;
+        }
+    }
+    class Program {
+        static void Main() {
+            CatchArg cg = new CatchArg();
+            MyDel mDel = cg.Add2;
+            mDel += cg.Add3;
+            mDel += cg.Add2;
+
+            int x = 5;
+            mDel(ref x);
+            Console.WriteLine("Value {0}", x); // 12
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/13-11.png)
+
+
 ### 匿名方法
 
+**匿名方法**是在初始化委托时内联声明的方法
+
+eg:
+```cs
+    class Program {
+        delegate int OtherDel(int InParam);
+        static void Main() {
+            OtherDel del = delegate(int x) {
+                return x + 20;
+            }
+            Console.WriteLine("{0}", del(5)); // 25
+            Console.WriteLine("{0}", del(6)); // 26
+        }
+    }
+```
+
+**匿名方法用于**:
+- 声明委托变量时作为初始化表达式 
+- 组合委托时在赋值语句右边
+- 为委托增加事件时在赋值语句的右边
+
+**基础语法**:
+- 使用`delegate`关键字
+- 参数列表,如果语句块没有使用任何参数且没有任何out参数则可以省略(使用空括号或省略括号),如有则需在三方面与委托匹配:
+    - 参数数量
+    - 参数类型及位置
+    - 修饰符
+- 语句块,包含了匿名方法的代码
+- 不需要显式声明返回值类型
+- 如果参数列表含有params参数,则委托声明时指定最后一个参数为params参数,需使用params关键字,但匿名方法的参数列表省略params关键字
+eg:
+```cs
+    delegate void SomeDel(int x, params int[] y);
+    SomeDel mDel = delegate(int x, int[] y) {
+        ...
+    }
+```
+
+**变量和参数的作用域**:
+- 参数和声明在匿名方法内部的局部变量的作用域都在实现方法的主体之内,主体结束后局部变量就会消失
+- 与委托的具名方法不同,匿名方法可以访问到它们外围作用域的局部变量(也叫*外部变量*)和环境,这种方式称为*被方法捕获*
+- 只要捕获方法还是委托的一部分,即使外部变量已经离开作用域,捕获的外部变量也会一致有效
+
+```cs
+    delegate OtherDel();
+    class Program {
+        static void Main() {
+            OtherDel oDel;
+            {
+                int x = 5;
+                oDel = delegate ()
+                {
+                    Console.WriteLine("Value of x: {0}", x); //捕获x变量
+                };
+            };
+            oDel(); // 5
+        }
+    }
+```
+
+
 ### Lambda表达式
+
+**Lambda表达式**替代匿名方法,简化语法
+- 删除`delegate`关键字
+- 在参数列表和匿名方法主题之间放Lambda运算符=>,读作goes to
+- 因为编译器能从委托声明中知道委托参数类型,Lambda表达式还能省略类型参数
+- 如果语句块只包含一个返回语句,可以将语句块替换成return关键字后的表达式
+- 参数列表中的参数必须在数量,类型和位置上与委托的匹配
+    - 参数不一定包含参数类型(隐式类型),但如果委托有ref或out参数时,此时必须标注参数类型
+    - 如果只有一个参数,并且是隐式类型的,周围圆括号可以被省略,否者必须有括号
+    - 如果没有参数,必须使用空括号
+
+```cs
+    delegate double MyDel(int par)
+    class Program {
+        static void Main() {
+            MyDel del = delegate(int x) {
+                return x + 1;
+            };
+            // 等价于
+            MyDel del = (int x) => { return x + 1; };
+            // 等价于
+            MyDel del = x => x + 1;
+        }
+    }
+```
+
+## 十四.事件
+
+### 发布者和订阅者
+
+- 发布者: 发布某个事件的类或结构,其他的类可以在该事件发生时得到通知
+- 订阅者: 注册并在事件发生时得到通知的类或结构
+- 事件处理程序: 由订阅者注册到事件的方法,在发布者触发事件时执行
+- 触发事件: 调用或触发事件的术语,当事件触发时,所有注册到它的方法都会依次被调用
+
+![](../.vuepress/public/images/cSharp/14-1.png)
+
+eg: 一个叫InCrementer的类,它按照某种方式进行计数
+- InCrementer定义了一个CountedADozen事件,每次累积到12个项时将会触发该事件
+- 订阅者类Dozens和SomeOtherClass各有一个注册到CountedADozen事件的事件处理程序
+- 每当触发事件时,都会调用这些处理程序
+
+![](../.vuepress/public/images/cSharp/14-3.png)
+
+### 源代码组件概览
+
+**事件**中使用的代码有5部分:
+- 委托类型声明: 事件和事件处理程序必须有共同的签名和返回类型,它们通过委托类型进行描述
+- 事件处理程序声明: 订阅者类中会在事件触发时执行的方法声明.它们不一定是有显式命名的方法,还可以是匿名方法或Lanbda表达式
+- 事件声明: 发布者类必须声明一个订阅者类可以注册的事件成员.当声明的事件为public时,称为**发布了**事件
+- 事件注册: 订阅者必须订阅事件才能在它被触发时得到通知
+- 触发事件的代码: 发布者类中**触发**事件并导致调用注册的所有事件处理程序的代码
+
+![](../.vuepress/public/images/cSharp/14-4.png)
+
+### 声明事件
+
+是发布者(InCrementer)必须提供的事件对象(CountedADozen):
+- 事件声明在一个类中,使用`event`关键字
+- 需要委托类型名称,任何附加到事件(如注册)的处理程序都必须与委托类型的签名和返回类型匹配
+- 使用`public`关键字声明,目的是其他类和结构可以在它上面注册事件处理程序
+- 不能使用对象创建表达式(即 new表达式)来创建它的对象
+- 可以使用`static`关键字使事件变成**静态**
+- 可以通过逗号分隔的列表在一个声明语句中声明一个以上的事件
+(声明事件不需要写参数, 但触发事件的参数列表必须与事件的委托类型相匹配)
+
+eg:
+```cs
+    class InCrementer {
+                        ↓委托类型   ↓事件名
+        public event EventHandler CountedADozen;
+
+        public event EventHandler MyEvent1, MyEvent2, MyEvent3;
+
+        public static event EventHandler CountedADozen;
+    }
+```
+
+**注意,事件是成员**
+- 事件是类或结构的成员
+- 不能在一段可执行代码中声明事件,必须声明在类或结构中
+- 事件成员被隐式自动初始化为null
+- 事件声明需要委托类型的名字,可以声明一个委托类型或使用已存在的,如果声明一个委托类型,必须指定事件保存的方法的签名和返回类型
+
+### 订阅事件
+
+是订阅者向事件添加事件处理程序:
+- 必须具有与事件的委托相同的返回类型和签名
+- 使用+=运算符为事件增加事件处理程序
+- 事件处理程序位于+=运算符右边
+    - 实例方法的名称
+    - 静态方法的名称
+    - 匿名方法
+    - Lambda表达式
+
+eg:
+```cs
+    Incrementer.CountedADozen += IncrenmenrDozensCount; // 方法形式的实例方法
+    Incrementer.CountedADozen += ClassB.CounterHandlerB; // 方法形式的静态方法
+    mc.CountedADozen += new EventHandler(cc.CounterHanlerC); // 委托形式的实例方法
+    Incrementer.CountedADozen += () => DozensCount++; // Lambda表达式形式
+    Incrementer.CountedADozen += delegate { DozensCount++; }; // 匿名方法形式
+```
+
+### 触发事件
+
+触发事件的代码:
+- 在触发事件之前需要和null比较,查看是否存在事件处理程序,如果事件是null,表示没有则不能执行
+- 触发事件,即使用事件名称,后面跟的参数列表包含在圆括号内,参数列表必须与事件的委托类型相匹配
+
+eg:
+```cs
+    if(CountedADozen != null) 
+        CountedADozen(source, args); // 触发事件
+```
+**一个完整的栗子**:
+
+![](../.vuepress/public/images/cSharp/14-5.png)
+
+### 标准事件的用法
+
+事件使用的标准模式的**根本**是System命名空间声明的`EventHandler`委托类型:
+- 第一个参数用来保存触发事件的对象的引用,由于是`object`类型,所以可以匹配任何类型的实例
+- 第二个参数用来保存状态信息,指明什么类型适用于该应用程序
+- 返回类型是void
+- 第二个参数是`EventArgs`类的对象,它声明在`System`命名空间中.
+    - 因为`EventArgs`设计为不能传递任何数据,它用于不需要传递数据的事件处理程序(通常会被忽略)
+    - 如果希望传递数据,必须声明一个派生自`EventArgs`的类,使用合适的字段来保存需要传递的数据
+```cs
+    public delegate void EventHandler(object sender, EventArgs e);
+```
+
+eg:修改上面栗子为**使用`EventHandler`**
+
+![](../.vuepress/public/images/cSharp/14-6.png)
+
+**通过扩展`EventArgs`来传递数据**
+
+eg: 使用一个派生自`EventArgs`的类
+
+```cs
+    public class IncrementEventArgs: EventArgs
+    {
+        public int IterationCount { get;  set; }
+    }
+    class Incrementer
+    {
+        public event EventHandler<IncrementEventArgs> CountedADozen; // 创建事件并发布
+        public void DoCount()
+        {
+            IncrementEventArgs args = new IncrementEventArgs();
+            for(int i=1; i<100; i++)
+            {
+                if (i % 12 == 0 && CountedADozen != null)
+                {
+                    args.IterationCount = i; // 设置值
+                    CountedADozen(this, args); // 传递参数
+                }
+
+            }
+        }
+    }
+    class Dozens
+    {
+        public int DozensCount { get; private set; }
+        void IncrementDozensCount(object source, IncrementEventArgs e) // 修改为自定义类
+        {
+            Console.WriteLine("Incremented at iteration: {0} in {1}", e.IterationCount, source.ToString()); // 获取参数值
+            DozensCount++;
+            
+        }
+        public Dozens(Incrementer incrementer)
+        {
+            DozensCount = 0;
+            incrementer.CountedADozen += IncrementDozensCount;
+        }
+        
+
+    }
+    class Program {
+        static void Main(string[] args)
+        {
+            Incrementer incrementer = new Incrementer();
+            Dozens dozensCounter = new Dozens(incrementer);
+            incrementer.DoCount();
+            Console.WriteLine("Number of dozens = {0}", dozensCounter.DozensCount);
+        }
+    }
+// Incremented at iteration: 12 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 24 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 36 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 48 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 60 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 72 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 84 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 96 in ClassDemo.Example.Incrementer
+// Number of dozens = 8
+```
+
+**移除事件处理程序**: 使用`-=`运算符
+
+如果一个处理程序向事件注册了多次,那么当执行命令移除处理程序时,只会将列表中该处理程序的最后一个实例移除
+
+```cs
+    class Publisher {
+        public event Eventhandler SimpleEvent;
+        public void RaiseTheEvent() {
+            SimpleEvent(this, null);
+        }
+    }
+    class Subscriber {
+        public void MethodA(object o, EventAgrs e) {
+            Console.WriteLine("AAA");
+        }
+        public void MethodB(object o, EventAgrs e) {
+            Console.WriteLine("BBB");
+        }
+    }
+    class Program {
+        static void Main() {
+            Publisher p = new Publisher();
+            Subscriber s = new Subscriber();
+            p.SimpleEvent += s.MethodA;
+            p.SimpleEvent += s.MethodB;
+            p.RaiseTheEvent();
+            Console.WriteLine("Remove MethodB");
+            p.SimpleEvent -= s.MethodB;
+            p.RaiseTheEvent();
+        }
+    }
+    // AAA
+    // BBB
+    // Remove MethodB
+    // AAA
+```
+
+### 事件访问器
+
+`+=`和`-=`是事件允许的唯二运算符,但这些运算符有预定义的行为,我们可以通过修改这些运算符的行为,让事件执行任何我们希望的自定义代码,要改变这两个运算符的操作,可以**为事件定义事件访问器**:
+- 有两个访问器: add和remove
+- 声明是将访问器看上去和声明一个属性差不多
+- 两个访问器都有叫做value的隐式值参数,它接受实例或静态方法的引用
+- 声明事件访问器之后,事件不包含任何内嵌委托对象,需要我们自己实现来来存储和移除事件注册的方法
+- 事件访问器表现为void方法,不能包含返回值的return语句
+
+## 十五.接口
+
+### 什么是接口
+
+**接口**是指定一组函数成员而不实现它们的引用类型,只能类和结构来实现接口
+
+eg: 使用接口IInfo使PrintInfo方法用于多个类
+
+```cs
+    interface IInfo
+    {
+        string GetName();
+        string GetAge();
+    }
+    class CA: IInfo
+    {
+        public string Name;
+        public int Age;
+        public string GetName()
+        {
+            return Name;
+        }
+        public string GetAge()
+        {
+            return Age.ToString();
+        }
+    }
+    class CB: IInfo
+    {
+        public string First;
+        public string Last;
+        public double PersonsAge;
+        public string GetName()
+        {
+            return First + " " + Last;
+        }
+        public string GetAge()
+        {
+            return PersonsAge.ToString();
+        }
+    }
+    class Program {
+        static void PrintInfo(IInfo item)
+        {
+            Console.WriteLine("Name: {0}, Age: {1}", item.GetName(), item.GetAge());
+        }
+        static void Main(string[] args)
+            {
+            CA a = new CA() { Age = 35, Name = "John Doe" };
+            CB b = new CB() { First = "Jane", Last = "Doe", PersonsAge = 33 };
+            PrintInfo(a); // Name: John Doe, Age: 35
+            PrintInfo(b); // Name: Jane Doe, Age: 33
+            }
+    }
+```
+
+eg: 2
+
+```cs
+    class CC: IComparable
+    {
+        public int TheValue;
+        public int CompareTo(object obj)
+        {
+            CC c = (CC)obj; // 暂时没明白这一行代表什么
+            if (this.TheValue < c.TheValue) return -1;
+            if (this.TheValue > c.TheValue) return 1;
+            return 0;
+        }
+    }
+    class Program {
+        static void PrintOut(string s, CC[] mc)
+        {
+            Console.Write(s);
+            foreach (var m in mc)
+                Console.Write("{0} ", m.TheValue);
+            Console.WriteLine("");
+        }
+        static void Main(string[] args)
+            {
+            var myInt = new[] { 20, 4, 16, 9, 2 };
+            CC[] cArr = new CC[5]; // 创建一个CC类型的数组
+            for(int i = 0; i< 5; i++ )
+            {
+                cArr[i] = new CC(); // 创建类对象 即实例化每一个元素
+                cArr[i].TheValue = myInt[i];
+            }
+            PrintOut("Initial Order: ", cArr); // Initial Order: 20 4 16 9 2
+            Array.Sort(cArr);
+            PrintOut("Sorted Order: ", cArr); // Sorted Order: 2 4 9 16 20
+            }
+    }
+```
+
+### 声明接口
+
+**声明接口**:
+- 声明接口不能包含数据成员和静态成员
+- 只能包含以下类型的非静态成员函数: 方法、属性、事件、索引器
+- 以上函数成员的声明不能包含任何实现代码,必须以分号结尾
+- 按照惯例,接口名称必须从大写的**I**开始
+- 与类和结构一样,接口声明还可以分隔成分部接口声明
+- 接口声明可以由任何的访问修饰符如: public、protected、internal或private
+- 但接口的成员是**隐式public**,不允许有任何访问修饰符
+
+```cs
+    interface IMyInterface {
+        int DoStuff (int nVar1, long lVar2);
+        double DoOtherStuff(string s, long x);
+    }
+```
+
+### 实现接口
+
+**只有类和结构能实现接口**,且类和结构必须:
+- 在基类列表中包含接口名称
+- 为每一个接口的成员提供实现
+- 基类列表中除了接口外的基类名称必须放在所有接口之前
+
+```cs
+    class Derived: MyBaseClass, IIfc1, IEnumerable, IComparable {
+        ...
+    }
+```
+
+### 接口是引用类型
+
+**接口是引用类型**, 不能直接通过类对象的成员访问接口, 但可以通过**把类对象引用强制转换为接口类型**来获取指向接口的引用
+
+
+### 接口和as运算符
+
+### 实现多个接口
+
+### 多个接口的引用
+
+### 派生成员实现
+
+### 接口可以继承接口
+
+### 不同类实现同一个接口的示例
