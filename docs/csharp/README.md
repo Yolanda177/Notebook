@@ -2169,17 +2169,761 @@ eg: 2
 
 ### 接口是引用类型
 
-**接口是引用类型**, 不能直接通过类对象的成员访问接口, 但可以通过**把类对象引用强制转换为接口类型**来获取指向接口的引用
+**接口是引用类型**, 不能直接通过类对象的成员访问接口, 但可以通过**把类对象引用强制转换为接口类型**来获取指向**接口的引用**
 
+```cs
+     ↓接口        ↓转换为接口
+    IIfc1 ifc = (IIfc1) mc;          // 获取接口的引用
+          ↑接口引用      ↑类对象引用
+
+    ifc.PrintOut("interface");       // 使用接口的引用调用方法
+```
+
+eg:
+```cs
+    interface IIfc1
+    {
+        void PrintOut(string s);
+    }
+    class CD: IIfc1
+    {
+        public void PrintOut(string s)
+        {
+            Console.WriteLine("Calling through: {0}", s);
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+            {
+            CD cd = new CD();
+            cd.PrintOut("object"); // Calling through: object
+            IIfc1 ifc = (IIfc1)cd; // 将类对象的引用转换为接口类型的引用
+            ifc.PrintOut("interface"); // Calling through: interface
+            }
+    }
+```
 
 ### 接口和as运算符
 
+如果将类对象的引用强制转换为**类未实现的接口**的引用,强制转换操作会抛出异常,但使用`as`运算符可以避免这个问题:
+- 如果类实现了接口, 表达式返回指向接口的引用
+- 如果类未实现接口, 表达式返回 null 而不是抛出异常
+
+```cs
+    // IIfc1 ifc = (IIfc1) mc;
+    IIfc1 ifc = mc as IIfc1;
+```
+
 ### 实现多个接口
+
+- 类或结构可以实现任意数量的接口
+- 所有实现的接口必须列在基类列表并以逗号分隔(如果有基类名称, 必须放在基类后面)
+
+```cs
+    interface IDataRetrieve
+    {
+        int GetData();
+    }
+    interface IDataStore
+    {
+        void SetData(int x);
+    }
+    class MyDataInt: IDataRetrieve, IDataStore
+    {
+        int Mem1;
+        public int GetData()
+        {
+            return Mem1;
+        }
+        public void SetData(int x)
+        {
+            Mem1 = x;
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+            {
+            MyDataInt data = new MyDataInt();
+            data.SetData(5);
+            Console.WriteLine("Value = {0}", data.GetData()); // Value = 5
+            }
+    }
+```
+
+### 实具有重复成员的接口
+
+如果类实现的多个接口中, 有两个接口成员都有相同的签名和返回类型, 那么类可以**实现单个成员**来满足所有包含重复成员的接口:
+
+```cs
+    interface IIfc1 {
+        void PrintOut(string s);
+    }
+    interface IIfc2 {
+        void PrintOut(string s);
+    }
+    class MyClass: IIfc1, IIfc2
+    {
+        public void PrintOut(string s) {
+            Console.WriteLine("Calling through: {0}", s);
+        }
+    }
+```
 
 ### 多个接口的引用
 
+如果类实现了多个接口, 可以获取每一个接口的独立引用:
+
+```cs
+    interface IIfc1 {
+        void PrintOut(string s);
+    }
+    interface IIfc2 {
+        void PrintOut(string s);
+    }
+    class CF: IIfc1, IIfc2
+    {
+        public void PrintOut(string s) {
+            Console.WriteLine("Calling through: {0}", s);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            CF cf = new CF();
+            IIfc1 ifc1 = cf as IIfc1;
+            IIfc2 ifc2 = cf as IIfc2;
+            cf.PrintOut("object");       // Calling through: object
+            ifc1.PrintOut("interface1"); // Calling through: interface1
+            ifc2.PrintOut("interface2"); // Calling through: interface2
+            }
+    }
+```
+
 ### 派生成员实现
+
+实现接口的类可以从它的基类**继承**实现的代码:
+
+```cs
+    interface IIfc1{
+        void PrintOut(string s);
+    }
+    class BaseClass
+    {
+        public void PrintOut(string s)
+        {
+            Console.WriteLine("Calling through: {0}", s);
+        }
+    }
+    class DerviedClass : BaseClass, IIfc1
+    { }
+    class Program 
+    {
+        static void Main(string[] args)
+        {
+            DerviedClass dc = new DerviedClass();
+            dc.PrintOut("object"); // Calling through: object
+        }
+    }
+```
+
+![](../.vuepress/public/images/cSharp/15-8.png)
+
+### 显式接口成员实现
+
+如果希望每一个接口分离实现，可以创建**显式接口成员实现**：
+- 与所有接口实现相似
+- 使用**限定接口名称**声明，由接口名称和成员名称以及它们中间的点分隔符号构成
+
+```cs
+    class MyClass : IIfc1, IIfc2
+    {
+        // 注意 没有类级别的实现
+        void IIfc1.PrintOut(string s) {
+            // 显式接口成员实现
+        }
+        void IIFc2.PrintOut(string s) {
+            // 显式接口成员实现
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/15-9.png)
+
+有**三种**实现场景：
+- 类级别实现
+- 显式接口成员实现
+- 类级别和显式接口成员实现
+
+**显式接口成员实现只能通过指向接口的引用来访问**，其他的类成员都不可以直接访问它们
+
+```cs
+    class MyClass: IIfc1
+    {
+        void IIfc1.PrintOut(string s) {
+            Console.WriteLine("IIfc1");
+        }
+        public void Method1() {
+            PrintOut("..."); // 编译错误 不可直接访问
+            this.PrintOut("..."); // 编译错误
+            ((IIfc1)this).PrintOut("..."); // IIfc1
+               ↑转换为接口的引用
+        }
+    }
+```
 
 ### 接口可以继承接口
 
+接口本身可以从一个或多个接口**继承**
+- 指定某个接口继承其他接口，应在接口声明中把基接口以逗号分隔的列表形式放在接口名称的冒号之后
+- 与类不同，类在继承接口时，基类列表中只能有一个类名，而接口可以在基接口列表中由任意多个接口
+    - 列表中的接口本身也可以继承其他接口
+    - 结果接口包含它声明的所有接口和所有基接口成员
+
+```cs
+    interface IDataRetrieve
+    {
+        int GetData();
+    }
+    interface IDataStore
+    {
+        void SetData(int x);
+    }
+    interface IDataIO : IDataRetrieve, IDataStore
+    {}
+    class MyDataIO: IDataIO
+    {
+        int nPrivateData;
+        public int GetData()
+        {
+            return nPrivateData;
+        }
+        public void SetData(int x)
+        {
+            nPrivateData = x;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyDataIO md = new MyDataIO();
+            md.SetData(5);
+            Console.WriteLine("{0}", md.GetData());
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/15-11.png)
+
 ### 不同类实现同一个接口的示例
+
+```cs
+    interface ILiveBirth
+    {
+        string BabyCalled();
+    }
+    class Animal
+    {
+
+    }
+    class Cat: Animal, ILiveBirth
+    {
+        string ILiveBirth.BabyCalled()
+        {
+            return "kitten";
+        }
+    }
+    class Dog: Animal, ILiveBirth
+    {
+        string ILiveBirth.BabyCalled()
+        {
+            return "puppy";
+        }
+    }
+    class Bird: Animal
+    {
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Animal[] animalArray = new Animal[3];
+            animalArray[0] = new Cat();
+            animalArray[1] = new Bird();
+            animalArray[2] = new Dog();
+            foreach( Animal a in animalArray)
+            {
+                ILiveBirth b = a as ILiveBirth;
+                if(b != null)
+                {
+                    Console.WriteLine("Baby is called: {0}", b.BabyCalled());
+                    // Baby is called: kitten
+                    // Baby is called: puppy
+                }
+            }
+        }
+    }
+```
+
+![](../.vuepress/public/images/cSharp/15-12.png)
+
+## 十六.转换
+
+### 什么是转换
+    
+**类型转换**：
+- 转换是接受一个类型的值并使用它作为另一个类型的等价值的过程
+- 转换后的值应该和源值一样的，但其类型为目标类型
+
+eg:
+```cs
+    short varl = 5;
+    sbyte var2 = 10;
+    var2 = (sbyte) var1; // 把 var1 值强制转换为sbyte类型
+```
+![](../.vuepress/public/images/cSharp/16-2.png)
+
+### 隐式转换
+
+**隐式转换**是指有些类型的转化不会丢失数据或精度：
+- 语言会自动做这些转换，叫做隐式转换
+- 从位数更少的源转换为位数更多的目标类型时，目标中多出来的位需要用0或1填充
+- 当从更小的无符号类型转换为更大的无符号类型时，目标类型多出来的最高位都以0进行填充，这叫做**零扩展**
+- 对于有符号类型的转换，额外的高位用源表达式的符号位进行填充，保证被转换值得正确符号和大小，这叫做**符号扩展**
+
+![](../.vuepress/public/images/cSharp/16-3.png)
+![](../.vuepress/public/images/cSharp/16-4.png)
+
+### 显式转换和强制转换
+
+如果要把长类型转换为短类型，目标类型很可能无法在不损失数据的情况下提供源值
+
+![](../.vuepress/public/images/cSharp/16-5.png)
+
+对于预定义类型，在那些从源类型到目标类型不会发生数据丢失的情况下，C#会自动将一个数据类型转换为另一个数据类型；如果会出现数据丢失，语言是不会提供自动转换，必须使用**显式转换**。也叫做**强制转换表达式**：
+- 一对圆括号，里面时目标类型
+- 目标类型后是源表达式
+
+注意：使用强制转换表达式意味着要承担执行操作可能引起丢失数据的后果
+
+eg: 将两个ushort类型的值转换为byte类型
+```cs
+    ushort sh1 = 10;
+    byte sb1 = (byte) sh1;
+    Console.WriteLine("sb: {0} = 0x{0:X}", sb1); // sb: 10 = 0xA
+
+    ushort sh2 = 1365;
+    byte sb2 = (byte) sh2;
+    Console.WriteLine("sb: {0} = 0x{0:X}", sb2); // sb: 85 = 0x55
+```
+![](../.vuepress/public/images/cSharp/16-6.png)
+
+### 转换的类型
+
+**转换的类型**有很多种：
+- 除了标准转换，还可以为自定义类型定义隐式转换和显式转换
+- 还有一个预定义的转换类型，叫做**装箱**，可以将任何值类型转换为：
+    - object类型
+    - System.ValueType类型
+- 拆箱可以将一个装箱的值转换为原始类型
+
+![](../.vuepress/public/images/cSharp/16-7.png)
+
+### 数字的转换
+
+![](../.vuepress/public/images/cSharp/16-8.png)
+
+任何数字类型都可以转换为其他数字类型
+
+**1. 隐式数字转换**：
+- 少位的数字类型可以隐式转换为多位的数字类型
+- 下图中有路径的都是隐式转换，无路径的必须使用显式转换
+
+![](../.vuepress/public/images/cSharp/16-9.png)
+
+对于整数类型，C#提供了选择运行时是否在进行类型转换时**检测结果溢出**的能力，通过使用`checked`和`unchecked`运算符实现：
+- 代码片段是否被检查称作**溢出检测上下文**
+    - 如果指定一个表达式或一段代码为checked，CLR会在转换溢出时抛出一个OverFlowException异常
+    - 如果代码是unchecked，转换会一直执行而不管是否会溢出
+- 默认情况下溢出检测上下文是**unchecked**
+
+eg：
+```cs
+    ushort sh = 2000;
+    byte sb;
+    sb = unchecked((byte) sh); // 大多数位丢失了 会进行显式转换不报错
+    Console.WriteLine("sb: {0}", sb);
+ 
+    sb = checked((byte) sh); // 会抛出OverFlowException异常
+    Console.WriteLine("sb: {0}", sb);
+```
+
+`checked`和`unchecked`运算符用于**圆括号**内的单个表达式，而`checked`和`unchecked`语句控制的是**一块代码中的所有转换**：
+
+eg:
+```cs
+    byte sb;
+    ushort sh = 2000;
+    unchecked {
+        sb = unchecked((byte) sh);
+        Console.WriteLine("sb: {0}", sb);
+    }
+    checked {
+        sb = checked((byte) sh);
+        Console.WriteLine("sb: {0}", sb);    
+    }
+```
+
+**2. 显式数字转换**
+
+![](../.vuepress/public/images/cSharp/16-10.png)
+
+2-1. **整数**类型到**整数**类型
+
+![](../.vuepress/public/images/cSharp/16-11.png)
+
+2-2. **float或double**类型到**整数**类型
+
+![](../.vuepress/public/images/cSharp/16-12.png)
+
+2-3. **decimal**到**整数**类型
+
+![](../.vuepress/public/images/cSharp/16-13.png)
+
+2-4. **double**到**float**
+- float类型值占32位，double类型值占64位
+
+![](../.vuepress/public/images/cSharp/16-14.png)
+
+2-5. **float或double**类型到**decimal**
+
+![](../.vuepress/public/images/cSharp/16-15.png)
+
+2-6. **decimal**到**float或double**
+- 从decimal类型到float类型总会成功，但可能会损失精度
+
+![](../.vuepress/public/images/cSharp/16-16.png)
+
+### 引用转换
+
+引用类型的对象由内存中的两部分组成：引用和数据
+- 由引用保存的那部分信息是它指向的数据类型
+- **引用类型转换**接受源引用并返回一个指向堆中同一位置的引用，但是把引用“标记”为其他类型
+
+eg:
+```cs
+    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        static void Main() {
+            B myVar1 = new B();
+            A myVar2 = (A) myVar1; // 引用转换
+            Console.WriteLine("{0}", myVar2.Field1); // 正常
+            Console.WriteLine("{0}", myVar2.Field2); // 编译错误 Field2对myVar2不可见
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/16-17.png)
+
+**隐式引用转换**：
+- 所有引用类型可以被隐式转换为object类型
+- 任何类型可以隐式转换到它继承的接口
+- 类可以隐式转换到：
+    - 它继承链中的任何类（如上例中的B到A）
+    - 它实现的任何接口
+- 委托可以隐式转换到下图中的.NET BCL类和接口
+- Array数组，其中元素是Ts类型的，可以隐式转换到
+    - 下图中的.NET BCL类和接口
+    - 另一个数组ArrayT，其中元素是Tt类型，满足以下条件：
+        - 两个数组维度一样
+        - 元素类型Ts和Tt都是引用类型，不是值类型
+        - 在类型Ts和Tt中存在隐式转换
+![](../.vuepress/public/images/cSharp/16-19.png)
+
+**显式引用转换**：从一个普通类型到一个更精确类型的引用转换
+- 显式转换包括：
+    - 从object到任何引用类型的转换
+    - 从基类到从它继承的类的转换
+
+eg:
+```cs
+    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        static void Main() {
+            A myVar1 = new A();
+            B myVar2 = (B) myVar1; // 不正确的强制转换 抛出InvalidCastException异常
+            Console.WriteLine("{0}", myVar2.Field2); // 错误，Field2不在内存中
+        }
+    }
+```
+进行**有效显式引用转换**：有三种
+- 从衍生类到基类，没必要进行显式转换，因为会自动进行隐式转换（如B到A）
+- 源引用是null，此时从基类到衍生类还是允许的，不会报错（如A到B）
+- 由源引用指向的实际数据可以被安全地进行隐式转换，见下例
+
+eg:
+```cs
+    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        B myVar1 = new B();
+        A myVar2 = myVar1; // 将B类引用myVar1隐式转换为A类
+        B myVar3 = (B) myVar2; // 该转换是允许地，因为数据是B类型的
+    }
+```
+![](../.vuepress/public/images/cSharp/16-21.png)
+
+### 装箱转换
+
+包括值类型在内的所有C#类型都派生自object类型，而值类型是高效轻量的类型，默认情况下堆上不包括它们的对象组件。
+
+**装箱**是一种隐式转换，它接受值类型的值，根据这个值在堆上创建一个完整的引用类型对象并返回对象引用
+
+eg:
+
+- `int i = 12; object oi = null; oi = i;`
+- 我们希望把变量i的值赋给oi，但oi是引用类型的变量，我们必须在堆上分配一个对象的引用，然而变量i是值类型，不存在指向堆上某对象的引用
+- 系统将i的值**装箱**：
+    - 在堆上创建了int类型的对象
+    - 将i的值复制到int对象
+    - 返回int对象的引用，让oi作为引用保存
+![](../.vuepress/public/images/cSharp/16-22.png)
+
+**装箱**是创建副本，并不是在原始项上进行操作，装箱返回的是值的**引用类型副本**，装箱后，该值有两份副本————原始值类型和引用类型副本，每一个都可以独立操作
+
+eg：
+```cs
+    int i = 10;
+    object oi = i;
+    Console.WriteLine("i: {0}, oi: {1}", i, oi); // i: 10 oi: 10
+
+    i = 12;
+    oi = 15;
+    Console.WriteLine("i: {0}, oi: {1}", i, oi); // i: 12 oi: 15
+```
+![](../.vuepress/public/images/cSharp/16-23.png)
+
+**装箱是值类型到引用类型的隐式转换**：任何值类型ValueTypeS都可以被隐式转换为object类型、System.ValueType或InterfaceT（如果ValueTypeS实现了InterfaceT）
+
+### 拆箱转换
+
+**拆箱**是把装箱后的对象转换回值类型的过程
+- 拆箱是**显式转换**
+- 系统把值拆箱成ValueTypeT时执行以下步骤：
+    - 它检测到要拆箱的对象实际是ValueTypeT的装箱值
+    - 它把对象的值复制到变量
+
+eg:
+```cs
+static void Main() {
+    int i = 10;
+    onject oi = i; // 装箱
+    int j = (int) oi; // 拆箱
+    Console.WriteLine("i: {0}, oi: {1}, j: {2}", i, oi, j); // 10 10 10
+}
+```
+
+### 用户自定义转换
+
+除了标准转换，还可以为类和结构定义隐式转换和显式转换，即**用户自定义转换**：
+- 使用`implicit`（隐式）和`explicit`（显式）关键字
+- 需要`public`和`static`修饰符
+- 需要`operator`运算符
+
+eg:
+```cs
+    public static implicit operator int(Person p) {
+        return p.age;
+    }
+```
+
+用户自定义转换的**约束**：
+- 只可以为类和结构定义用户自定义转换
+- 不能重定义标准隐式转换或显式转换
+- 对于源类型S和目标类型T，如下命题为真：
+    - S和T必须是不同类型
+    - S和T不能通过继承关联，即S不能继承T，T也不能继承S
+    - S和T都不能是接口类型或object类型
+    - 转换运算符必须是S或T的成员
+- 对于相同源和目标类型，不能声明隐式或显式转换
+
+eg:
+```cs
+    class Person
+    {
+        public string Name;
+        public int Age;
+        public Person (string name, int age)
+        {
+            Name = name;
+            Age = age;
+        }
+        public static implicit operator int(Person p)
+        {
+            return p.Age;
+        }
+        public static implicit operator Person(int i)
+        {
+            return new Person("Nemo", i);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Person bill = new Person("bill", 25);
+            int age = bill;
+            Console.WriteLine("Person Info: {0}, {1}", bill.Name, age); // Person Info: bill 25
+            Person anon = 35;
+            Console.WriteLine("Person Info: {0}, {1}", anon.Name, anon.Age); //Person Info: Nemo 35
+        }
+    }
+
+```
+**注意**，如果使用`explicit`运算符定义相同的转换，则需要强制转换表达式来进行转换：
+```cs
+    public static explicit operator int(Person p) {
+        return p.Age;
+    }
+    static void Main() {
+        ...
+        int age = (int) bill; // 使用强制转换表达式
+    }
+```
+
+**用户自定义转换**在完整转换中最多可以有三个步骤：
+- 预备标准转换
+- 用户自定义转换
+- 后续标准转换
+
+```cs
+    class Employee : Person { }
+    class Person
+    {
+        public string Name;
+        public int Age;
+        public static implicit operator int(Person p)
+        {
+            return p.Age;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            bill.Name = "William";
+            bill.Age = 25;
+            float fVar = bill;
+            Console.WriteLine("Person Info: {0}, {1}", bill.Name, fVar); // Person Info: William 25
+        }
+    }
+```
+
+![](../.vuepress/public/images/cSharp/16-28.png)
+
+### is运算符
+
+通过使用**is**运算符来检查转换是否会成功完成，从而避免抛出异常，语法如下：
+```cs
+Expr is TargetType // 返回 bool
+ ↑源表达式     ↑目标类型
+```
+如果Expr可以通过以下方式成功转换为目标类型，则运算符返回true：
+- 引用转换
+- 装箱转换
+- 拆箱转换
+- 不能用于用户自定义转换
+eg:
+```cs
+    class Employee : Person { }
+    class Person
+    {
+        public string Name = "Anonymous";
+        public int Age = 25;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            Person p;
+            if (bill is Person) {
+                p = bill;
+                Console.WriteLine("Person Info: {0}, {1}", p.Name, p.Age); // Person Info: Anonymous 25
+            }
+            
+        }
+    }
+```
+### as运算符
+
+**as**运算符与强制转换运算符相似，但它遇到转换失败不会抛出异常，而是返回null，语法如下：
+```cs
+Expr as TargetType // TargetType必须是引用类型，返回的是引用表达式
+```
+eg:
+```cs
+    class Employee : Person { }
+    class Person
+    {
+        public string Name = "Anonymous";
+        public int Age = 25;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            Person p;
+            p = bill as Person;
+            if (p != null) {
+                Console.WriteLine("Person Info: {0}, {1}", p.Name, p.Age); // Person Info: Anonymous 25
+            }
+            
+        }
+    }
+```
+注意，as运算符只能用于引用转换和装箱转换，不能用于用户自定义转换或到值类型转换
+
+## 十七.泛型
+
+### 什么是泛型
+
+### C#中的泛型
+
+### 泛型类
+
+### 声明泛型类
+
+### 创建构造类型
+
+### 创建变量和实例
+
+### 类型参数的约束
+
+### 泛型方法
+
+### 扩展方法和泛型类
+
+### 泛型结构
+
+### 泛型委托
+
+### 泛型接口
+
+### 协变
+
+### 逆变
