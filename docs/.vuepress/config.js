@@ -42,7 +42,8 @@ module.exports = {
           { text: "🌍GIS", link: "/gis/" },
           { text: "️️🖱️软件", link: "/software/" },
           { text: "️️🐛网络工程", link: "/network/",  },
-          { text: "🚗C#", link: "/csharp/"}
+          { text: "🚗C#", link: "/csharp/"},
+          { text: "🎮Unity", link: "/unity/"}
         ]
       },
       { text: "设计", items: [
@@ -182,6 +183,13 @@ module.exports = {
       "/csharp/": [
         {
           title: "C#",
+          collapsable: false,
+          children: [""]
+        }
+      ],
+      "/unity/": [
+        {
+          title: "Unity",
           collapsable: false,
           children: [""]
         }

@@ -2902,28 +2902,680 @@ eg:
 
 ### 什么是泛型
 
+通过**泛型**，我们可以重构代码并且增加一个抽象层，使之应用到它们编码的数据类型上或其他类型。这是专门为多段代码在不同的数据类型上执行相同指令的情况专门设计的
+
 ### C#中的泛型
+
+**泛型**特性提供了一种更优雅的方式让多个类型共享一组代码。泛型允许我们声明**类型参数化**的代码，可以用不同的类型进行实例化。注意，**类型不是对象而是对象的模板，泛型类型也不是类型而是类型的模板**
+
+C#提供了**5种**泛型：类、结构、接口、委托和方法（前4个是类型，方法是成员）
+
+eg: 创建一个泛型类
+
+```cs
+    class MyStack <T> // 在类型后放置 <T>
+    {
+        int StackPointer = 0;
+        T [] StackArray;
+        public void Push(T x) {...}
+        public Pop() {...}
+    }
+```
 
 ### 泛型类
 
+创建和使用常规的、非泛型的类有两个步骤：声明类和创建类型实例；但**泛型类**不是实际的类而是类的模板，所以使用上有些差别：先构建实际的类类型、再创建这个构建后的类类型的实例
+- 在某些类型上使用占位符来声明一个类
+- 为占位符提供真实类型，该类型称为**构造类型**
+- 创建构造类型的实例
+
+![](../.vuepress/public/images/cSharp/17-3.png)
+
 ### 声明泛型类
+
+声明一个泛型类：
+- 在类名后放置一组尖括号(区分泛型类和普通类的标志)
+- 在尖括号中用逗号分隔的占位符字符串表示希望提供的类型，这叫做**类型参数**
+- 在泛型类声明的主体中使用类型参数来表示应该替代的类型
+
+eg:
+```cs
+    class SomClass <T1, T2>
+    {
+        public T1 SomeVar = new T1();
+        public T2 OtherVar = new T2();
+    }
+```
 
 ### 创建构造类型
 
+创建构造类型的语法：列出类名并在尖括号中提供真实类型来替代类型参数，替代类型参数的真实类型叫做**类型实参**
+
+![](../.vuepress/public/images/cSharp/17-4.png)
+
 ### 创建变量和实例
+
+**类对象的创建**：
+```cs
+    // 普通非泛型类型对象的创建
+    MyNonGenClass myNGC = new MyNonGenClass();
+    // 泛型类型对象的创建
+    SomeClass<short, int> mySc1 = new SomeClass<short, int>();
+    // 或者使用 var，让编译器使用类型引用
+    var mySc2 = new SomeClass<short, int>();
+```
+
+![](../.vuepress/public/images/cSharp/17-6.png)
+
+使用泛型的栈的栗子：
+```cs
+    class MyStack<T>
+    {
+        T[] StackArray;
+        int StackPointer = 0;
+        public void Push(T x)
+        {
+            if (!IsStackFull)
+                StackArray[StackPointer++] = x;
+        }
+        public T Pop()
+        {
+            return (!IsStackEmpty) ? StackArray[--StackPointer] : StackArray[0];
+        }
+        const int MaxStack = 10;
+        bool IsStackFull
+        {
+            get
+            {
+                return StackPointer >= MaxStack;
+            }
+        }
+        bool IsStackEmpty
+        {
+            get
+            {
+                return StackPointer <= 0;
+            }
+        }
+        public MyStack()
+        {
+            StackArray = new T[MaxStack];
+        }
+        public void Print()
+        {
+            for (int i = StackPointer - 1; i >= 0; i--)
+                Console.WriteLine(" Value: {0}", StackArray[i]);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyStack<int> StackInt = new MyStack<int>();
+            MyStack<string> StackString = new MyStack<string>();
+
+            StackInt.Push(3);
+            StackInt.Push(5);
+            StackInt.Push(7);
+            StackInt.Push(9);
+            StackInt.Print();
+
+            StackString.Push("This is fun");
+            StackString.Push("Hi here");
+            StackString.Print();
+            // Value: 9
+            // Value: 7
+            // Value: 5
+            // Value: 3
+            // Value: Hi here
+            // Value: This is fun
+        }    
+    }
+```
+
+比较：
+
+![](../.vuepress/public/images/cSharp/17-8.png)
 
 ### 类型参数的约束
 
+从泛型栈的示例可以看出，它没有尝试添加、比较或做其他任何需要用到项本身的运算符的事情，因为泛型栈不知道它要保存的项的类型是什么，不会知道这些类型实现的成员。但所有的C#对象最终都从`object`类继承，栈可以确定的是，它保存的项都实现了`object`的成员，包括`ToString`、`Equals`和`GetType`等等
+
+只要代码不访问它处理的一些类型的对象（或者它始终是`object`的成员），泛型类就能处理任何类型。符合约束的类型参数叫做**未绑定的类型参数**，如果代码尝试使用其他成员，编译器会产生一个错误
+
+eg:
+```cs
+    class Simple<T>
+    {
+        static public bool LessThan(T i1, T i2)
+        {
+            return i1 < i2; // 错误 不是所有的类都实现了小于运算符
+        }
+    }
+```
+
+要让泛型更有用，需要提供额外的信息让编译器知道参数可以接受哪些类型，这些额外的信息叫做**约束**。只有符合约束的类型才能替代给定的类型参数，来产生构造类型
+
+约束使用**where**子句列出：
+- 每一个约束的类型参数有自己的where子句
+- 如果形参有多个约束，它们在where子句中使用逗号分隔
+
+eg:
+```cs
+    where TypeParam : constraint, contraint, ... 
+                             ↑约束列表
+```
+
+where子句需要注意：
+- 子句在类型参数列表的关闭尖括号后列出
+- 子句不使用逗号或其他符号分隔
+- 子句可以以任何次序列出
+- 子句中的约束必须有特定顺序
+    - 最多只能有一个主约束，如果有则必须放在第一位
+    - 可以有任意多的接口约束
+    - 如果有构造函数约束，必须放在最后
+
+eg:
+```cs
+    class MyClass <T1, T2, T3>
+        where T2: Customer
+        where T3: IComparable
+    {
+        ...
+    }
+```
+
+有**5种**类型的约束
+
+![](../.vuepress/public/images/cSharp/17-2.png)
+
+它们的顺序：
+
+![](../.vuepress/public/images/cSharp/17-9.png)
+
+
+
 ### 泛型方法
+
+**泛型方法**可以在泛型和非泛型类以及结构和接口中声明
+
+**声明泛型方法**：具有类型参数列表和可选的约束
+- 泛型方法有两个参数列表
+    - 封闭在圆括号内的方法参数列表
+    - 封闭在尖括号内的类型参数列表
+- 在方法名称后和方法参数列表之前放置类型参数列表
+- 在方法参数列表后放置可选的约束子句
+
+eg:
+```cs
+                            ↓类型参数列表     ↓约束子句
+    public void PrintData<S, T> (S p, T t) where S: Person
+    {                              ↑方法参数列表
+        ...                        
+    }
+```
+
+**调用类型参数列表**：需要在调用方法时提供**类型实参**
+
+eg:
+```cs
+    void DoStuff <T1, T2> (T1 t1, T2 t2)
+    {
+        T1 someVar = t1;
+        T2 otherVar = t2;
+    }
+    DoStuff <short, int> (sVal, iVal);
+    DoStuff <int, long> (iVal, lVal);
+```
+
+当传入方法参数时，编译器可以通过方法参数推断出泛型方法的类型形参的类型，因此可以省略类型参数和调用中的尖括号
+
+eg:
+
+```cs
+    int myInt = 5;
+    MyMethod <int> (myInt);
+    =
+    MyMethod(myInt);
+```
+
+eg：在一个非泛型类中声明一个泛型方法
+
+```cs
+    class MyMethod
+    {
+        static public void ReverseAndPrint<T> (T[] arr)
+        {
+            Array.Reverse(arr);
+            foreach (T item in arr)
+                Console.Write("{0}, ", item.ToString());
+            Console.WriteLine("");
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 创建各种类型的数组
+            var intArray = new int[] { 3, 5, 7, 9, 11 };
+            var stringArray = new string[] { "first", "second", "third" };
+            var doubleArray = new double[] { 3.567, 7.891, 2.345 };
+
+            MyMethod.ReverseAndPrint<int>(intArray); // 11, 9, 7, 5, 3,
+            MyMethod.ReverseAndPrint<string>(stringArray); // third, second, first,
+            MyMethod.ReverseAndPrint<double>(doubleArray); // 2.345, 7.891, 3.567,
+
+            MyMethod.ReverseAndPrint(intArray); // 3, 5, 7, 9, 11,
+            MyMethod.ReverseAndPrint(stringArray); // first, second, third,
+            MyMethod.ReverseAndPrint(doubleArray); // 3.567, 7.891, 2.345,
+        }
+    }
+```
 
 ### 扩展方法和泛型类
 
+扩展方法与泛型类结合使用，允许将类中静态方法关联到不同的泛型类上，还允许像调用类构造方法一样来调用方法
+
+**泛型类的扩展方法**：
+- 必须声明为`static`
+- 必须是静态类的成员
+- 第一个参数类型中必须有关键字`this`,后面是扩展的泛型类的名字
+
+eg:一个叫做Print的扩展方法，扩展了叫做`Holder<T>`的泛型类
+```cs
+    static class ExtendHolder
+    {
+        public static void Print<T>(this Holder<T> h)
+        {
+            T[] vals = h.GetValues();
+            Console.WriteLine("{0},\t{1},\t{2}", vals[0], vals[1], vals[2]);
+        }
+    }
+    class Holder<T>
+    {
+        T[] Vals = new T[3];
+        public Holder (T v0, T v1, T v2)
+        {
+            Vals[0] = v0;
+            Vals[1] = v1;
+            Vals[2] = v2;
+        }
+        public T[] GetValues()
+        {
+            return Vals;
+        }
+    }
+    class Program 
+    {
+        static void Main(string[] args)
+            {
+            var intHolder = new Holder<int>(3, 5, 7);
+            var stringHolder = new Holder<string>("a1", "a2", "a3");
+            intHolder.Print(); // 3  5  7
+            stringHolder.Print();// a1  a2  a3
+            }
+    }
+```
+
+
 ### 泛型结构
+
+与泛型类相似，**泛型结构**可以有类型参数和约束
+
+eg:
+```cs
+    struct PieceOfData<T>
+    {
+        public PieceOfData(T value)
+        {
+            _data = value;
+        }
+        private T _data;
+        public T Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            var intData = new PieceOfData<int>(10);
+            var stringData = new PieceOfData<string>("Hi here");
+            Console.WriteLine("intData = {0}", intData.Data);
+            Console.WriteLine("stringData = {0}", stringData.Data);
+            }
+    }
+```
 
 ### 泛型委托
 
+**声明泛型委托**：
+- 在委托名后、委托参数列表之前的尖括号中放置类型参数列表
+- 有两个参数列表：委托形参列表和类型参数列表
+- 类型参数列表的范围包括：
+    - 返回值
+    - 形参列表
+    - 约束子句
+
+eg:
+```cs
+                             ↓类型参数列表  
+    delegate  R  MyDelegate<T, R>(T value);
+              ↑返回类型             ↑委托形参
+```
+
+eg: 在Main中，泛型委托MyDelegate使用string类型的实参实例化，并且用PrintString方法初始化
+```cs
+    delegate void MyDelegate<T>(T value); // 泛型委托
+    class SimplePrint
+    {
+        static public void PrintString(string s) // 方法匹配委托
+        {
+            Console.WriteLine(s);
+        }
+        static public void PrintUpperString(string s) // 方法匹配委托
+        {
+            Console.WriteLine("{0}", s.ToUpper());
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            var myDel = new MyDelegate<string>(SimplePrint.PrintString); // 创建委托的实例
+            myDel += SimplePrint.PrintUpperString; // 向委托添加方法
+            myDel("Hi here");
+            // Hi here
+            // HI HERE
+            }
+    }
+```
+
 ### 泛型接口
+
+泛型接口允许我们编写参数和接口成员返回类型是泛型类型参数的接口，泛型接口的声明与非泛型接口相似，只是多了尖括号和类型参数
+
+eg:
+```cs
+    interface IMyIfc<T> // 泛型接口
+    {
+        T ReturnIt(T inValue);
+    }
+    class SimpleDervied<S>: IMyIfc<S> // 泛型类
+    {
+        public S ReturnIt(S inValue)
+        {
+            return inValue;
+        }
+    }
+    class Program
+    {
+        static void Main()
+        {
+            var trivInt = new SimpleDervied<int>();
+            var trivString = new SimpleDervied<string>();
+            Console.WriteLine("{0}", trivInt.ReturnIt(5));
+            Console.WriteLine("{0}", trivString.ReturnIt("Hi here"));
+        }
+    }
+```
+
+**泛型接口的实现必须唯一**，必须保证类型实参组合不会在类型中产生两个重复接口
+
+eg: 错误示例
+```cs
+    interface IMyIfc<T> // 泛型接口
+    {
+        T ReturnIt(T inValue);
+    }
+    class SimpleDervied<S>: IMyIfc<int>, IMyIfc<S> // 错误
+    {
+        public int ReturnIt(int inValue) // 实现第一个接口
+        {
+            return inValue;
+        }
+        public S ReturnIt(S inValue) // 实现第二个接口
+        {                            // 如果把int作为类型参数来替代第二个接口中的S，则会有两个相同类型的接口，这是不允许的
+            return inValue;
+        }
+    }
+```
 
 ### 协变
 
+**可变性**：协变、逆变、不变
+
+**赋值兼容性**：将派生类对象的实例赋值给基类的变量
+
+eg: 将派生类Dog的对象，赋值给基类Animal类型的变量
+```cs
+    class Animal
+    {
+        public int NumberOfLegs = 4;
+    }
+    class Dog: Animal
+    {
+    }
+    class Program
+    {
+        static void Main()
+        {
+            Animal a1 = new Animal();
+            Animal a2 = new Dog();
+            Console.WriteLine("Number of dog legs: {0}", a2.NumberOfLegs);
+        }
+    }
+```
+![](../.vuepress/public/images/cSharp/17-12.png)
+
+eg:示例2
+```cs
+    class Animal
+    {
+        public int NumberOfLegs = 4;
+    }
+    class Dog: Animal
+    {
+    }
+    delegate T Factory<T>();
+    class Program
+    {
+        static DogS MakeDog()
+        {
+            return new DogS();
+        }
+        static void Main(string[] args)
+            {
+            Factory<DogS> dogMaker = MakeDog; // 创建委托对象
+            Factory<AnimalS> animalMaker = dogMaker; // 尝试赋值委托对象 报错
+            Console.WriteLine(animalMaker().NumberOfLegs.ToString());
+            }
+    }
+```
+
+**报错分析**：看上去由派生类构造的委托应该可以赋值给由基类构造的委托，为什么会报错呢？赋值兼容性不成立了吗？
+
+不是，这个原则还是成立的，在这里不生效的原因是：尽管DogS是AnimalS的派生类，但委托`Factory<DogS>`没有从`Factory<AniamlS>`派生，这两个委托是同级的，之间没有派生关系，所以赋值兼容性不适用
+
+如果**派生类**只是用于**输出值**，那么这种结构化的委托有效性之间的常数关系叫做**协变**，使用`out`关键字标记委托声明中的类型参数，就能让编译器知道这个是我们的期望，就能解决报错了
+
+更改为`delegate T Factory<out T>();`
+
+![](../.vuepress/public/images/cSharp/17-14.png)
+
 ### 逆变
+
+eg:
+```cs
+    class Program
+    {
+        delegate void Action1<in T>(T a);
+        static void ActOnAnimal(AnimalS a)
+        {
+            Console.WriteLine(a.NumberOfLegs);
+        }
+        static void Main(string[] args)
+            {
+            Action1<AnimalS> act1 = ActOnAnimal;
+            Action1<DogS> dog1 = act1;
+            dog1(new DogS());
+            }
+    }
+```
+
+如果类型参数只用作委托中方法的**输入参数**，即使调用代码传入了一个更高程度的派生类的引用，委托中的方法也只期望一个程度低一些的派生类的引用.
+
+这种在期望传入基类时允许传入派生类对象的特性叫做**协变**，逆变允许更高程度的派生类作为输入参数
+
+![](../.vuepress/public/images/cSharp/17-15.png)
+
+**比较协变和逆变**
+
+![](../.vuepress/public/images/cSharp/17-16.png)
+
+**接口的协变和逆变**：可以在声明接口时使用`out`和`in`关键字
+
+eg:
+```cs
+    class AnimalS
+    {
+        public string Name;
+    }
+    class DogS : AnimalS
+    {
+    }
+
+    interface IMyIfcS<out T> // 声明泛型接口 out关键字制定了类型参数时协变的
+    {
+        T GetFirst();
+    }
+    class SimpleReturn<Y>: IMyIfcS<Y>
+    {
+        public Y[]  items =  new Y[2];
+        public Y GetFirst() // 泛型类实现了泛型接口
+        {
+            return items[0];
+        }
+    }
+    class Program
+    {
+        static void DoSomething(IMyIfcS<AnimalS> returner) // 方法接受由AnimalS类型构建的泛型接口IMyIfcS作为参数
+        {
+            Console.WriteLine(returner.GetFirst().Name);
+        }
+        static void Main(string[] args)
+        {
+            SimpleReturn<DogS> dogReturner = new SimpleReturn<DogS>();
+            dogReturner.items[0] = new DogS() { Name = "Avonlea" }; // 使用DogS类创建并初始化了泛型类SimpleReturn的示例
+            IMyIfcS<AnimalS> animalReturner = dogReturner; // 因为使用了out 所以成立
+            DoSomething(dogReturner); // 实现接口的构造协变类调用了DoSomething方法
+        }
+    }
+```
+
+以上栗子都是显式的协变和逆变，有些情况下编译器可以自动识别某个已构建的委托是协变还是逆变，从而进行**类型的强制转换**，这通常发生在没有为对象的类型赋值的时候：
+
+eg:
+```cs
+    class AnimalS
+    {
+        public string Name;
+    }
+    class DogS : AnimalS
+    {
+    }
+    class Program
+    {
+        delegate T Factory<T>();
+        static DogS MakeDog()
+        {
+            return new DogS()
+        }
+        static void Main()
+        {
+
+            Factory<AnimalS> animalMaker = MakeDog; // 隐式强制转换 不需要out
+
+            Factory<DogS> dogMaker = MakeDog;
+            Factory<AnimalS> animalMaker = dogMaker; // 已为对象的类型赋值 需要out 
+
+            Factory<AnimalS> animalMaker = new Factory<DogS> (MakeDog) // 需要out
+        }
+    }
+
+```
+
+**总结**
+- 变化处理的是使用派生类替换基类的安全情况，即只适用引用类型，所以不适用于从值类型派生其他类型
+- 显式变化使用`in`和`out`关键字只适用于委托和接口，不适用于类、结构和方法
+- 不包括`in`和`out`关键字的委托和接口类型参数叫做**不变**，这些类型参数不能同于协变和逆变
+
+## 十八.枚举器和迭代器
+
+### 枚举器和可枚举类型
+
+为什么数组可以通过`foreach`方法列举出每一项的值？原因是数组可以按需提供一个叫做**枚举器**的对象。枚举器可以一次返回请求的数组中的元素。对于有枚举器的类型而言，获取一个对象枚举器的方法是调用对象的`GetEnumerator`方法。实现`GetEnumerator`方法的类型叫做**可枚举类型**
+
+![](../.vuepress/public/images/cSharp/18-1.png)
+
+`foreach`结构设计用来和可枚举类型一起使用。只要给它的遍历对象是可枚举类型，就会执行以下行为：
+- 通过调用`GetEnumerator`方法获取对象的枚举器
+- 从枚举器中请求每一项并且把它作为**迭代变量**，代码可以读取该变量但不可以改变
+
+eg:
+```cs
+                              ↓必须是可枚举变量
+    foreach(Type VarName in EnumerableObject)
+    {
+        ...
+    }
+```
+
+### IEnumerator接口
+
+实现`IEnumerator`接口的枚举器包含3个函数成员：Current、MoveNext和Reset
+- Current是返回序列中当前位置项的属性
+    - 它是只读属性
+    - 它返回object类型的引用，所以可以返回任何类型
+- MoveNext是把枚举器位置前进到集合中下一项的方法，它也返回布尔值，指示新的位置是否有效
+    - 如果新的位置有效，则返回true
+    - 如果新的位置无效（比如到达了尾部），则返回false
+    - 枚举器的原始位置为-1，因此MoveNext必须再第一次使用Current前调用
+- Reset是把位置重置为原始状态的方法
+
+![](../.vuepress/public/images/cSharp/18-3.png)
+
+eg: 模仿 foreach 实现遍历数组
+```cs
+    static void Main() {
+        int[] MyArray = { 10, 11, 12, 14, 15 };
+        IEnumerator ie = MyArray.GetEnumerator();
+        while (ie.MoveNext())
+        {
+            int i = (int) ie.Current;
+            Console.WriteLine("{0}", i);
+        }
+    }
+```
+
+### IEnumerable接口
+
+### 泛型枚举接口
+
+### 迭代器
+
+### 常见迭代器模式
+
+### 产生多个可枚举类型
+
+### 将迭代器作为属性
+
+### 迭代器的实质
