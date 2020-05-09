@@ -7,6 +7,141 @@
 
 ## 基础
 
+### 执行上下文
+
+执行上下文是评估和执行JavaScript代码的环境，有三种类型的执行上下文：
+- 全局执行上下文：默认、基础的上下文，任何不在函数内的代码都在全局上下文中。它会执行两件事：创建一个全局的`window`对象，并设置`this`的值等于这个**全局对象**。一个程序中只会有一个全局上下文
+
+- 函数执行上下文：每当一个函数被调用时，都会为这个函数创建一个新的执行上下文，每个函数都有它自己的执行上下文。每当一个新的执行上下文被创建，它会按定义的顺序执行一系列的步骤
+
+- Eval 函数执行上下文：执行在`eval`函数内的代码也会有它自己的执行上下文，但较少使用该函数
+
+### 执行栈
+
+**执行栈**，也就是其他编程语言中所说的“调用栈”，是一种拥有“后进先出”(LIFO)数据结构的栈，被用来存储代码运行时创建的所有执行上下文
+
+当 JavaScript 引擎第一次遇到脚本时，会创建一个全局的执行上下文并压入当前的执行栈。每当引擎遇到一个函数调用，它会为该函数创建一个新的执行上下文并压入栈的顶部
+
+引擎会执行那些上下文位于栈顶的函数，当该函数执行结束时，执行上下文从栈中弹出，控制流程到达当前栈中的下一个上下文
+
+```js
+function first() {
+  console.log('Inside first function');
+  second();
+  console.log('Again inside first function');
+}
+
+function second() {
+  console.log('Inside second function');
+}
+
+first();
+consolg.log('Inside Global Execution Context');
+```
+
+![](../.vuepress/public/images/zhixingzhan.png)
+
+当上述代码在浏览器加载时，JavaScript 引擎创建了一个全局执行上下文并把它压入当前栈。当遇到`first()`函数调用时，JavaScript引擎为该函数创建了一个新的执行上下文并把它压入当前栈的顶部
+
+当`first()`函数内部调用`second()`函数时，JavaScript引擎为`second()`函数创建了一个新的执行上下文，并把它压入当前栈的顶部。当`second()`函数执行完毕，它的执行上下文会从当前栈弹出，并且控制流程到达下一个执行上下文，即`first()`函数的执行上下文
+
+当`first()`执行完毕，它的执行上下文从栈弹出，控制流程到达全局执行上下文，一旦所有代码执行完毕，JavaScript 引擎从当前栈中移除全局执行上下文
+
+
+例：以下两段代码有什么区别？执行结果是什么？
+```js
+var scope = 'global scope';
+function checkscope() {
+  var scope = 'local scope';
+  function f() {
+    return scope;
+  }
+  return f();
+}
+checkscope();
+
+var scope = 'global scope';
+function checkscope() {
+  var scope = 'local scope';
+  function f() {
+    return scope;
+  }
+  return f;
+}
+checkscope()();
+```
+
+执行结果都是`local scope`，它们的调用栈顺序不同：
+
+第一段：全局——>函数checkscope()——>函数f()——>出栈——>出栈——>出栈
+
+第二段：全局——>函数checkscope()——>出栈——>函数f()——>出栈——>出栈
+
+
+**this 绑定**
+
+在全局执行上下文中，`this`的值指向全局对象(在浏览器中，`this`引用Window对象)
+
+在函数执行上下文中，`this`的值取决于该函数是如何被调用的。如果它被一个引用对象调用，那么`this`就会被设置为那个对象，否则`this`的值被设置为全局对象或`undefined`(严格模式下)
+
+```js
+let foo = {
+  baz: function() {
+    console.log(this)
+  }
+}
+
+foo.baz(); // this 指向 foo
+
+let bar = foo.baz();
+bar(); // this 指向 window 对象
+```
+
+**变量对象**
+
+每一个执行上下文都会分配一个变量对象，变量对象的属性由**变量和函数声明**构成。在函数上下文情况中，参数列表也会被加入到变量对象中作为属性，变量对象与当前作用域息息相关。不同作用域的变量对象互不相同，它保存了当前作用域的所有函数和变量
+(要注意的是，**函数声明**会被加入到变量对象中，但**函数表达式**则不会)
+
+```js
+function a() {}
+console.log(typeof a); // function
+
+var a = function _a() {};
+console.log(typeof a); // function
+console.log(typeof _a); // undefined
+
+```
+
+
+进入执行上下文时，首先会处理**函数声明**，其次会处理变量声明，如果变量名跟已经声明的形式参数或函数相同时，则变量声明不会干扰已经存在的这类属性，例：
+
+```js
+console.log(foo); // 打印函数
+
+function foo() {
+  console.log('foo');
+}
+var foo = 1;
+```
+
+**作用域**
+
+JavaScript 采用词法作用域(静态作用域)，作用域决定了变量的生命周期及其可见性；函数的作用域在函数定义的时候就决定了。当我们创建了一个函数或`{}`块，就会生成一个新的作用域，需要注意的是，通过`var`创建的变量只有函数作用域，而通过`let`或`const`创建的变量既有函数作用域，也有块作用域
+
+```js
+var value = 1;
+function foo() {
+  consloe.log(value);
+}
+
+function bar() {
+  var value = 2;
+  foo();
+}
+
+bar(); // 打印 1
+```
+
 ### 面向对象与原型
 
 ### ajax
