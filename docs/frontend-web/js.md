@@ -1024,6 +1024,167 @@ JavaScript 时单线程执行的，无法同时执行多段代码。当某一段
 
 由上可知，`setTimeout`并不是异步的，而是将其操作插入到 js 线程中，排队执行，造成异步的假象，这时 setTimeout 立即将 ajax 排到 js 线程中，仍然会造成 ui 阻塞。
 
+**事件循环**
+![](../.vuepress/public/images/eventloop.png)
+
+先看一个小栗子：当JS引擎运行时，会将代码压入执行栈进行执行
+```js
+function a() {
+  b()
+}
+function b() {
+  c()
+}
+function c() {
+  console.log('c')
+}
+a()
+```
+入栈：当代码被解析后，函数依次被压入栈
+![](../.vuepress/public/images/inloop.png)
+出栈：当函数c执行完后，开始出栈
+![](../.vuepress/public/images/outloop.png)
+
+tip:
+- Call Stack 执行栈 **先进后出**
+- Callback Queue 回调队列 **先进先出**
+- Web Apis 浏览器功能，专门维护事件
+
+**当执行栈遇到异步**
+```js
+console.log('sync')
+$.on('button', 'click', function() {
+  console.log('hello')
+})
+setTimeOut(function() {
+  console.log('2')
+}, 3000)
+```
+总过程: 打印 > 添加点击事件 > setTimeout
+![](../.vuepress/public/images/inloop2.png)
+
+分析1: 浏览器在执行栈执行时，发现有异步任务后，会交给webapi去维护，而执行栈会继续执行后面的任务
+![](../.vuepress/public/images/inloop3.png)
+
+分析2: 同样，setTimeout也会被添加到webapi中，setTimeout旁边有个进度条，这个进度条就是设置的等待时间
+![](../.vuepress/public/images/inloop4.png)
+
+分析3: 当setTimeout执行结束后，是不是就回到执行栈呢？答案是否的，倒计时结束后setTimeout的可执行函数，被放入了回调队列，**只有当执行栈的任务为空时**，才会从回调队列中取出放入执行
+![](../.vuepress/public/images/inCallbackQueue.png)
+
+![](../.vuepress/public/images/inStack.png)
+
+再看一个栗子：
+```js
+console.log(1)
+setTimeout(() => {
+  console.log(2)
+  setTimeout(() => {
+    console.log(3)
+  }, 0)
+}, 0)
+setTimeout(() => {
+  console.log(4)
+})
+console.log(5)
+```
+上面代码依次输出：1，5，2，4，3
+分析：
+1. 输出1，将2push进回调队列
+2. 将4push进回调队列
+3. 输出5
+4. 清空执行栈，读取输出2，将3push进回调队列
+5. 清空执行栈，读取输出4
+6. 清空执行栈，读取输出3
+
+### Macrotask(宏任务)、Microtask(微任务)
+通过上面的例子，想必对 event loop 有了一定的了解，现在继续看一个例子
+```js
+  console.log(1)
+  setTimeout(() => {
+    console.log(2)
+  })
+  const p = new Promise(resolve => {
+    console.log(3)
+    resolve()
+  })
+  p.then(() => {
+    console.log(4)
+  })
+  console.log(5)
+```
+按照 event loop 的概念，输出应该是1，3，5，2，4，因为 setTimeout 和 then 会被放入回调队列，然后先进先出，所以应该是2先输出，4后输出
+
+但实际输出结果是1，3，5，4，2，为什么呢？因为 promise 的 then 方法被认为是在 Microtask 微任务队列中
+
+**什么是Macrotask(宏任务)？**
+
+宏任务就是前面介绍过的回调队列 Callback Queue
+
+**什么是Microtask(微任务)？**
+
+微任务同样也是一个任务队列，只是执行顺序是在清空执行栈之后
+
+![](../.vuepress/public/images/eventloop.png)
+
+从这张图可以看到，Macrotask(微任务)虽然是队列，但**并不是一个个放入执行栈**，而是当执行栈清空，就会执行全部Microtask(微任务)队列中的任务，最后才是取回调队列的第一个Macrotask(宏任务)
+
+**如何分清宏任务还是微任务？**
+
+除了 then 以外，还有几个事件也被记为微任务：
+- process.nextTick (node环境下，浏览器环境会变成宏任务)
+- Object.observe
+- MutationObserver
+
+注意：process.nextTick 和 then 不太一样，process.nextTick 是加入到执行栈底部，所以和其他微任务表现不一致
+
+(node 环境)
+```
+console.log("1");
+setTimeout(()=>{
+    console.log(2)
+    Promise.resolve().then(()=>{
+        console.log(3);
+        process.nextTick(function foo() {
+            console.log(4);
+        });
+    })
+})
+Promise.resolve().then(()=>{
+    console.log(5);    
+    setTimeout(()=>{
+        console.log(6)
+    })
+    Promise.resolve().then(()=>{
+        console.log(7);
+    })
+})
+
+process.nextTick(function foo() {
+    console.log(8);
+    process.nextTick(function foo() {
+        console.log(9);
+    });
+});
+console.log("10")
+
+```
+
+1. 输出1，将2push进回调队列
+2. 将5push进微任务队列
+3. 将8压入执行栈底部
+4. 输出10
+5. 输出8，将9压入执行栈底部
+6. 输出9
+7. 输出5，将6压入回调队列，将7push进微任务
+8. 输出7
+9. 输出2，将3push进微任务队列，将4压入执行栈底部
+10. 输出3
+11. 输出4
+12. 输出6
+
+
+
 ### 闭包
 
 #### 变量的作用域
