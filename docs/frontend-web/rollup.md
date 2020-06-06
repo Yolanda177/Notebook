@@ -211,6 +211,34 @@ console.log(res2);
 console.log(isArray);
 
 ```
+打包后的 main.min.js文件内容
+```js
+(function (lodash) {
+  'use strict';
+
+  lodash = lodash && Object.prototype.hasOwnProperty.call(lodash, 'default') ? lodash['default'] : lodash;
+
+  function a(name) {
+    var temp = "Hello, ".concat(name, "!");
+    return temp;
+  }
+
+  var addArray = function addArray(arr) {
+    var result = arr.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    return result;
+  };
+
+  var res1 = a('1234');
+  var res2 = addArray([1, 2, 3, 4]);
+  var res3 = lodash.isArray(['123', '456']);
+  console.log(res1);
+  console.log(res2);
+  console.log(res3);
+}(lodash));
+
+```
 
 index.html 文件内容
 ```html
@@ -233,36 +261,145 @@ index.html 文件内容
 </html>
 ```
 
-当我们直接访问 index.html时，会发现浏览器报错了
+当我们直接访问 index.html时，会发现浏览器报错了 `Uncaught ReferenceError: lodash is not defined`
 
-
-
-
-
-
+为什么会是 undefined呢？这是因为一般情况下，第三方 node模块并不会被 rollup直接加载，node模块使用的是 CommonJs规范，因此不会兼容 rollup而直接被使用，为了解决这个问题，可以添加一些插件来处理 node依赖和 CommonJs模块
 
 ### 插件
 
+**rollup-plugin-node-resolve**： 允许加载 node_modules中的第三方模块
+
+**rollup-plugin-commonjs**：将 CommonJs模块转换为ES6来为 rollup兼容
+
+在 rollup.config.js中添加插件
+```js
+import babel from '@rollup/plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+
+export default {
+  input: './src/main.js',
+  output: {
+    file: './dist/js/main.min.js',
+    format: 'iife'
+  },
+  plugins: [
+    babel({
+      exclude: 'node_modules/**',  // 排除node_module下的所有文件
+      babelHelpers: 'runtime' // 结合 @babel/plugin-transform-runtime 使用
+    }),
+    resolve({
+      jsnext: true, // 该属性是指定将Node包转换为ES2015模块
+      main: true, // main 和 browser 属性将使插件决定将那些文件应用到bundle中
+      browser: true
+    }),
+    commonjs()
+  ]
+}
+```
+
+这时，我们重新打包一次，再打开 index.html浏览器就能正常显示不会报错啦
+
+
 **rollup-watch**: 监听文件变化
+
+接着在 `package.json`配置，这样当我们执行 `yarn rollupBuild`即可完成打包
+```js
+  "scripts": {
+    "rollupBuild": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+```
+执行一遍 `yarn watch`后，我们直接打开 index.html文件，直接修改 index.js的内容就能触发 watch重新打包并在浏览器更新变化了
 
 **rollup-plugin-serve**: 开启本地服务
 
+在 rollup.config.js中添加插件
+```js
+import babel from '@rollup/plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import serve from 'rollup-plugin-serve';
+
+export default {
+  input: './src/main.js',
+  output: {
+    file: './dist/js/main.min.js',
+    format: 'iife'
+  },
+  plugins: [
+    babel({
+      exclude: 'node_modules/**',  // 排除node_module下的所有文件
+      babelHelpers: 'runtime' // 结合 @babel/plugin-transform-runtime 使用
+    }),
+    resolve({
+      jsnext: true, // 该属性是指定将Node包转换为ES2015模块
+      main: true, // main 和 browser 属性将使插件决定将那些文件应用到bundle中
+      browser: true
+    }),
+    commonjs(),
+    serve({
+      open: true, // 是否打开浏览器
+      contentBase: '.', // 入口html的文件位置
+      historyApiFallback: false, // Set to true to return index.html instead of 404
+      host: 'localhost',
+      port: 10001 // 需要五位数
+    }),
+  ]
+}
+```
+
+当我们执行 `yarn rollupBuild`时，就能自动打开 http://localhost:10001/了，由于设置的的是根路径，还需要添加成 calhost:10001/src/index.html 才能真正访问目标文件
+
 **rollup-plugin-livereload**: 实时刷新界面
+
+注入LiveReload脚本：
+
+在LiveReload工作前，需要向页面中注入一段脚本用于和LiveReload的服务器建立连接。
+
+在 index.js 中加入如下一段代码：
+```js
+// Enable LiveReload
+document.write(
+  '<script src="http://' + (location.host || 'localhost').split(':')[0] +
+  ':35729/livereload.js?snipver=1"></' + 'script>'
+);
+```
+接着运行命令去监听目录：
+
+```./node_modules/.bin/livereload 'src/'```
+
+会得到如下结果；Starting LiveReload v0.9.1 for /Users/kayliang/Documents/个人提升/前端/vue-demo/babel-temp/src on port 35729.
+
+告诉我们监听成功，这时我们执行 `yarn rollupBuid` 后打开 index.html文件，在index.html修改内容后保存会看到页面自动刷新内容了
+
+我们还可以这样优化：在 package.json的 scripts中添加命令：
+```json
+"scripts": {
+  "watch": "rollup -c -w",
+  "rollupBuild": "rollup -c",
+  "reload": "livereload 'src/'"
+}, 
+```
+就能简化过程，无需执行 ```./node_modules/.bin/livereload 'src/'``` 命令
+
+但这个插件只能监听 src下的文件变化，并不能再往下监听其他文件，因为它不能自动打包，这需要 watch插件共同完成，但我们又不能同时打开 watch 和 livereload 这就出现了 all插件
 
 **rollup-all**: 共同开启 watch 和 livereload 
 
+rollup-all 旨在使一个终端可以执行多个任务，我们只需要在 package.json中再添加一条脚本：
+
+```json
+"scripts": {
+  "watch": "rollup -c -w",
+  "rollupBuild": "rollup -c",
+  "reload": "livereload 'src/'",
+  "all": "npm-run-all --parallel watch"
+}, 
+```
+这时我们执行 `yarn all`后刷新浏览器，改变 js或 css，浏览器就能自动加载更新后的代码
 
 
-
-
-
-## 进阶
-
-## 原理
-
-## 不提供热更新
-
-可以下载 `npm-run-all` 以及 `live-server` 来加载浏览器。
 
 ## 参考资料
 
