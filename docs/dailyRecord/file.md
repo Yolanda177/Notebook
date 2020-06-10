@@ -649,6 +649,105 @@ const saveChunkKey = 'chunkUploaded'
 
 
 
+
+### 文件夹上传
+
+当需要上传文件夹时，需要在 input上添加**webkitdirectory**属性（仅支持谷歌浏览器），这样在选择的时候就能选择文件夹上传了。这里增加一点难度，将文件夹压缩打包后再上传，选用的库是 **JSZip**
+
+这是我们即将上传的文件夹结构:
+![](../.vuepress/public/images/file-folder.jpg)
+
+```html
+  <input
+    type="file"
+    @change="zipFiles"
+    multiple="multiple"
+    webkitdirectory
+  />
+```
+
+```js
+// 在 @change 中获取到了文件夹中所有的文件对象 FileList
+  zipFiles(e) {
+    const { files } = e.target
+    console.log(files)
+  }
+```
+这是打印出来的文件列表，可以看出文件的层级被**扁平化**了，如何能还原出原来的文件夹呢？
+![](../.vuepress/public/images/file-list.jpg)
+
+[JSZip](https://stuk.github.io/jszip)提供了两个关键的 API：
+- zip.file(name, data [,options]) 创建一个文件
+- zip.folder(name) 创建一个新的文件夹
+
+```js
+import * as JSZip from 'jszip'
+  zipFiles(e) {
+    const { files } = e.target
+    const zip = new JSZip()
+    for (let index = 0; index < files.length; index++) {
+      const path = files[index].webkitRelativePath.split('/')
+      // 根据文件路径 生成目标文件
+      if (path.length === 2) {
+        // abc/123.pdf
+        zip.file(files[index].name, files[index])
+      }
+      if (path.length === 3) {
+        // abc/hahhaha/456.pdf
+        zip.folder(path[1]).file(files[index].name, files[index])
+      }
+      if (path.length === 4) {
+        // abc/hahhaha/aaaa/rollup-cjs.jpg
+        zip.folder(path[1]).folder(path[2]).file(files[index].name, files[index])
+      }
+      if (path.length === 5) {
+        // abc/hahhaha/bbb/hahahhab/rollup-umd.jpg
+        zip.folder(path[1]).folder(path[2]).folder(path[3])
+          .file(files[index].name, files[index])
+      }
+    }
+  }
+```
+
+从中可以发现除了根节点外，folder的创建跟 path的长度相关，可以用一个递归去生成目标文件
+```js
+import * as JSZip from 'jszip'
+// 在 @change 中获取到了文件夹中所有的文件对象 FileList
+  async zipFiles(e) {
+    const { files } = e.target
+    const zip = new JSZip()
+    for (let index = 0; index < files.length; index++) {
+      const path = files[index].webkitRelativePath.split('/')
+      if (path.length !== 2) {
+          // 非根节点
+        let i = 1
+        const deepPath = (obj, length) => {
+          if (length - 2 === 1) { // 插进文件
+            obj.file(files[index].name, files[index])
+          } else {
+            i++
+            const folder = obj.folder(path[i]) // 创建文件夹
+            deepPath(folder, path.length - (i - 1))
+          }
+        }
+        deepPath(zip.folder(path[1]), path.length)
+      } else {
+        // 根节点
+        zip.file(files[index].name, files[index])
+      }
+    }
+    const arrPath = files[0].webkitRelativePath.split('/')
+      try {
+        const content = await zip.generateAsync({ type: 'blob' })
+        // 创建file对象
+        const file = new File([content], `${arrPath[0]}.zip`, { type: 'zip' })
+      } catch (error) {
+        this.$message.error('打包失败！')
+        console.log(error)
+      }
+  }
+```
+
 ## 下载
 后端一般提供一个 `URL`，前端根据需求不同，实现客户端的保存下载。根据这个`URL`，前端处理下载的方式还可以细分几种，比较常用的有以下几种：
 
