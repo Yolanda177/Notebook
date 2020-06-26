@@ -177,7 +177,7 @@ module.exports = {
         {
           title: "GIS",
           collapsable: false,
-          children: ["", "layer", "handleFile", "learn"]
+          children: ["", "layer", "handleFile", "learn", "openLayers"]
         }
       ],
       "/csharp/": [
