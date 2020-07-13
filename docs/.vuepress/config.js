@@ -177,7 +177,7 @@ module.exports = {
         {
           title: "GIS",
           collapsable: false,
-          children: ["", "layer", "handleFile", "learn", "openLayers"]
+          children: ["", "layer", "handleFile", "learn", "openLayers", "arcGIS API for JavaScript"]
         }
       ],
       "/csharp/": [

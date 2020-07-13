@@ -352,9 +352,184 @@ provide() {
 
 ### $attrs与$listeners
 
+### vue选项合并策略
+
+  当使用 Vue 的**mixins**时，会发现不同的选项会有不同的合并策略：
+
+  - data、props、methods 属于**同名属性被组件覆盖合并**
+  - 生命周期钩子函数属于**直接合并**，执行顺序是**先混入后组件**
+
+  而 Vue 中提供了这样一个 API ：**Vue.config.optionMergeStrategies**，可以通过这个 API 自定义我们需要的合并策略
+
+应用场景：当系统页面有存在轮询或动画时，打开一个浏览器页签不会有很明显的问题；但打开的页签多了，浏览器就会变得卡顿；有没有能监听浏览器页签是否显示的方法呢？有的：**visibilityChange**
+
+demo:
+```js
+  created() {
+    this.refreshTimer = setInterval(() => {
+      const time = new Date()
+      console.log(time)
+    }, 1 * 1000)
+
+    window.addEventListener('visibilitychange', this.handleVisibilityChange)
+  },
+
+  methods: {
+    handleVisibilityChang() {
+      if (document.visibilityState === 'hidden') {
+        console.log('hidden')
+        clearInterval(this.refreshTimer)
+        this.refreshTimer = null
+      } else if (document.visibilityState === 'visible') {
+        console.log('visible')
+        if (!this.refreshTimer) {
+          this.refreshTimer = setInterval(() => {
+            const time = new Date()
+            console.log(time)
+          }, 1 * 1000)
+        }
+      }
+    }
+  }
+
+```
+
+当切换浏览器标签时：
+
+![](../.vuepress/public/images/visibleChange.png)
+
+如果在每一个需要监听处理的文件上写一堆的事件监听，去判断页面是否显示，效率是比较低的；这时，如果能定义一个页面显示隐藏的生命周期钩子，把这些判断封装起来，就非常高效：
+
+demo:
+
+```js
+// initLifeCycle.js
+import Vue from 'vue'
+
+// 通知所有组件页面状态发生了变化
+const notifyVisibilityChange = (lifeCycleName, vm) => {
+  // 生命周期函数会存在$options中，通过$options[lifeCycleName]获取生命周期
+  const lifeCycles = vm.$options[lifeCycleName]
+  // 因为使用了created的合并策略，所以是一个数组
+  lifeCycles && lifeCycles.length && lifeCycles.forEach(lifecycle => {
+    // 遍历 lifeCycleName对应的生命周期函数列表，依次执行
+    lifecycle.call(vm)
+  })
+  
+  vm.$children && vm.$children.length && vm.$children.forEach(child => {
+    // 遍历所有的子组件，然后依次递归执行
+    notifyVisibilityChange(lifeCycleName, child)
+  })
+}
+
+/**
+ * 添加生命周期钩子函数
+ * @param {*} rootVm vue 根实例，在页面显示隐藏时候，通过root向下通知
+ */
+export function initLifeCycle() {
+  const { optionMergeStrategies } = Vue.config
+  /*
+    定义了两个生命周期函数 pageVisible, pageHidden
+    为什么要赋值为 optionMergeStrategies.created呢
+    这个相当于指定 pageVisible, pageHidden 的合并策略与 created的相同（其他生命周期函数都一样）
+   */
+  optionMergeStrategies.pageVisible = optionMergeStrategies.beforeCreate
+  optionMergeStrategies.pageHidden = optionMergeStrategies.created
+}
+
+/**
+ * 将事件变化绑定到根节点上面
+ * @param {*} rootVm
+ */
+export function bind(rootVm) {
+  window.addEventListener('visibilitychange', () => {
+    // 判断调用哪个生命周期函数
+    let lifeCycleName
+    if (document.visibilityState === 'hidden') {
+      lifeCycleName = 'pageHidden'
+    } else if (document.visibilityState === 'visible') {
+      lifeCycleName = 'pageVisible'
+    }
+    if (lifeCycleName) {
+      // 通过所有组件生命周期发生变化了
+      notifyVisibilityChange(lifeCycleName, rootVm)
+    }
+  })
+}
+
+```
+
+在 main.js 使用，**注意**，需要在 Vue 实例化前调用
+
+```js
+// main.js
+import Vue from 'vue'
+import App from '@/App.vue'
+import router from '@/router'
+import store from '@/store'
+import { initLifeCycle, bind } from '@/utils/test'
+import '@/register'
+
+Vue.config.productionTip = false
+
+initLifeCycle()
+const vm = new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
+
+bind(vm)
+console.log(Vue.config.optionMergeStrategies)
+```
+
+这就是定义后的 vue 生命周期钩子函数：
+
+![](../.vuepress/public/images/optionMessage.png)
+
+
 ## 框架原理
 
 ### 响应式对象
+
+#### proxy 实现双向绑定
+
+一个简单的例子：
+
+```html
+<template>
+  <div>
+    <p>请输入:</p>
+    <input type="text" id="input">
+    <p id="p">
+  </div>
+</template>
+```
+
+```js
+const input = document.getElementById('input');
+const p = document.getElementById('p');
+const obj = {};
+
+const newObj = new Proxy(obj, {
+  get: function(target, key, receiver) {
+    console.log(`getting ${key}!`);
+    return Reflect.get(target, key, receiver);
+  },
+  set: function(target, key, value, receiver) {
+    console.log(target, key, value, receiver);
+    if (key === 'text') {
+      input.value = value;
+      p.innerHTML = value;
+    }
+    return Reflect.set(target, key, value, receiver);
+  },
+});
+
+input.addEventListener('keyup', function(e) {
+  newObj.text = e.target.value;
+});
+```
 
 #### proxy
 
@@ -1446,6 +1621,7 @@ handleClick(name) {
   this.$emit("update:currentSelectedTask", item);
 },
 ```
+
 ## 参考资料
 
 - [vue 中 8 种组件通信方式, 值得收藏!](https://juejin.im/post/5d267dcdf265da1b957081a3)
