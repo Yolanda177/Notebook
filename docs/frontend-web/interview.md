@@ -30,7 +30,7 @@ Object
 
 类型转换：
 
-![image-20201113105711953](./img/image-20201113105711953.png)
+<!-- ![image-20201113105711953](./img/image-20201113105711953.png) -->
 
 ![类型转换](https://static001.geekbang.org/resource/image/71/20/71bafbd2404dc3ffa5ccf5d0ba077720.jpg)
 
@@ -83,7 +83,7 @@ Q：为什么说JavaScript中函数都是天生闭包的？
 
 A：JavaScript 中的函数会自动通过隐藏的 `[[Environment]]` 属性记住创建它们的位置，所以它们都可以访问外部变量，能访问外部变量就产生了闭包。
 
-![image-20201014162314708](./img/image-20201014162314708.png)
+<!-- ![image-20201014162314708](./img/image-20201014162314708.png) -->
 
 注意：
 
