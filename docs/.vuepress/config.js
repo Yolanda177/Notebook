@@ -84,7 +84,7 @@ module.exports = {
         {
           title: "日常记录",
           collapsable: true,
-          children: ["2020", "file", "2018", "table",""]
+          children: ["2020", "2018", "table",""]
         },
         {
           title: "TechnologyDevelopment",
