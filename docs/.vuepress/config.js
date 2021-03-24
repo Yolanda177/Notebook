@@ -141,7 +141,7 @@ module.exports = {
         {
           title: "前端",
           collapsable: false,
-          children: [ "browser", "css", "javascript", "es6", "react", "vue", "webpack", "", "modulization", "architecture", "authentication", "chrome","noJQ", "performance", "npm", "lodash", "babel", "rollup", "docker", "security", "file"]
+          children: [ "browser", "css", "javascript", "es6", "react", "vue", "webpack", "", "modulization", "architecture", "authentication", "chrome","noJQ", "performance", "npm", "lodash", "babel", "rollup", "docker", "security", "file", "interview"]
         }
       ],
       "/rethink/": [

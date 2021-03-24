@@ -360,6 +360,11 @@ container bgColor rgb(255, 255, 0)
 
 补充：除了一个 JS 文件外，针对 JS 文件里面的代码层级，可以是通过异步编程（promise）来解决同步阻塞的问题。
 
+
+
+
+
+
 ## 从 Event Loop 谈 JS 的运行机制
 
 单线程 == 一个调用栈 == one thing at a time（一个时间点做一件事）
