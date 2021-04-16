@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /images/hero.jpg
+heroImage: /images/beijin.webp
 actionText: 开始学习 →
 actionLink: /dailyRecord/
 features:
