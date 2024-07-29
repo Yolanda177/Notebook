@@ -2,6 +2,176 @@
 
 ## js
 
+### 如何实现小驼峰格式转换？
+
+例：输入 HgaG_sHaaa 输出 hgagShaaa
+
+可用正则：
+1. `/^[^a-zA-Z0-9]+(.)?/g` 非字母、数字外的命中规则
+2. `/^[-_\s.]+(.)?/g` -或_或空格或. 的命中规则
+
+```javascript
+const toCamelCase = (str) => {
+  return str.toLowerCase()
+  .replace(/^[-_\s.]+(.)?/g, (match, char) => ( char ? char.toLowerCase() : ''))
+}
+```
+
+### （项目）如何实现版本比对？
+
+```javascript
+// 纯数字版本
+function compareVersion(version1, version2) {
+  if (version1 === version2) return 0
+  const v1 = version1.split('.').map(Number);
+  const v2 = version2.split('.').map(Number);
+  const maxLength = Math.max(v1.length, v2.length);
+  for (let i = 0; i < maxLength; i++) {
+    const num1 = i < maxLength ? v1[i] : 0;
+    const num2 = i < maxLength ? v2[i] : 0;
+    if (num1 > num2) {
+      // version1 is > version2
+      return 1
+    } else if (num1 < num2) {
+      // version1 is < version2
+      return -1
+    }
+  }
+}
+
+// 考虑预发版本
+const compareVersionWithPreRelease = (version1, version2) => {
+  const v1 = version1.split('+')[0].split('.').map(Number);
+  const v2 = version2.split('+')[0].split('.').map(Number);
+  console.log(v1, v2);
+  const prerelease1 = version1.split('-')[1] || '';
+  const prerelease2 = version2.split('-')[1] || '';
+  // console.log(prerelease1, prerelease2);
+  // 比较主版本号、次版本号、修订号
+  const maxLength = Math.max(v1.length, v2.length)
+  for(let i = 0; i < maxLength.length; i++) {
+    const num1 = i < v1.length ? v1[i] : 0;
+    const num2 = i < v2.length ? v2[i] : 0;
+    if (num1 > num2) {
+      return 1
+    } else if (num1 < num2) {
+      return -1
+    }
+  }
+  // 如果 主版本号、次版本号、修订号相同 则比较预发版本号
+  if (prerelease1 && prerelease2) {
+    if (prerelease1 < prerelease2) {
+      return -1
+    } else if (prerelease1 > prerelease2) {
+      return 1
+    }
+  } else if (prerelease1) {
+    // version1 有预发布版本号，version2没有，则 version1 小于 version2
+    return -1
+  } else if (prerelease2) {
+    // version2 有预发布版本号，version1没有，则 version1 大于 version2
+    return 1
+  }
+  return 0
+}
+console.log(compareVersionWithPreRelease('1.4.2-alpha', '1.4.2-beta'));
+console.log(compareVersionWithPreRelease('1.4.2+20130313144700', '1.4.2-beta'));
+```
+
+### 如何实现有效括号匹配？
+
+```javascript
+function isValid(string) {
+  const stack = []
+  const map = {
+    '[': ']',
+    '{': '}',
+    '(': ')',
+  }
+  for (let char of string) {
+    if (map[char]) {
+      stack.push(char)
+    } else {
+      const next = stack.pop()
+      if (map[next] !== char) {
+        return false
+      }
+    }
+  }
+  return stack.length === 0
+}
+console.log(isValid('{}')) // true
+console.log(isValid('{]')) // false
+```
+
+### 如何判断b是否是a的子集（a和b有重复元素，要求b的同个元素出现次数<=a的同个元素出现次数
+
+```javascript
+const checkBinA = (b, a) => {
+  const mapA = {}
+  const mapB = {}
+  for(let char of b) {
+    if (!mapB[char]) {
+      mapB[char] = 1
+    } else {
+      mapB[char] += 1
+    }
+  }
+  for(let char of a) {
+    if (!mapA[char]) {
+      mapA[char] = 1
+    } else {
+      mapA[char] += 1
+    }
+  }
+  for(let key in mapB) {
+    if (!mapA[key] || mapB[key]> mapA[key]) {
+      return false
+    }
+  }
+  console.log(mapB, mapA)
+  return true
+}
+console.log(checkBinA('1111234', '111233455'))
+
+```
+
+### 说说vue和react的相同点和不同点
+
+相同点：
+
+1、**虚拟dom实现快速渲染**：两者都是利用虚拟dom技术，通过比较新旧虚拟dom的差异来最小化真实dom的操作，从而提高渲染性能
+
+2、**组件化**：都支持组件化开发，允许开发者将界面拆分成独立、可复用的组件
+
+3、**响应式和声明式**：都提供了响应式的数据绑定和声明式的渲染方式，使得开发者可以更容易地构建和维护 UI
+
+4、**服务端渲染**：都支持服务端渲染，有利于提高加载速度
+
+5、**广泛的社区生态支持**：都有庞大的社区和生态系统，提供了大量的插件、工具和资源
+
+不同点：
+
+1、**模版语法和jsx**：vue使用基于html的模版语法来声明组件的渲染逻辑，而react使用jsx，一种看起来像xml的js语法扩张
+
+2、**数据流与通信**：vue支持双向数据绑定，修改数据会自动更新视图，组件通信方式有多种，比如props、自定义事件、provide/inject等等；react采用单向数据流，通过props和state来管理组件状态，子组件向父组件传递数据通常使用回调函数，react本身不支持自定义事件，但可以通过context进行跨层级通信
+
+3、**状态管理**：vue推荐使用vuex或pinia作为状态管理库，vuex与vue的集成更紧密；react则推荐使用redux，而redux也适用于其他前端框架
+
+4、**Diff算法与性能**：vue2使用全量diff、vue3则采用map数据结构以及动静结合的方式，在编译阶段提前标记静态节点，diff过程中直接跳过有静态标记的节点，提高了性能；而react采用递归同层比较，标识差异点保存到diff队列保存得到patch树，再统一操作批量更新dom
+
+5、**设计理念**：vue主张渐进式开发，易于上手，适合初学者；react主张函数式编程，相对抽象和灵活性更高
+
+### 说说单向数据流和双向数据绑定的原理，区别
+
+单向数据流
+
+1、**数据流向**：单向数据流意味着数据只能从一个方向流动，通常是父组件向子组件，形成一个单向的链式结构
+
+2、**状态管理**：应用程序的状态通常由顶层组件（或者全局状态管理器）管理，并通过props将状态传递给子组件
+
+3、**更新机制**：数据更新通常是通过回调函数或事件处理程序来实现，子组件通过调用这些回调函数来影响父组件的状态
+
 ### 说一下 js 的基本数据类型有哪些？
 
 基本类型：Undefined、Null、String、Number、Boolean、BigInt、Symbol (七种原始类型)
@@ -16,16 +186,48 @@
 
 ### 判断类型的方法有哪些？
 
-typeof()，instanceof，Object.prototype.toString.call()
+typeof,
 
-### 判断是不是字符串数字？
+instanceof,
+
+Object.prototype.toString.call(),
+
+Array.isArray(),
+
+isNaN(),
+
+### （项目）清除字符串空格的方式？
+```javascript
+1、清除首尾两端的空格：str.trim()
+
+2、清除首部空格（es2019）：str.trimStart()
+
+3、清除尾部空格（es2019）：str.trimEnd()
+
+4、使用正则表达：str.replace(/\s+/g, '') 或者 str.replace(' ', '')
+
+5、使用split和join：str.split(' ').join('')
+```
+
+### （项目）判断是不是字符串数字？
 
 ```js
-function testStringNum(str) {
-  return !Number.isNaN(+str);
+1、funtion isNumberString(string) {
+  return !!(string.length && !isNaN(Number(str.replace(/\s+/g, ''))))
 }
-// 方法
-Object.prototype.toString.call();
+
+2、functoin isNumberString(string) {
+  // 使用正则
+  // 正负整数
+  const regexInteger = /^[-+]?\d+$/
+  // 浮点数
+  const regexFloat = /^[-+]?\d+(\.\d+)?$/
+  // 科学计数法
+  const regexScientification = /^[-+]?\d+(\.\d+)?([eE][-+]?\d+)?$/
+  return regexScientification.test(str)
+}
+
+3、Object.prototype.toString.call(); // 方法
 ```
 
 ### [1,2,3].map(parseInt) 返回什么？
@@ -56,6 +258,9 @@ parseInt(value, radix) 接收两个参数：
 parseInt(1, 0) => 1   radix = 0 看作 radix = 10
 parseInt(2, 1) => NaN
 parseInt(3, 2) => NaN
+// 在parseInt(2, 1)、 parseInt(3, 2) 中，第二个参数 2 表示将输入按照二进制来解析。但一进制只有 0 这一个数字、二进制数只有 0 和 1，所以 3 不是有效的二进制表示，这种情况下 parseInt 通常会返回 NaN 
+parseInt('1011', 2) => 11 
+// 1011是一个二进制数，转换成十进制计算：从右往左为 1*2的0次方+1*2的1次方+0*2的二次方+1*2的三次方=1+2+0+8=11
 ```
 
 ### 数组、字符串、对象的基本操作方法？
@@ -69,7 +274,7 @@ parseInt(3, 2) => NaN
 
 **数组**：
 
-- 添加、删除元素 push()、pop()、shift()、unshift()、splice() 都是修改原数组
+- 添加、删除元素 push()、pop()、shift()、unshift()、splice() (包含startIndex)都是修改原数组
 - 遍历数组 forEach()、map()
 - 查询、过滤 find()、includes()、filter()
 
@@ -89,6 +294,56 @@ js 原型是指为其他对象提供共享属性访问的对象。在创建对�
 
 原型链：原型也是对象，因此它有自己的原型，这样就构成了一个原型链
 
+原型链的查找过程：
+
+1、**对象本身**：先在对象本身查找属性或方法
+
+2、**原型对象**：对象本身没找到，继续在对象的原型中查找
+
+3、**原型的原型**：原型对象没找到，继续在原型的原型中查找，以此类推
+
+4、**Object.prototype**：最终会达到 Object.prototype
+
+5、**null**：仍未找到，返回undefined
+
+补充：在JavaScript中，每个对象都有一个内部属性（[[Prototype]]），这个属性引用了另一个对象，这个被引用的对象就是原对象的原型。原型对象可以包含属性和方法，这些属性和方法可以被原对象继承
+
+补充：在JavaScript中，[[Prototype]]和__proto__的区别
+
+**[[Prototype]]**：
+
+1、**内部属性**：
+- [[Prototype]]是每个JavaScript对象的内部属性（或称为内部槽），它引用了对象的原型对象。
+- 这个属性是不可枚举的，不能通过常规方式访问或修改
+
+2、**访问方式**：
+- 通常不直接访问[[Prototype]]，而是通过语言提供的API间接访问
+
+3、**规范**：
+- [[Prototype]]是ECMAScript规范中定义的内部机制，确保了原型链的一致性和规范性
+
+**\__proto__**
+
+1、**访问器属性**：
+- __proto__是一个访问器属性，它在大多数现代JavaScript引擎中被实现，用于获取和设置对象的原型对象
+- 这个属性不是标准的一部分，但在实践中被广泛使用
+
+2、**访问方式**：
+- 可以通过obj.__proto__直接访问对象的原型对象
+- 也可以通过Object.getPrototypeOf(obj)获取对象的原型对象，通过Object.setPrototypeOf(obj, newProto)设置对象的原型对象
+
+3、**兼容性**：
+- __proto__在所有现代浏览器和Node.js环境中都可用，但并不是ECMAScript标准的一部分，因此在某些严格模式下可能会引起问题
+
+4、**限制**：
+- 由于__proto__可能与某些对象字面量中的属性冲突（例如，如果对象字面量中有__proto__属性），因此使用时需要小心
+
+**总结**：
+- 规范性：[[Prototype]]是ECMAScript规范的一部分，而__proto__不是。
+- 访问方式：[[Prototype]]通常通过语言提供的API访问，而__proto__可以直接访问。
+- 可枚举性：[[Prototype]]不可枚举，而__proto__可以作为对象的属性被访问和修改。
+- 实现：[[Prototype]]是内部机制，而__proto__是语言层面的实现。
+
 ### 说一个原型里比较少人知道的特性？
 
 在 ES3 时代，只有访问属性的 get 操作能触发对原型链的查找。在 ES5 时代，新增了 accessor property 访问器属性的概念。它可以定义属性的 getter/setter 操作。
@@ -97,15 +352,33 @@ js 原型是指为其他对象提供共享属性访问的对象。在创建对�
 
 普通对象的 **proto** 属性，其实就是在原型链查找出来的(`get __proto__`)，它定义在 Object.prototype 对象上。
 
+**补充**：
+
+Symbol.hasInstance：允许自定义 instanceof 操作符的行为。通过在构造函数的原型上定义 Symbol.hasInstance 方法，可以控制实例检查的逻辑
+
+```javascript
+class CustomType {
+  static [Symbol.hasInstance](instance) {
+    return instance.customProperty === true;
+  }
+}
+
+let obj = { customProperty: true };
+console.log(obj instanceof CustomType); 
+```
+
 ### 原型链有什么作用？
 
 在访问一个对象的属性时，实际上是在查询原型链。这个对象是原型链的第一个元素，先检查它是否包含属性名，如果包含则返回属性值，否则检查原型链上的第二个元素，以此类推。
 
 ### 原型继承是什么意思？
 
+原型继承是js中实现对象属性和方法共享的一种机制。在js中，对象可以继承另一个对象的属性和方法，这种继承关系是通过原型链来实现
+
 JavaScript 通过`[[Prototype]]`实现原型继承，也就是`__proto__`
 
 通过 Object.create 或者 Object.setPrototypeOf 显式继承另一个对象，将它设置为原型
+
 
 ```js
 const superObj = { a: 1 };
@@ -117,6 +390,60 @@ subObj.__proto__ === superObj; // true;
 
 ### 如何实现原型继承？
 
+- 通过原型链继承，直接修改原型对象：
+  ```javascript
+  function SuperType() {
+    this.property = true
+  }
+  SuperType.prototype.method = function() {
+    console.log('SuperType method called')
+  }
+  function SubType() {
+    // 调用SuperType构造函数
+    SuperType.call(this)
+  }
+  // 让SubType的实例的原型指向SuperType的实例
+  SubType.prototype = new SuperType() // 或者 Object.create(SuperType.prototype)
+  SubType.prototype.constructor = SubType
+  ```
+
+- 通过构造函数 constructor 继承：
+  ```javascript
+  function SuperType(name) {
+    this.name = name;
+  }
+  SuperType.prototype.sayHello = function() {
+    console.log('Hello, ' + this.name);
+  };
+  function SubType(name, age) {
+    // 调用SuperType构造函数
+    SuperType.call(this)
+    this.age = age
+  }
+  SubType.prototype = new SuperType(); // 继承SuperType的属性
+  SubType.prototype.constructor = SubType;
+  ```
+
+- 组合继承:
+  ```javascript
+  function SuperType(name) {
+    this.name = name;
+  }
+  SuperType.prototype.sayHello = function() {
+    console.log('Hello, ' + this.name);
+  };
+  function SubType(name, age) {
+    SuperType.call(this, name); // 借用构造函数继承
+  }
+  // 原型链继承
+  SubType.prototype = Object.create(SuperType.prototype);
+  SubType.prototype.constructor = SubType;
+  SubType.prototype.sayBye = function() {
+    console.log('Bye, ' + this.name);
+  };
+  ```
+
+- 
 - 通过 Object.create 或者 Object.setPrototypeOf 显式继承另外一个对象，将它设置为原型
 - 通过 constructor 构造函数，在使用 new 关键字实例化时，会自动继承 constructor 的 prototype 对象，作为实例的原型
 - 在 ES6 中提供了 class ，背后跟 constructor 工作方式一样，写起来更内聚一些。
@@ -128,7 +455,29 @@ class extends 方式继承，本质上也是基于原型,
 - es5 的继承，实质是先创建子类的实例对象 this，然后将父类实例对象的属性和方法，加到 this 上面（Parent.applt(this))
 - es6 的继承，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super），然后再用子类构造函数修改 this
 
-实现方式
+补充：prototype和__proto__是两个与原型链相关但用途和行为不同的属性
+
+```javascript
+const person = new Person();
+person.__proto__ === Person.prototype; // true
+```
+
+**prototype**
+- 用途：prototype属性是函数特有的，它是一个对象，包含了通过该构造函数创建的所有实例的共享属性和方法
+- 定义：当你创建一个类或构造函数时，JavaScript会自动设置其prototype属性，以便新创建的对象可以继承这些属性和方法
+- 访问：通常通过构造函数访问，例如：FunctionName.prototype
+- 目的：用于定义所有实例共享的属性和方法
+- 影响：修改prototype可以在不改变现有实例的情况下修改构造函数的原型对象
+
+**__proto__**
+- 用途：__proto__是一个对象的属性，它指向该对象的原型（即内部属性[[Prototype]]]）
+- 定义：当你创建一个对象时，它会自动获得一个__proto__属性，该属性引用了创建它的构造函数的prototype属性
+- 访问：可以通过实例访问，例如：newObject.__proto__
+- 目的：用于实现实例与原型的链接
+- 影响：修改__proto__会直接影响实例的原型链接
+
+
+### 类继承的实现方式
 
 步骤：
 
@@ -146,7 +495,9 @@ Object.setPrototypeOf(subClass, superClass);
 
 \_this = \_possibleConstructorReturn(this, Super.call(this, name));
 
-理解：Class 作为构造函数的语法糖，同时有`prototype`属性和`__proto__`属性，因此同时存在两条继承链：作为一个对象，子类（`B`）的原型（`__proto__`属性）是父类（`A`）；作为一个构造函数，子类（`B`）的原型对象（`prototype`属性）是父类的原型对象（`prototype`属性）的实例。
+理解：Class 作为构造函数的语法糖，同时有`prototype`属性和`__proto__`属性，因此同时存在两条继承链：
+- 作为一个对象，子类（`B`）的原型（`__proto__`属性）是父类（`A`） 即 subClass.__proto__ === superClass ；
+- 作为一个构造函数，子类（`B`）的原型对象（`prototype`属性）是父类的原型对象（`prototype`属性）的实例 即 subClass.prototype.\__proto__ === superClass.prototype
 
 ```javascript
 class A {}
@@ -182,88 +533,128 @@ class B extends A {
 es5
 
 ```js
-function _extends(child, parent) {
-  child.prototype = Object.create(parent.prototype);
-  child.prototype.constructor = child;
-  Object.setPrototypeOf(child, parent);
+// 父类
+function Animal(name) {
+  this.name = name;
 }
 
-function _checkConstructorReturn(self, call) {
-  if (call && (typeof call === "object" || typeof call === "function")) {
-    return call;
-  }
-  if (self !== undefined) {
-    return self;
-  }
+Animal.prototype.speak = function() {
+  console.log(this.name + ' makes a noise.');
+};
+
+// 子类
+function Dog(name, breed) {
+  Animal.call(this, name); // 继承父类构造函数
+  this.breed = breed;
 }
 
-var A = (function() {
-  return function A(opt) {
-    this.name = opt.name;
-  };
-})();
+// 设置子类原型
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog; // 修复构造函数指向
 
-var B = (function(_super) {
-  _extends(A, _super);
+// 子类方法
+Dog.prototype.bark = function() {
+  console.log(this.name + ' says woof!');
+};
 
-  function B(opt) {
-    let _this;
-    _this = _checkConstructorReturn(this, _super.call(this, opt));
-    return _this;
-  }
-
-  return B;
-})(A);
+// 创建子类实例
+var myDog = new Dog('Buddy', 'Golden Retriever');
+myDog.speak(); // 输出 "Buddy makes a noise."
+myDog.bark(); // 输出 "Buddy says woof!"
 ```
 
 ### new 操作符做了什么？
 
 当一个函数被使用 `new` 操作符执行时，它按照以下步骤：
 
-1. 生成一个原型为构造函数的 prototype 的对象
-2. 绑定 this 为 新对象，执行构造函数
-3. 如果构造函数返回的是对象，则返回这个对象，否则返回自己生成的对象
+1. 创建新对象：const person = new Person('Alice');
+2. 设置原型：person.\__proto\__ = Person.prototype
+3. 执行构造函数：Person.call(person, 'Alice')，这里 call 方法将 Person函数的 this 绑定到新对象 person上，并传入参数 Alice
+4. 返回新对象：如果 Person 函数没有显示返回一个对象，那么new操作符返回步骤1中创建的新对象 person
+
 
 ### 如何实现一个`new`函数呢？
 
+1. 创建一个 myNew 函数，接收两个参数：构造函数和参数数组
+2. 创建新对象，并将构造函数的 prototype 赋值给新对象的原型
+3. 改变this指向，使用 Function.prototype.call 或者 Function.prototype.apply 调用构造函数，并将this指向新创建的对象
+4. 处理返回值，如果构造函数返回一个对象，则返回该对象；否则返回步骤2中创建的对象
+
 A：
 
-```js
-function _new(Constructor, ...args) {
-  const obj = Object.create(Constructor.prototype); // 链接到原型
-  const res = Constructor.apply(obj, args); // 绑定this
-  return res instanceof Object ? res : obj; // 生成一个实例对象
-}
+```javascript
+  function myNew(constructor, ...args) {
+    // 创建一个新对象，其原型指向构造函数的prototype
+    const obj = Object.create(constructor.prototype)
+    // 改变this指向
+    const result = constructor.apply(obj, args)
+    // 生成一个实例对象
+    // 如果返回值是一个对象，且不是null，则返回该对象
+    // 否则返回创建的新对象
+    return result && typeof result === 'object' ? result : obj
+  }
+
+  // 示例使用
+  function Person(name) {
+    this.name = name;
+  }
+  Person.prototype.sayHello = function() {
+    console.log(`Hello, my name is ${this.name}`);
+  };
+  const person = myNew(Person, 'Alice');
+  person.sayHello(); // 输出 "Hello, my name is Alice"
+  console.log(person.__proto__ === Person.prototype) // true
 ```
 
 ### 如何保证函数必须要用 new 调用？
 
-A：
-
-```js
+1. 使用严格模式:
+```javascript
 function User() {
-  if (!new.target) { // 如果你没有通过 new 运行我
-    throw new TypeError("Cannot call a class as a function");
-  }
-  ...
-}
-
-// 或者用这种方法
-function User() {
+  'use strict';
   if (!(this instanceof User)) {
     throw new TypeError("Cannot call a class as a function");
   }
   ...
 }
 ```
+2. 函数内部检查this的类型是否为对象：if (typeof this !== 'object') throw new TypeError
+3. 函数内部检查this是否为该构造函数的实例：if (!(this instanceof User)) throw new TypeError
+4. 使用 new.target 方法
+```javascript
+function MyClass() {
+  if (!new.target) {
+    throw new Error('MyClass must be called with the new operator');
+  }
+  this.name = 'kk'
+}
+try {
+  MyClass(); // 抛出错误
+} catch (error) {
+  console.error(error.message); // 输出错误信息
+}
+const instance = new MyClass();
+console.log(instance.name); // 输出 "Kimi"
+```
 
 ### 什么是闭包？
 
-闭包是指有权访问另一个函数作用域中的变量的函数。
+闭包是指有权访问另一个函数作用域中的变量的函数。即使外部函数已经执行完毕，闭包仍能记住并访问其作用域中的变量
 
 闭包是基于词法作用域书写代码时所产生的自然结果。当函数记住并访问所在的词法作用域(词法环境[[Environment]])，闭包就产生了。
 
+**闭包的优点**
+闭包允许函数操作定义时的作用域中的变量，使得这些变量即使在定义它们的外部函数执行完毕后仍然可以被访问和操作
+
+**闭包的缺点**
+如果不正确使用闭包，可能会导致内存泄漏，因为闭包引用的变量不能被垃圾回收器回收
+
 ### 为什么说 JS 中函数都是天生闭包的？
+
+1. 词法作用域：js使用词法作用域，意味着函数的作用域是由函数声明的位置决定而不是函数调用的位置决定，因此函数可以访问其声明时所在的作用域中的变量
+2. 函数作为一等公民：在js，函数与其他类型的变量一样，可以作为参数传递给其他函数，可以作为其他函数的返回结果，这种灵活性使得函数可以携带其词法作用域中的变量
+3. 函数嵌套：函数可以嵌套定义，内层函数可以访问外层函数的变量，即使外层函数已经执行完毕，这种嵌套关系自然形成了闭包
+4. 延迟执行：函数可以被延迟执行，这种情况下，函数仍可以访问其创建时的作用域中的变量，即使这些变量在函数被调用时可能已经不在作用域中
 
 JavaScript 中的函数会自动通过隐藏的 `[[Environment]]` 属性记住创建它们的位置，所以它们都可以访问外部变量，能访问外部变量就产生了闭包。
 
@@ -324,20 +715,23 @@ JavaScript 中的函数会自动通过隐藏的 `[[Environment]]` 属性记住�
 
 ### 实现深拷贝
 
-- Json.parse(Json.stringify(obj)) 忽略 undefined、symbol、function 等类型
-- deepClone(obj, hash = new WeakMap())
+1. Json.parse(Json.stringify(obj)) 忽略 undefined、symbol、function 等类型
+2. 第三方库lodash的 cloneDeep()
+3. 手写递归函数：deepClone(obj, hash = new WeakMap())
+4. 使用es6的proxy
 
 ```js
+// 递归函数
 function deepClone(obj, hash = new WeakMap()) {
-  if (typeof obj !== "object" || obj === null) return obj;
-  if (hash.get(obj)) return hash.get(obj);
+  if (typeof obj !== "object" || obj === null || obj === undefined) return obj;
+  if (hash.get(obj)) return hash.get(obj); // 处理循环引用
 
   let cloneObj = new obj.constructor();
   hash.set(obj, cloneObj);
 
   for (let key in cloneObj) {
     if (obj.hasOwnProperty(key)) {
-      cloneObj[key] = deepClone(value, hash);
+      cloneObj[key] = deepClone(value, hash); // 递归
     }
   }
   return cloneObj;
@@ -346,13 +740,13 @@ function deepClone(obj, hash = new WeakMap()) {
 
 ### 实现浅拷贝
 
-- Object.assign({}, obj)
-- 展开运算符 [...arr]
-- arr.slice(0)、arr.concat()
-- shallowClone(obj)
+1. Object.assign({}, obj)
+2. 展开运算符 [...arr]
+3. arr.slice(0)、arr.concat()
+4. shallowClone(obj)
 
 ```js
-function shalloClone(obj) {
+function shallowClone(obj) {
   const cloneObj = new obj.constructor();
   for (let key in cloneObj) {
     if (obj.hasOwnProperty(key)) {
@@ -365,97 +759,81 @@ function shalloClone(obj) {
 
 ### 什么是深度遍历和广度遍历？
 
-- 深度遍历，是指优先遍历每个节点的所有节点，结束后再遍历其余节点
-- 广度遍历，是指优先按一层层来遍历，每层搜索完再搜索下一层
+- 深度遍历：是指优先遍历每个节点的所有节点，结束后再遍历其余节点
+  - 实现方式：通常使用递归或显示栈
+- 广度遍历：是指优先按一层层来遍历，每层搜索完再搜索下一层
+  - 实现方式：通常使用队列
 
 写一个深度和广度遍历函数
 
 ```js
-const listData = [
-  {
-    name: "root",
-    children: [
-      {
-        name: "1",
-        children: [
-          {
-            name: "1-1",
-            children: []
-          },
-          {
-            name: "1-2",
-            children: []
-          }
-        ]
-      },
-      {
-        name: "2",
-        children: [
-          {
-            name: "2-1",
-            children: []
-          },
-          {
-            name: "2-2",
-            children: [
-              {
-                name: "2-2-1",
-                children: []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        name: "3",
-        children: [
-          {
-            name: "3-1",
-            children: []
-          }
-        ]
-      }
-    ]
-  }
-];
 // 深度遍历
-let nodes = [];
-function dfs(arr) {
-  arr.length &&
-    arr.forEach((item) => {
-      nodes.push(item.name);
-      if (item.children && item.children.length) {
-        dfs(item.children);
-      }
-    });
+const dfs = (nodes, visited = new Set()) => {
+  visited.add(nodes)
+  console.log(visited)
+  node?.children.forEach((child) =>{
+    if (!visited.has(child)) {
+      dfs(child, visited)
+    }
+  })
 }
+
 // 广度遍历
-function bfs(arr) {
-  const stacks = [];
-  arr.length &&
-    arr.forEach((item) => {
-      stacks.push(item);
-      while (stacks.length) {
-        const node = stacks.shift();
-        nodes.push(node.name);
-        const { children } = node;
-        if (children.length) {
-          for (var i = 0; i < children.length; i++) {
-            stacks.push(children[i]);
+const bfs = (root) => {
+  const origin = Arrary.isArray(root) ? root : [root]
+  origin.forEach(rootItem => {
+    const quene = [rootItem] // 队列默认第一项
+    const visited = new Set()
+    
+    while (quene.length() > 0) { // 开始循环队列
+      const node = quene.shift()
+      if (!visited.has(node)) {
+        visited.add(node)
+        console.log(node) // 记录节点
+        node.children.forEach((child) => {
+          if (!visited.has(child)) {
+            quene.push(child) // 将未访问的子节点加入队列
           }
-        }
+        })
       }
-    });
+    }
+  })
 }
 ```
+### new Set() 应用场景
+
+Set 是 JavaScript 中一种集合类型，它类似于数组，但成员的值是唯一的，没有重复的值
+
+**应用场景**
+
+1. 数组去重
+```javascript
+const numbers = [1, 2, 3, 2, 4, 3, 5];
+const uniqueNumbers = [...new Set(numbers)] // [1,2,3,4,5]
+```
+2. 集合操作：求并集、交集、差集
+```javascript
+const setA = new Set([1, 2, 3]);
+const setB = new Set([2, 3, 4]);
+const union = new Set([...setA, ...setB]); // 并集
+const intersection = new Set([...setA].filter(x => setB.has(x))); // 交集
+const difference = new Set([...setA].filter(x => !setB.has(x))); // 差集
+```
+
+3. 快速查找某个值是否存在集合中
 
 ### 实现一个简单的模版字符串替换
 
 ```js
 let str = "{{name}}很厉害,才{{age}}岁";
 let obj = { name: "yolanda", age: 24 };
-const res = str.replace(/{{(.*?)}}/g, (match, key) => obj[key.trim()]);
+const res = str.replace(/\{\{(.*?)\}\}/g, (match, key) => obj[key.trim()]);
 ```
+
+解析：
+- \{\{：匹配文字 {{。由于 { 是一个特殊字符，需要使用反斜杠 \ 进行转义
+- (.*?)：匹配任意字符（. 表示任意字符，*? 表示非贪婪模式的任意次数），圆括号表示捕获组，用于捕获匹配的文本
+- \}\}：匹配文字 }}。同样，} 也需要转义
 
 ### 数组扁平化去重排序
 
@@ -469,69 +847,86 @@ const res2 = Array.from(new Set(res1));
 const res = res2.sort((a, b) => a - b);
 ```
 
+扩展：字母排序：使用**localeCompare**用于比较两个字符串，并根据本地环境的特定规则返回排序顺序
+```js
+const stringArray = ['banana', 'apple', 'orange', 'lemon'];
+const uniqueStringArray = Array.from(new Set(stringArray.flat(Infinity)))
+const sortedStringArray = uniqueStringArray.sort((a, b) => a.localeCompare(b));
+console.log(uniqueStringArray); // 输出 ["apple", "banana", "lemon", "orange"]
+```
+
 ### 如何实现一个 flat 函数？
 
 ```js
 let list = [1, 2, 3, [4, 5, 1, [6, 2, 7, 8, 8, [9, 10, 9, 1]]]];
-function flatten(arr) {
-  while (arr.some((item) => Array.isArray(item))) {
-    arr = [].concat(...arr);
+
+const flatten1 = (arr) => {
+  let result = arr
+  while(result.some(item => Array.isArray(item)) {
+    result = [].concat(...result)
   }
-  console.log(arr);
 }
-function flatten2(arr) {
-  let res = [];
-  arr.forEach((item) => {
-    if (Array.isArray(item)) {
-      res = res.concat(arguments.callee(item));
-    } else {
-      res.push(item);
-    }
-  });
-  console.log(res);
-  return res;
+
+const flatten2 = (arr, dept = 1) => {
+  return arr.reduce((acc, currentVal) => {
+    return acc.concat(dept > 1 && Array.isArray(currentVal) ? flatten2(currentVal, dept -1) : currentVal)
+  }, [])
 }
+
 ```
 
 ### 什么是节流？
 
-（节流是事件触发多次，控制在规定时间内只执行 1 次）
-把多个事件控制在 ms 执行分片执行，用加锁的方法来控制节流
+- 定义：节流是一种限制函数执行频率的技术，确保函数在指定的时间间隔内最多执行一次
+- 用例：比如指定时间为 300ms，那在 1000ms 内，如果你触发了 10 次事件，但也只会执行 3 次
+- 场景：滚动、窗口缩放、鼠标移动等等，适用于频繁触发但无需每次都执行
 
-比如 300ms 执行一次，那在 1000ms 内，如果你触发了 10 次事件，但也只会执行 3 次
+（节流是事件触发多次，控制在规定时间内只执行 1 次，把多个事件控制在 ms 执行分片执行，用加锁的方法来控制节流）
 
 ```js
-function throttle(fn, ms) {
-  let canRun = true;
-  return function(...args) {
-    if (!canRun) return;
-    canRun = false;
-    setTimeout(() => {
-      fn.apply(this, args);
-      canRun = true;
-    }, ms);
-  };
+const throttle = (func, limit) => {
+  let inThrottle
+  return (...args) => {
+    if (!inThrottle) {
+      func.apply(this, args)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, limit)
+    }
+  }
 }
 ```
 
 ### 什么是防抖？
 
-（防抖是事件连续触发多次，控制在触发结束后的规定时间内执行 1 次）
-连续事件触发结束后只触发一次，用去除定时器的方法
+- 定义：防抖是一种确保函数在最后一次触发后等指定时间间隔结束后才执行的技术
+- 用例：比如指定时间是300ms，那在100ms内触发了10次，只会在最后一次触发后等待300ms再执行函数
+- 场景：适用于需要在事件停止触发后执行的场景，比如搜索框输入、按钮点击等等
+
+（防抖是事件连续触发多次，控制在触发结束后的规定时间内执行 1 次，
+连续事件触发结束后只触发一次，用去除定时器的方法）
 
 ```js
-function debounce(fn, ms) {
-  let timeout = null;
-  return function(...args) {
-    timeout && clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      fn.apply(this, args);
-    }, ms);
-  };
+const debounce = (func, delay) => {
+  let timer = null
+  return (...args) => {
+    timer && clearTimeout(timer)
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+    
+  }
 }
 ```
 
+**区别**
+- 节流保证在指定时间间隔内至少执行一次函数
+- 防抖保证在指定时间间隔结束后才执行一次函数
+
 ### 垃圾回收机制
+
+定义：垃圾回收是一种自动内存管理机制，用于识别和回收不再使用的对象，从而释放内存资源
 
 1. JavaScript 创建字符串、对象需要**动态分配内存**，如果不对这些内存进行回收就会导致系统奔溃
 
@@ -539,8 +934,8 @@ function debounce(fn, ms) {
 
 3. 常用的垃圾回收方法有两种：引用计数 和 标记计数
 
-   - 引用计数：是指变量被引用时，它的引用次数就不为 0；只有当引用次数变为 0，才能被回收掉，但引用计数无法解决循环依赖的问题
-   - 标记计数：是指标记变量是否进入环境，并标记它们的根节点；当变量没有被根引用时（直接或间接引用），就会被回收掉，解决了循环依赖的问题
+   - 引用计数：当一个对象的引用次数变为0时，即没有任何变量或对象引用它，该对象就会被垃圾回收器回收，但引用计数无法解决循环依赖的问题
+   - 标记计数：垃圾回收器会从全局对象开始，递归地访问所有可达的对象，将它们标记为“活跃”。未被标记的对象被认为是“垃圾”，随后会被回收，解决了循环依赖的问题
 
 ### 事件循环
 
@@ -558,9 +953,19 @@ JavaScript 代码执行过程中，所有任务都是需要排队的，前一个
 
 微任务一般有：promise.then、MutationObserver、process.nextTick
 
-执行过程：取一个宏任务执行，结束后执行微任务队列中的所有微任务，如果需要就进行 ui 更新
+任务队列执行：
+- 事件循环首先检查微任务队列，然后才是宏任务队列
+- 微任务队列中的所有任务执行完成后，才会处理下一个宏任务
+
+代码执行顺序：
+1. 同步任务：首先执行同步任务，如函数调用、表达式计算等等
+2. 微任务：执行所有微任务队列中的任务
+3. 宏任务：执行一个宏任务（如setTimeout的回调）
+4. UI渲染：
+5. 事件循环：重复步骤2～4，直到调用栈和事件队列为空
 
 ```js
+// 到底是哪个先执行？
 while (true) {
   for (macroTask of macroTaskQueue) {
     // 1. Handle current MACRO-TASK
@@ -787,6 +1192,46 @@ promise 有三个状态：pending 等待、fulfilled 执行、rejected 拒绝；
 Promise 20 行简单手写
 
 ```js
+// ES6
+class MyPromise {
+  constructor(executor) {
+    this.value = undefined
+    this.reason = undefined
+    this.onFullfilled = []
+    this.onRejected = []
+    executor(this._resolve, this._reject)
+  }
+  _resolve = (value) => {
+    this.value = value
+    this.onFullfilled.forEach(fn => fn(value))
+  }
+  _reject = (reason) => {
+    this.reason = reason
+    this.onRejected.forEach(fn => fn(value))
+  }
+  then(onFulfilled, onRejected) {
+    return new Promise((resolve, reject) => {
+      this.onFullfilled.push(value => {
+        try {
+          resolve(onFulfilled(value))
+        } catch(err) {
+          reject(err)
+        }
+      })
+      this.onFullfilled.push(reason => {
+        try {
+          resolve(onRejected(reason))
+        } catch(err) {
+          reject(err)
+        }
+      })
+    })
+  }
+}
+```
+
+```js
+// ES5
 function MyPromise(fn) {
   this.cbs = [];
   this.value = null;
@@ -1096,23 +1541,23 @@ module.exports = MyPromise;
 
 ### 模块化
 
-IFEE
+**IFEE**：通过闭包方式私有化变量
 
-通过闭包方式私有化变量
+缺点：模块化难以维护，依赖模糊
 
 ```js
 var module = (function($) {
- 	var a = 123;
+  var a = 123;
   var private = 456;
 
-  var foo - function() {
+  var foo = function() {
     console.log(private);
   }
 
   $.plugins = function() {};
 
   return {
-    a,
+    a,foo
   }
 })(jQuery)
 
@@ -1120,11 +1565,10 @@ module.foo(); // 456
 module.private; // undefined
 ```
 
-缺点：模块化难以维护，依赖模糊
+**Commomjs**：使用了一个同步的 require 方法去加载依赖项并且返回一个向外暴露的接口
 
-Commomjs
-
-使用了一个同步的 require 方法去加载依赖项并且返回一个向外暴露的接口
+- 特点：同步加载模块，适用于服务端渲染
+- 应用：主要用于 node.js 环境
 
 ```js
 require("module");
@@ -1133,11 +1577,11 @@ exports.doStuff = function() {};
 module.exports = someValue;
 ```
 
-这个模式主要用于 node.js 端，因为同步阻塞调用的问题，以及多个模块之间不能同时并行加载，所以不会用在浏览器端
+**AMD**：
 
-AMD
+- 特点：异步模块，支持多个模块的同时并行加载，代表有 RequireJS
+- 应用：适用于浏览器环境，通过异步加载模块可以避免阻塞页面加载
 
-异步的 require
 
 ```js
 require(["module", "../file"], function(module, file) {
@@ -1148,18 +1592,10 @@ define("mymodule", ["dep1", "dep2"], function(d1, d2) {
 });
 ```
 
-优点：
+**EsModule**：es6 引入的模块化方案
 
-- 十分适合在现下网络的异步请求
-- 支持多个模块的同时并行加载
-
-缺点：
-
-- 写码开销，读写十分的困难
-
-EsModule
-
-es6 模块化方案，浏览器实现的标准
+- 特点：使用 import 和 export 关键字，可按需加载，支持静态分析和tree shaking
+- 应用：适用于浏览器环境
 
 ```js
 import Vue from "vue";
@@ -1167,13 +1603,9 @@ export function doStuff() {}
 export default function doStuff1() {}
 ```
 
-最大的优点是静态解析，编译时就知道模块之间的依赖关系，可以做 tree-shaking 优化
+**UMD**：可以在各种环境中使用的模块化方案
 
-标准就是最大的优点
-
-UMD
-
-支持 script、commonjs、esm 的模块化方案
+- 特点：根据运行环境呢自动选择CommonJS或AMD模块加载方式
 
 ```js
 (function(global, factory) {
@@ -1189,6 +1621,15 @@ UMD
   return xxx;
 });
 ```
+
+|   类型   |         CommonJS         |       AMD       |       ESModule       |    UMD     |
+| :------: | :----------------------: | :-------------: | :------------------: | :--------: |
+| 加载方式 |           同步           |      异步       |         动态         |            |
+| 环境支持 |        主要nodejs        |   主要浏览器    |  现代浏览器和nodejs  | 主要浏览器 |
+|   语法   | require和modules.exports | define和require |    import和export    |   都可以   |
+|   性能   |                          |                 | 配合工具tree shaking |            |
+|  兼容性  |                          |                 |                      |    最好    |
+
 
 ### 拖拽上传
 
@@ -1216,28 +1657,208 @@ UMD
 
 ## css
 
+20240724
+### 什么是CSS 模块化？
+
+### CSS3 中 transition 和 animation 的属性分别有哪些？
+
+**transition**：用于定义元素在状态改变时从一个样式转换到另一个样式的过渡效果
+
+1. 指定属性：transition-property
+2. 过渡时间:transition-duration
+3. 过渡函数:transition-timing-function
+4. 延迟时间：transition-delay
+
+**animation**：用于定义复杂的动画效果
+
+1. 指定key：animation-name
+2. 动画时间：animation-duration
+3. 动画函数：animation-timing-function
+4. 延迟时间：animation-delay
+5. 动画重复次数：animation-interation-cout
+6. 动画方向：animation-direction
+7. 动画非运行时效果：animation-fill-mode
+8. 动画播放状态：animation-play-state
+
+### 什么是 Css 盒模型？
+
+- 所有 HTML 元素可以看作盒子，CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括：边距，边框，填充，和实际内容。
+
+盒模型分为 2 种：
+
+- IE 盒模型 ：盒子的 width = border + padding + content 三个部分
+
+- w3c 盒模型：盒子的 width = content
+
+（但是 w3c 盒模型的 offsetWidth 是包含 border 和 padding 的）
+
+可以通过 box-sizing 设置应用哪种盒模型，border-box 表示 IE 盒模型，content-box 表示 W3C 盒模型
+
+### CSS 中有哪些选择器？优先级怎么处理？
+
+- 常见的选择器类型：
+
+  - 普通选择器：id 选择器、class 类选择器、标签选择器、伪类选择器、伪元素选择器等等
+  - 组合器：包括后代选择器、子选择器、相邻兄弟选择器等等
+  - css3新增的选择器：层次选择器、伪类中的 first-of-type、nth-child(n)等等
+
+- 优先级：每个选择器、每条规则都包含一个权重级别，构成优先级
+
+  - 权重：important > 行内样式 > id > class/伪类/属性选择器 > 标签/伪元素选择器
+
+**继承属性**是指父元素设置的一些属性，后代元素会自动拥有这些属性，常见的几种类型：
+
+1. 字体系列属性：font-family、font-weight、font-size等等
+2. 文本系列属性：text-indent、text-align、line-height等等
+3. 元素可见性：visibility
+
+### 伪类和伪元素有什么区别？
+
+- 书写上，规定要求伪类选择器使用一个冒号，伪元素选择器使用两个冒号
+- 表现上，伪类选择器应用的元素是真实存在文档树中，只是需要符合特定状态或特性的元素；而伪元素选择器是用于创建或样式化文档树中不存在的元素，并不存在于文档树中
+- 使用上，同一个选择器，伪类可以使用多个，而伪元素只能使用一个
+
+### em/px/rem/vh/vw 这些单位有什么区别？
+
+**px**：表示像素，每个像素代表屏幕上的一个点，不同分辨率的设备，1px代表不同的物理尺寸
+
+**em**：em 是相对单位，相对于当前对象字体大小，默认值为1em=16px（浏览器默认字体大小）
+
+**rem**：rem 是相对单位，相对于 HTML 根元素的字体大小
+
+**vw、vh**：vw和vh都是相对单位，根据窗口的宽度或高度分成100等份，100vw就表示满宽
+
+### 设备像素、css像素、设备独立像素、dpr、ppi 之间有什么区别？
+
+1. 设备像素：是物理屏幕上的最小可见单位
+2. CSS像素：是Web开发中使用的相对单位，用于在网页上布局元素
+3. 设备独立像素(dip)：是一种逻辑像素单位，用于将 CSS 像素与实际渲染的设备像素进行关联
+4. 设备像素比(dpr)：是设备的物理像素与CSS像素之间的比例，计算公式为：DPR = 物理像素 / CSS像素
+5. 每英寸像素密度(ppi)：是屏幕分辨率的一个度量，表示每英寸长度内可以容纳多少个设备像素
+
+### 🌟 使用 css 隐藏元素有哪些？
+
+- display: none 引起浏览器重排重绘，元素上绑定的事件会失效
+- visibility: hidden 引起重绘但不会重排 ，元素上绑定的事件会失效
+- opacity: 0 引起重绘但不会重排，元素上绑定的事件仍能响应
+- overflow: hidden
+
+|         类型         | display:none | visibility:hidden |   opacity:0   |
+| :------------------: | :----------: | :---------------: | :-----------: |
+|        页面中        |    不存在    |       存在        |     存在      |
+|         重排         |      会      |       不会        |     不会      |
+|         重绘         |      会      |        会         | 不一定,一般会 |
+|     自身绑定事件     |     失效     |       失效        |    可触发     |
+|      transition      |    不支持    |       支持        |     支持      |
+|      子元素复原      |     不能     |        能         |     不能      |
+| 被遮挡的元素触发事件 |      能      |        能         |     不能      |
+
+
+### 🌟 以上隐藏元素的方式的区别？
+
+- display: none 该元素以及它的所有后代元素都会隐藏，不会占用空间，元素上绑定的事件失效，会引起重绘、回流
+- visibility: hidden 隐藏元素，保留原来的位置，元素上绑定的事件失效，如果有子元素，会自动继承 visibility: hidden，修改 visible 后可显示子元素，并可在冒泡阶段响应事件（子元素 visible 的情况下），会引起重绘，但不会回流
+- opacity: 0 设置透明度为 0 隐藏元素，保留原来的位置，元素上绑定的事件仍然有效，引起重绘，但不会回流
+- 补充：Transition 对`visibility`的变化有效，对 display: none 无效
+
+### 如何实现两栏布局，右侧自适应？三栏布局中间自适应呢？
+
+**两栏布局，右侧自适应**
+
+方式一：flex 布局
+```css
+.box { display: flex;}
+.left { width: 100px;}
+.right { flex: 1;} /* flex-grow: 1; flex-shrink: 1; flex-basis: 0%; */
+```
+
+- flex-grow: 1 代表项目可以增长来占据容器中的剩余空间，0 代表不增长
+- flex-shrink: 1 代表容器尺寸不足时项目会收缩变小，0 代表不收缩
+- flex-basis: 0% 代表项目的基准大小为最小内容宽度，auto 代表自适应于内容
+
+方式二：float 浮动布局
+```css
+.box { overflow: auto; /* 清除浮动 */ }
+.left {  
+  float: left; 
+  width: 100px;
+}
+```
+
+方式三：grid 布局
+```css
+.box {
+  display: grid;
+  grid-template-columns: 200px auto; /* 列固定宽度和自适应 */
+}
+```
+
+**三栏布局中间自适应**
+
+方式一：flex 布局
+```css
+.box { display: flex;}
+.left { width: 100px;}
+.middle { flex: 1;} /* flex-grow: 1; flex-shrink: 1; flex-basis: 0%; */
+.right { width: 100px;}
+```
+
+方式二：grid 布局
+```css
+.box {
+  display: grid;
+  grid-template-columns: 200px auto 200px; /* 列固定宽度和自适应 */
+}
+```
+
+方式三：float 布局(不推荐)
+```html
+<div class="box">
+  <div class="left"></div>
+  <div class="right"></div>
+  <div class="middle"></div> /* 布局有要求 */
+</div>
+```
+
+```css
+.box { overflow: auto; /* 清除浮动 */ }
+.left {  
+  float: left; 
+  width: 100px;
+}
+.right {  
+  float: left; 
+  width: 100px;
+}
+.middle {
+  margin-left: 100px; /* 控制两边间距 */
+}
+```
+
 ### 🌟 什么是 grid 布局？
 
 grid 布局是指将一个区域划分为一个个网格，可以任意组合不同的网格，做出各种布局
 
-flex 是轴线布局，可以指定项目针对轴线摆放，是一种一维布局；而 grid 将容器分为**行**和**列**，指定项目所在的单元格，是一种二维布局，提供了几类关键字 fr 片段、auto 自适应宽度、auto-fill 自适应列数或行数、span 横跨；几类方法 repeat()重复、minmax()设置最大最小宽度
+flex 是轴线布局，可以指定项目针对轴线摆放，是一种一维布局；
 
-**使用**
+grid 将容器分为**行**和**列**，指定项目所在的单元格，是一种二维布局，
 
-```html
-<div class="container">
-  <div class="item item-1">1</div>
-  <div class="item item-2">2</div>
-  <div class="item item-3">3</div>
-</div>
-```
+**常见关键字**：
+-  fr片段：Grid 支持自适应布局，使用 fr 单位来分配空间
+-  auto：自适应宽度
+-  auto-fill 自适应列数或行数
+-  span 横跨
+-  方法 repeat()重复
+-  方法 minmax()设置最大最小宽度
+
+**常见属性**：
 
 container 容器属性：
 
 - display: grid; 设置容器为 grid 布局
 - grid-template-columns: 100px 100px 100px; 设置容器有三行
 - grid-template-columns: 100px 100px 100px; 设置容器有三列
-  - 使用 **repeat()** 等价于 `repeat(3, 100px);`
+  - 等价于 `repeat(3, 100px);`
   - 或者容器宽度不确定，单元格确定，使用关键字 **auto-fill** 自动划分几列，每列 100px `repeat(auto-fill, 100px);`
   - 或者平分三份，使用关键字 **fr**：`repeat(3,fr);`
   - 或者中间自适应，使用关键字 **auto**：`fr auto fr;`
@@ -1246,19 +1867,19 @@ container 容器属性：
 - align-items: center; 设置单元格内容垂直位置居中
 
 item 元素属性：
-
-- `grid-column: <start-line> / <end-line>;` 设置左右网格线的起始数
-  - `grid-column-start: span 2;` 使用关键字 **span**，表示横跨两个网格
-  - 等价于 `grid-column-end: span 2;`
-- `grid-row: <start-line> / <end-line>;` 设置上下网格线的起始数
+- grid-row: `<start-line> / <end-line>`  设置上下网格线的起始数
+- grid-column: `<start-line> / <end-line> ` 设置左右网格线的起始数
+  - 使用关键字 **span**，表示横跨两个网格
+  - 等价于： `grid-column-start: span 2;` 和 `grid-column-end: span 2;`
+- order: 控制项目的排序顺序
 
 ### 🌟 什么是 flex 布局？
 
-Flex 是 Flexible Box 的简写，意为弹性布局，能够为特殊布局提供解决方案，常见的应用场景是设置元素水平垂直居中。
+Flex 是 Flexible Box 的简写，意为弹性布局，适用于创建各种灵活和自适应的网页布局，常见的应用场景是设置元素水平垂直居中。
 
 Flex 布局主要根据两根轴线：主轴和交叉轴，主轴由 flex-direction 定义，交叉轴会垂直于主轴
 
-常见的容器属性
+**常见的容器属性**:
 
 容器属性：
 
@@ -1276,44 +1897,47 @@ item 属性：
     - flex 容器尺寸不足时尺寸会收缩变小（flex-shrink:1）
     - 尺寸自适应于内容（flex-basis:auto）
 
-常见的单值语法：基准设为 0%，
 
-- flex: initial; 等价于 flex: 0 1 auto; 🌟 常用
+**flex-basis:auto 和 flex-basis: 0% 的区别**
+
+- flex-basis:auto 项目会首先尝试基于内容分配空间，然后根据 flex-grow 和 flex-shrink 调整大小
+- flex-basis: 0% 项目会首先将所有项目设置为 0% 的宽度（或高度），然后根据 flex-grow 和 flex-shrink 的比例分配剩余空间
+
+
+- **flex: initial;** 等价于 flex: 0 1 auto; 🌟 常用
 
   - item 尺寸不会增长但可以收缩变小 (flex-grow:0) 、(flex-shrink:1)
   - item 尺寸自适应于内容 (flex-basis:auto)
 
-* flex: 0; 等价于 flex: 0 0 0%；❌ 较少使用
+- **flex: 0;** 等价于 flex: 0 0 0%；❌ 较少使用
 
   （场景：表现为 item 内容宽度, 而不是设置的 width）
 
   - item 尺寸不会增长也不收缩变小 (flex-grow:0) 、(flex-shrink:0)
   - item 尺寸为最小内容宽度(flex-basis: 0%)
 
-* flex: none; 等价于 flex 0 0 auto；🌟 常用
+- **flex: none;** 等价于 flex 0 0 auto；🌟 常用
 
   （场景：当 item 的宽度就是 width 大小，且内容永远不会换行，则适合使用`flex:none`）
 
   - item 尺寸不会增长也不会收缩变小 (flex-grow:0) 、(flex-shrink:0)
   - item 尺寸自适应于内容 (flex-basis:auto) 不会换行
 
-- flex: 1; 等价于 flex: 1 1 0%；🌟 常用
+- **flex: 1;** 等价于 flex: 1 1 0%；🌟 常用
 
   （场景：当希望 item 充分利用剩余空间，同时不会侵占其他元素应有的宽度的时候）
 
   - item 尺寸可以放大也可以缩小 (flex-grow:1) 、(flex-shrink:1)
   - item 尺寸以最小内容宽度为基础放大或缩小(flex-basis: 0%)
 
-- flex: auto; 等价于 flex 1 1 auto；❌ 较少使用
+- **flex: auto;** 等价于 flex 1 1 auto；❌ 较少使用
 
   （场景：当希望元素充分利用剩余空间，但是各自的尺寸按照各自内容进行分配的时候）
 
   - item 尺寸可以放大也可以缩小 (flex-grow:1) 、(flex-shrink:1)
   - item 尺寸自适应于内容 (flex-basis:auto)
 
-![](../.vuepress/public/images/2021-07-19-16-01-00.png)
-
-![](../.vuepress/public/images/2021-07-19-16-01-15.png)
+![](../.vuepress/public/images/WechatIMG5111.png)
 
 **flex 单值语法**：
 
@@ -1335,19 +1959,6 @@ item 属性：
 - 第二个值必须为一个无单位数，并且它会被当作 `<flex-shrink>` 的值。
 - 第三个值必须为一个有效的宽度值， 并且它会被当作 `<flex-basis>` 的值。
 
-### 🌟 使用 css 隐藏元素有哪些？
-
-- display: none 引起重绘回流，因此在元素上绑定的事件不会生效
-- opacity: 0 引起重绘但不会回流，元素会触发绑定的事件
-- visibility: hidden 引起重绘但不会回流 ，元素不会触发绑定的事件
-- overflow: hidden
-
-### 🌟 以上隐藏元素的方式的区别？
-
-- display: none 该元素以及它的所有后代元素都会隐藏，不会占用空间，元素上绑定的事件失效，会引起重绘、回流
-- visibility: hidden 隐藏元素，保留原来的位置，元素上绑定的事件失效，如果有子元素，会自动继承 visibility: hidden，修改 visible 后可显示子元素，并可在冒泡阶段响应事件（子元素 visible 的情况下），会引起重绘，但不会回流
-- opacity: 0 设置透明度为 0 隐藏元素，保留原来的位置，元素上绑定的事件仍然有效，引起重绘，但不会回流
-- 补充：Transition 对`visibility`的变化有效，对 display: none 无效
 
 ### 🌟 position 有哪些属性？
 
@@ -1372,10 +1983,101 @@ item 属性：
 - flex 设为弹性布局
 - inherit 从父元素中继承 display 属性
 
+### Sass 和 Less 的区别？
+
+- 两者都是 css 的预处理器，预处理器定义了一种专门的编程语言，提供使用变量、函数、混入、嵌套、运算等语法
+- 环境上：Sass 的安装需要安装 Ruby 环境，Less 基于 JavaScript，Sass 是通过服务端处理，Less 是通过客户端处理的，解析上 Less 会慢一些
+- 变量使用的符号不同：sass 使用 \$、less 使用 @
+
+### 说说对 CSS 预编语言的理解，以及它们之间的区别？
+
+CSS 预编语言是一种在浏览器解析CSS前通过**预处理器**进行处理的CSS扩展语言。它们允许开发者使用变量、条件语句、循环、函数等等特性来编写样式。
+
+**常见的CSS预编语言有**：
+
+1. **Sass**：支持变量、嵌套规则、混合（mixins，类似于函数）、继承和其它高级功能
+2. **Less**：支持变量、混合、操作和函数等
+3. **Stylus**：支持变量、可重用语句、继承、函数等
+
+|   类型   |      Sass      |  Less  |  Stylus  |
+| :------: | :------------: | :----: | :------: |
+|   语法   | .scss 或 .sass | .less  | .stylus  |
+| 变量定义 |     $符号      | @符号  |  变量名  |
+| 编译方式 |     编译器     | 编译器 | 直接解析 |
+|   函数   |      支持      |  支持  |   支持   |
+|   混入   |      支持      |  支持  |   支持   |
+
+20240725
+
+### 怎么让Chrome支持小于12px 的文字？
+
+默认情况下，Chrome浏览器的最小字体大小限制为12px，可通过以下方式绕开限制：
+
+1. 使用缩放比例：`transform: scale(0.8)`，缺点是可能会模糊失真
+2. 使用zoom：`zoom: 0.8`，缺点是浏览器容易不兼容
+3. 使用 -webkit-text-size-adjust：`-webkit-text-size-adjust: none`，禁用浏览器对最小字体的限制
+4. 使用图片替代
+
+### 怎么使用 CSS 画一个三角形？
+
+方式一：使用border，上右下左，向哪边的border-width设置0,反方向设置颜色，
+```css
+/* 向上的三角形 */
+{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 25px 25px 25px;
+  border-color: transparent transparent blue transparent;
+}
+/* 向左的三角形 */
+{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 25px 25px 25px 0;
+  border-color: transparent blue transparent transparent;
+}
+```
+
+方式二：使用clip-path的polygon函数，入参分别是各坐标点
+```css
+/* 向下的三角形 */
+{
+  clip-path: polygon(0 0, 100% 0, 50% 50%);
+  width: 100px;
+  height: 100px;
+  background-color: #333;
+}
+
+```
+
+方式三：使用transform的rotate函数转换方向
+```css
+/* 原本是向上的三角形，经过rotate后变成 向下的三角形 */
+{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 25px 25px 25px;
+  border-color: transparent transparent blue transparent;
+  transform: rotate(180deg);
+}
+```
+
+### 如何使用css完成视差滚动效果?
+
+1. 使用 background-attachment，作用是设置背景图像是否固定或者随着页面的其余部分滚动
+2. 使用 trancform: translate3D，原理如下：
+  - 容器设置 transform-style: preserve-3d 和 persperctive: xpx，处于这个容器的子元素就将位于3D空间中
+  - 子元素设置不同的 transform: translateZ() 不同元素在3D的Z轴方向距离屏幕的距离就不一样
+  - [参考资料](https://juejin.cn/post/7087766484587380767)
+
 ### 什么是 BFC？
 
-BFC：块级格式化上下文，<u>是一个独立的渲染区域，子元素不会影响到外面</u>。
-出现场景：
+BFC：块级格式化上下文，<u>是一个独立的渲染区域，子元素不会影响到外面布局</u>。
+
+产生BFC的场景：
 
 - float 属性不为 none
 - position 为 absolute 或 fixed
@@ -1388,51 +2090,19 @@ BFC：块级格式化上下文，<u>是一个独立的渲染区域，子元素�
 - 解决外边距合并(塌陷)问题
 - 实现右侧自适应的盒子
 
-### 什么是 css 盒模型？
-
-- 所有 HTML 元素可以看作盒子，CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括：边距，边框，填充，和实际内容。
-
-盒模型分为 2 种：
-
-- IE 盒模型 ：盒子的 width = border + padding + content 三个部分
-
-- w3c 盒模型：盒子的 width = content
-
-（但是 w3c 盒模型的 offsetWidth 是包含 border 和 padding 的）
-
-可以通过 box-sizing 设置应用哪种盒模型，border-box 表示 IE 盒模型，content-box 表示 W3C 盒模型
-
 ### 如何获取元素的宽高属性？
 
 - vue 中通过 ref 获取 dom 元素
 - 原生 js 获取 dom 元素
 - window.getComputedStyle(dom)
+- getBoundingCliClientRect()
 
 ### 🌟 如何实现垂直居中布局？
 
-- flex 布局，设置容器 display： flex、align-items：center、justify-content：center
-- 绝对定位， display：absolute，margin： auto，top、bottom、left、right 都设为 0
-- 绝对定位，display：absolute，top：50%，left：50%，transform：translate(-50%, -50%)
-
--
-
-### CSS 中有哪些选择器？优先级怎么处理？
-
-- 选择器类型：
-
-  - 普通选择器：id 选择器、class 选择器、标签选择器、伪类选择器、伪元素选择器等等
-
-  - 组合器：包括后代选择器、子选择器、相邻兄弟选择器、通用兄弟选择器
-
-- 优先级：每个选择器、每条规则都包含一个权重级别，构成优先级
-
-  - 权重：important > 行内样式 > id > class/伪类/属性选择器 > 标签/伪元素选择器
-
-### 伪类和伪元素有什么区别？
-
-- 书写上，规定要求伪类选择器使用一个冒号，伪元素选择器使用两个冒号
-- 表现上，伪类选择器应用的元素是真实存在文档树中，只是需要符合触发条件的元素；而伪元素选择器是生成一个虚拟元素，并不存在于文档树中
-- 使用上，同一个选择器，伪类可以使用多个，而伪元素只能使用一个
+- flex 布局，设置容器 display: flex; align-items: center; justify-content: center;
+- grid 布局，设置容器 display: grid; place-items: center;
+- 绝对定位， display: absolute; margin: auto; top、bottom、left、right 都设为 0
+- 绝对定位，display: absolute; top:50%; left:50%;，transform:translate(-50%, -50%);
 
 ### 你说一下 CSS3 的新特性有哪些？
 
@@ -1442,14 +2112,35 @@ BFC：块级格式化上下文，<u>是一个独立的渲染区域，子元素�
 - 动画：**animation**：动画名称、周期时间、效果曲线、延迟时间、播放次数、是否反向播放、是否暂停动画（通过 @keyframes 方式创建动画）
 - 形状转换：**transform**：对元素进行 rotate 旋转、sacle 缩放、translate 移动、skew 倾斜操作
 - 阴影：**box-shadow**：水平位置 垂直位置 模糊距离 阴影大小 阴影颜色 开始方向
-- 渐变：**linear-gradient **线性渐变、**radial-gradient\*** 径向渐变
+- 渐变：**linear-gradient**：线性渐变、**radial-gradient**： 径向渐变
 - 背景属性：**background-origin**、**background-size**等等
 
-### Sass 和 Less 的区别？
+### 如何实现单行/多行文本溢出的省略样式？
 
-- 两者都是 css 的预处理器，预处理器定义了一种专门的编程语言，提供使用变量、函数、混入、嵌套、运算等语法
-- 环境上：Sass 的安装需要安装 Ruby 环境，Less 基于 JavaScript，Sass 是通过服务端处理，Less 是通过客户端处理的，解析上 Less 会慢一些
-- 变量使用的符号不同：sass 使用 \$、less 使用 @
+**单行文本**
+
+```css
+div {
+  overflow: hidden;
+  width: 200px;
+  height: 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+**多行文本**
+
+方式一：
+```css
+{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 设置超过三行就省略 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px; /* 固定宽度，根据需要调整 */
+}
+```
 
 ### CSS 性能优化？
 
@@ -1483,7 +2174,8 @@ JavaScript 方面：
 - 避免频繁操作样式，最好一次性重写 style 属性
 - 避免频繁读取会引发回流/重绘的属性，如果需要多次使用，用一个变量缓存起来
 - 可以先将元素设为 display:none 操作结束后再显示出来，因为在 none 的元素上进行 DOM 操作不会引起回流和重绘
-- 避免频繁操作 DOM，可以创建一个 DocumentFragment，在它上面应用 DOM 操作，最后再将它添加到文档中（**DocumentFragment 不是真实 DOM 树的一部分，它的变化不会引起 DOM 树的重新渲染的操作(reflow)**）
+- 避免频繁操作 DOM，可以使用文档片段 DocumentFragment，在它上面应用 DOM 操作，最后再将它添加到文档中
+  （**DocumentFragment 不是真实 DOM 树的一部分，它的变化不会引起 DOM 树的重新渲染的操作(reflow)**）
 
 ### 为什么 CSS 选择器的匹配规则是从右到左？
 
@@ -1491,71 +2183,13 @@ JavaScript 方面：
 
 ### 层叠上下文？
 
-当容器的 z-index 不为 auto 且包含 position 为 relative/absolute/fixed 的定位元素时，会创建层叠上下文
+层叠上下文定义了元素如何在Z轴上堆叠，以及元素之间的遮挡关系
 
-### BFC
+**创建层叠上下文**
 
-BFC：块级格式化上下文
-
-- float 属性不为 none
-- position 为 absolute 或 fixed
-- display 为 inline-block, table-cell, table-caption, flex, inline-flex
-- overflow 不为 visible。
-
-用途
-
-- 清除元素内部浮动
-- 解决外边距合并(塌陷)问题
-- 制作右侧自适应的盒子问题
-
-### css 盒模型
-
-所有 HTML 元素可以看作盒子，在 CSS 中，"box model"这一术语是用来设计和布局时使用。
-
-CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括：边距，边框，填充，和实际内容。
-
-盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
-
-<!-- ![image-20201110163721554](./img/image-20201110163721554.png) -->
-
-盒模型又分 2 种
-
-w3c 盒模型 content-box
-
-属性 width、height 只包含内容 content，不包含 border 和 padding，但是用 offsetWidth 取是包含 border 和 padding 的
-
-IE 盒模型 border-box
-
-属性 width、height 包含 border 和 padding
-
-### flex
-
-flex 简写属性包括
-
-- flex-grow 初始值为 0
-- flex-shrink 初始值为 1
-- flex-basis 初始值 auto
-
-单值语法：
-
-- flex number: flex number 1 0
-
-- flex: initial: flex 0 1 auto
-- flex: auto: flex 1 1 auto
-- flex: none: flex 0 0 auto
-
-双值语法:
-
-第一个值必须为一个无单位数，并且它会被当作 `<flex-grow>` 的值。第二个值必须为以下之一：
-
-- 一个无单位数：它会被当作 `<flex-shrink>` 的值。
-- 一个有效的宽度值: 它会被当作 `<flex-basis>` 的值。
-
-三值语法:
-
-- 第一个值必须为一个无单位数，并且它会被当作 `<flex-grow>` 的值。
-- 第二个值必须为一个无单位数，并且它会被当作 `<flex-shrink>` 的值。
-- 第三个值必须为一个有效的宽度值， 并且它会被当作 `<flex-basis>` 的值。
+- 当容器的 z-index 不为 auto 且包含 position 为 relative/absolute/fixed 的定位元素
+- opacity 值小于1的元素
+- transform、filter、clip-path 等属性非默认值的元素
 
 ## Node
 

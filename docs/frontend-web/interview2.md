@@ -2,6 +2,22 @@
 
 ## vue
 
+### Vue中的父组件怎么监听子组件的生命周期？
+
+**Vue2**
+1. 使用 ref：
+  ```
+  // 父组件
+  this.$refs.child.$on('hook:mounted', this.handleChildMounted);
+  // 子组件
+  mounted() {console.log('子组件已挂载');}
+  ```
+2. 子组件在生命周期钩子中触发自定义事件，父组件监听这些事件：
+  ```<child @custom-event="handleEvent"/>```
+3. 通过 provide 和 inject 实现跨层级组件通信
+
+**Vue3**
+
 ### 什么是 MVVM ？
 
 MVVM 是指 Model-View-ViewModel
@@ -564,6 +580,112 @@ Vue.prototype.$forceUpdate = function() {
 3. 定义一个更新函数和 Watcher，将来数据变化时，Watcher 会调用更新函数
 4. 因为 data 中的 key 可以在视图中出现多次，所以每个 key 都需要一个管家 Dep 管理多个 Watcher
 5. 以后，data 中的数据一旦发生变化，会先找到对应的 Dep，通知所有的 Watcher 执行更新函数
+
+### vue3的响应式原理？
+
+1. 依赖收集
+2. 依赖更新
+
+**如何实现自动操作track和trigger？**
+
+**vue2**使用 es5 的 Object.defineProperty() 实现
+**vue3**使用 es6 的 Proxy 和 Reflect 实现
+
+```javascript
+// 1 初始化 targetMap 保存多个观察对象，每个对象作为单独的key
+const targetMap = new WeakMap()
+let activeEffect = null
+const effect = eff => {
+  activeEffect = eff
+  activeEffect()
+  activeEffect = null
+}
+// 2 收集依赖
+const track = (target, key) => {
+  if (!activeEffect) return
+  let depsMap = targetMap.get(target)
+  if (!depsMap) {
+    // 如果未保存过当前对象key，则添加观察对象作为key，值为待补充的map
+    targetMap.set(target, (depsMap = new Map()))
+  }
+  let dep = depsMap.get(key)
+  if (!dep) {
+    // 如果该map无该属性的key键（值为副作用）
+    depsMap.set(key, (dep = new Set()))
+  }
+  dep.add(activeEffect)
+}
+// 3 执行指定对象的指定属性的所有副作用
+const trigger = (target, key) => {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
+  const dep = depsMap.get(key)
+  if (!dep) return
+  dep.forEach(effect => effect())
+}
+
+// 4 响应式处理
+const reactive = (target) => {
+  // 1 封装统一处理函数
+  const handler = {
+    get(target, key, receiver) {
+      console.log('正在读取的数据：',key);
+      const result = Reflect.get(target, key, receiver);
+      track(target, key);  // 自动调用 track 方法收集依赖
+      return result
+    },
+    set(target, key, value, receiver) {
+      console.log('正在修改的数据：', key, ',值为：', value);
+      const oldValue = target[key];
+      const result = Reflect.set(target, key, value, receiver);
+      if(oldValue !== result){
+        trigger(target, key);  // 自动调用 trigger 方法执行依赖
+      }
+      return result
+    }
+  }
+  // 2 统一调用 proxy 函数
+  return new Proxy(target, handler)
+}
+const product = reactive({ price: 10, quantity: 2 })
+let total = 0
+// const effect = () => { total  = product.price * product.quantity }
+console.log(`total: ${total}`); // total: 0
+effect(() => {total = product.price * product.quantity})
+console.log(`total: ${total}`); // total: 20
+product.price = 20
+console.log(`total: ${total}`); // total: 40
+```
+
+### 实现 vue3 的 ref 函数
+```js
+// 方式1 实现一个 ref
+const ref = initialValue => reactive({value:initialValue})
+const testRef = ref({a: 2})
+console.log(testRef.value)
+
+// 方式2
+const ref2 = raw => {
+  const r = {
+    get value() {
+      track(r, 'value')
+      return raw
+    },
+    set value(newValue) {
+      raw = newValue
+      trigger(r, 'value')
+    }
+  }
+  return r
+}
+const testRef2 = ref2(0)
+console.log(testRef2.value)
+```
+
+### 实现 vue3 的 computed
+```js
+
+```
 
 ### 实现一个简单的响应式系统
 
@@ -1499,6 +1621,58 @@ import(/* webpackChunkName: "xxx" */ "src/xxx");
 
 ## 网络
 
+20240726
+### 🌟 输入 URL 到页面展示过程
+
+整体流程：
+1. URL 解析 -> 
+2. DNS 查询（获得 IP 端口） -> 
+3. TCP 连接 -> 
+4. HTTP 请求 -> 
+5. 服务器处理请求 ->
+6. HTTP 响应 -> 
+7. 浏览器接收响应，HTML解析
+8. 页面渲染 DOM -> CSSOM -> render -> layout -> painting
+
+具体来说，分为两个过程
+
+- 请求响应：
+
+  1. 浏览器进行 URL 解析，再通过 DNS 查询，获取服务器的 IP 地址和端口号
+
+  2. 浏览器与服务器通过 TCP 三次握手建立连接
+  3. 浏览器向服务器发送 HTTP 请求
+  4. 服务器收到报文后处理请求，同样拼好报文再发给浏览器
+  5. 浏览器对资源进行解析
+
+- 页面渲染：
+
+  1. 解析 HTML，生成 DOM 树
+  2. 解析 CSS，生成 CSSOM 规则树
+  3. 合并 DOM 树和 CSSOM 树，生成 render 树
+  4. 布局 render 树（Layout/Reflow），负责各元素尺寸、位置的计算
+  5. 绘制 render 树（paint），绘制页面像素信息
+  6. 浏览器将各层信息发送给 GPU，GPU 会将各层合成显示在屏幕上
+  7. 如果遇到 script 标签，会执行并阻塞渲染
+
+详细补充：
+
+- 构建 DOM 树（DOM tree）：从上到下解析 HTML 文档生成 DOM 节点树，也叫内容树（content tree）
+
+- 构建 CSSOM 树（CSS Object Model）：加载解析样式生成 CSSOM 树
+
+<!-- - 执行 JavaScript：加载并执行 JS 代码（包括内联代码或外联 JS 文件） -->
+
+- 构建渲染树 （render tree）：根据 DOM 树和 CSSOM 树生成渲染树（render tree）
+
+<!-- - 渲染树：按顺序展示在屏幕上的一系列矩形，这些矩形带有字体、颜色和尺寸等视觉属性 -->
+
+- 布局（layout）：根据渲染树将节点树的每一个节点布局在屏幕的正确位置
+
+- 绘制（painting）：遍历渲染树绘制所有节点，为每一个节点使用对应的样式
+
+之后每当一个新元素加入到这个 DOM 树当中，浏览器便会通过 CSS 引擎查遍 CSS 样式表，找到符合该元素的样式规则应用到这个元素上，然后再重新去绘制它。
+
 ### 🌟 说一下有什么缓存策略？
 
 - 缓存分为强缓存和协商缓存。客户端第一次请求资源时，浏览器会根据服务端的响应头做缓存处理。
@@ -1647,49 +1821,6 @@ TCP，传输控制协议，是一种面向连接的、可靠的、基于字节�
 ### UDP
 
 UDP 协议是面向无连接的，也就是说不需要在正式传递数据之前先连接起双方。
-
-### 🌟 输入 URL 到页面展示过程
-
-整体流程：URL 解析 -> DNS 查询（获得 IP 端口） -> TCP 连接 -> HTTP 请求 -> 响应请求 -> 页面渲染 DOM -> CSSOM -> render -> layout -> painting
-
-具体来说，分为两个过程
-
-- 请求响应：
-
-  1. 浏览器进行 URL 解析，再通过 DNS 查询，获取服务器的 IP 地址和端口号
-
-  2. 浏览器与服务器通过 TCP 三次握手建立连接
-  3. 浏览器向服务器发送 HTTP 请求
-  4. 服务器收到报文后处理请求，同样拼好报文再发给浏览器
-  5. 浏览器对资源进行解析
-
-- 页面渲染：
-
-  1. 解析 HTML，生成 DOM 树
-  2. 解析 CSS，生成 CSSOM 规则树
-  3. 合并 DOM 树和 CSSOM 树，生成 render 树
-  4. 布局 render 树（Layout/Reflow），负责各元素尺寸、位置的计算
-  5. 绘制 render 树（paint），绘制页面像素信息
-  6. 浏览器将各层信息发送给 GPU，GPU 会将各层合成显示在屏幕上
-  7. 如果遇到 script 标签，会执行并阻塞渲染
-
-详细补充：
-
-- 构建 DOM 树（DOM tree）：从上到下解析 HTML 文档生成 DOM 节点树，也叫内容树（content tree）
-
-- 构建 CSSOM 树（CSS Object Model）：加载解析样式生成 CSSOM 树
-
-<!-- - 执行 JavaScript：加载并执行 JS 代码（包括内联代码或外联 JS 文件） -->
-
-- 构建渲染树 （render tree）：根据 DOM 树和 CSSOM 树生成渲染树（render tree）
-
-<!-- - 渲染树：按顺序展示在屏幕上的一系列矩形，这些矩形带有字体、颜色和尺寸等视觉属性 -->
-
-- 布局（layout）：根据渲染树将节点树的每一个节点布局在屏幕的正确位置
-
-- 绘制（painting）：遍历渲染树绘制所有节点，为每一个节点使用对应的样式
-
-之后每当一个新元素加入到这个 DOM 树当中，浏览器便会通过 CSS 引擎查遍 CSS 样式表，找到符合该元素的样式规则应用到这个元素上，然后再重新去绘制它。
 
 ### 🌟 使用加载带有 defer 与 async 属性的脚本的区别
 
