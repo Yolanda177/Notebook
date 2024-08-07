@@ -1260,6 +1260,7 @@ MyPromise.prototype.then = function(onResolved) {
 };
 ```
 
+![](../.vuepress/public/images/image.png)
 手写 promiseA+规范
 
 ```js
@@ -2289,6 +2290,57 @@ Promise.resolve(
 ## 算法
 
 ### 树相关
+
+**满二叉树**：除了叶子节点外，每个节点都有左右子节点，假设深度为 h，总节点数为 2^
+h - 1
+
+**完全二叉树**：除了最后一层，其他层节点数都达到最大，最后一层的节点都靠左排列，并且最后一层的叶子节点数达到最大
+
+**二叉搜索树**：左子树的每个节点值小于根节点，右子树的每个节点值大于根节点（左小右大）
+
+**递归遍历 DFS**
+
+```js
+const traverse = root => {
+  if (!root) return
+  // 前序遍历 进入节点就会执行
+  traverse(root.left)
+  // 中序遍历 左子树遍历完全后，右子树遍历前执行
+  traverse(root.right)
+  // 后序遍历 左右子树遍历完全后指定
+}
+```
+
+**层序遍历 BFS**
+
+特点：层序遍历是一层一层，从左到右的遍历二叉树节点
+
+```js
+const traverse = root {
+  if (!root) return
+  const queue = [root]
+  while (queue.length > 0) {
+    const cur = queue.shift() // 推出顶部元素
+    console.log('访问 cur 节点', cur.val)
+    if (cur.left) {
+      queue.push(cur.left)
+    }
+    if (cur.right) {
+      quene.push(cur.right)
+    }
+}
+```
+
+**二叉树解题思路**
+
+1. **遍历**：配合外部变量，通过遍历一遍二叉树得到答案
+2. **分解问题**：定义一个递归函数，通过子问题（子树）的答案推导出原问题的答案
+
+
+**求二叉树的最大深度**是指**根节点**到最远的叶子节点的最长路径上的节点数（包含根节点）
+
+**求二叉树的直径**是指**任意两个节点**的路径长度，不一定经过根节点
+
 
 ### 深度优先遍历
 
