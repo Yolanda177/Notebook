@@ -1,6 +1,264 @@
 # 常见问题 1
 
-## js
+## JS
+
+### Ts中 type 和 interface 的区别？（byd）
+
+type 和 interface 都是定义对象的结构，都可以通过继承来扩展
+区别如下：
+
+1. 扩展方式不同：interface 通过 entends 继承；type 用 交叉类型继承
+2. 范围：type 可以直接定义基本类型、联合类型；interface 不可以
+3. 声明合并：interface 支持多次定义自动合并；type 不能重复定义
+
+
+### JS的设计模式有哪些？（星巴克科技）
+
+定义：设计模式是一种被反复使用的、可重用的代码解决方案，用来解决开发过程中遇到的常见问题
+
+类型：分为三大类
+- 创建型：关注对象的创建过程，如 工厂模式、单例模式、建造者模式
+- 结构型：关注对象之间的关系，如 适配器模式、代理模式、装饰器模式
+- 行为型：关注对象的行为和职责分配，如 观察者模式、发布-订阅模式、策略模式
+
+应用：
+- 组件通信：
+- 组件封装：装饰器模式扩展组件功能
+
+**工厂模式**
+- 用途：用一个工厂函数来创建对象，而不是直接使用构造函数
+- 举例：根据类型动态加载不同的模块；封装组件库时，根据类型创建不同的组件实例
+
+```javascript
+const InputFactory = {
+  createInput(type) {
+    switch (type) {
+      case 'text':
+        return new TextInput();
+      case 'select':
+        return new SelectInput();
+      case 'checkbox':
+        return new CheckboxInput();
+      // ...其他类型
+      default:
+        throw new Error('Unsupported input type');
+    }
+  }
+};
+```
+
+**单例模式**
+- 用途：确保一个类只有一个实例，并提供一个全局访问点
+- 举例：vue的状态管理 store，整个应用中共享状态；封装 axios 暴露一个实例 算吗？
+
+```javascript
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment(state) {
+      state.count++;
+    }
+  }
+});
+
+new Vue({
+  store, // 将 store 实例传递给 Vue 根实例
+  // ...其他选项
+});
+```
+
+**建造者模式**
+- 用途：分步创建复杂对象
+- 举例：封装一个 Request 类，根据不同的属性配置和axios实例，逐步构建这个对象
+
+```javascript
+class Request {
+  constructor(opts) {
+    this.instance = axios.create({...opts})
+  }
+  get = () => this.instance({})
+  post = () => this.instance({})
+}
+
+// 使用
+const request = new Request();
+export const get = request.get;
+export const post = request.post;
+export default request.instance;
+```
+
+**适配器模式**
+- 用途：通过适配器类，解决接口不兼容问题
+- 举例：组件化开发时，数据格式的转换，命名或类型的兼容；
+
+```javascript
+class DatePickerAdapter {
+  constructor(picker) {
+    this.picker = picker;
+  }
+
+  setOptions(options) {
+    // 转换配置选项以适配第三方组件
+    const adaptedOptions = this.adaptOptions(options);
+    this.picker.configure(adaptedOptions);
+  }
+
+  adaptOptions(options) {
+    // 适配逻辑，例如将 'startDate' 转换为 'minDate'
+    return {
+      ...options,
+      minDate: options.startDate
+    };
+  }
+}
+```
+
+**装饰器模式**
+- 用途：暴露接口，动态地为对象添加额外的功能，而不用修改原始的代码
+- 举例：组件封装时，动态添加样式等逻辑
+
+```javascript
+class Component {
+  render() {
+    return `<div>Hello World</div>`;
+  }
+}
+class ThemedComponent {
+  constructor(component, theme) {
+    this.component = component;
+    this.theme = theme;
+  }
+  render() {
+    const themedStyle = `style="${this.theme}"`;
+    return `<div ${themedStyle}>${this.component.render()}</div>`;
+  }
+}
+
+// 使用装饰器
+const themedButton = new ThemedComponent(new Component(), 'color: red;');
+```
+
+**代理模式**
+- 用途：控制对对象的访问，可以在访问对象前后增加逻辑
+- 举例：Proxy 的使用
+
+```javascript
+const user = {
+    name: 'John',
+    age: 30,
+};
+const userProxy = new Proxy(user, {
+    get(target, prop) {
+        if (prop === 'age') {
+            return `${target[prop]} years old`;
+        }
+        return target[prop];
+    },
+});
+console.log(userProxy.age); // "30 years old"
+```
+
+**观察者模式**
+- 用途：一个对象状态发生变化时，通知所有的观察者
+- 举例：状态管理，当状态更新时，所有订阅的组件都会收到通知并更新；表单组件的验证；父子组件通信
+
+```javascript
+class Store {
+  constructor() {
+    this.observers = [];
+    this.state = {};
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(newState) {
+    this.state = {...this.state, ...newState};
+    this.notifyAll();
+  }
+
+  attach(observer) {
+    this.observers.push(observer);
+  }
+
+  notifyAll() {
+    this.observers.forEach(observer => observer.update(this.state));
+  }
+}
+
+class Component {
+  constructor(store) {
+    this.store = store;
+    this.store.attach(this);
+  }
+
+  update(state) {
+    console.log('Component updated with new state:', state);
+  }
+}
+
+// 使用
+const store = new Store();
+const component = new Component(store);
+store.setState({ count: 1 }); // 更新状态，组件收到通知并更新
+```
+
+**发布-订阅模式**
+- 用途：消息通信
+- 举例：eventBus、window.eventListener 等等
+
+```javascript
+const pubSub = {
+    events: {},
+    subscribe(event, callback) {
+        if (!this.events[event]) this.events[event] = [];
+        this.events[event].push(callback);
+    },
+    publish(event, data) {
+        if (this.events[event]) {
+            this.events[event].forEach(callback => callback(data));
+        }
+    },
+};
+pubSub.subscribe('event1', data => console.log('Event 1:', data));
+pubSub.publish('event1', { key: 'value' });
+```
+
+**策略模式**
+- 用途：动态替换算法或行为
+- 举例：根据不同的APP，加载对应的插件 JSBridge；
+
+```javascript
+class StrategyA {
+    execute() {}
+}
+class StrategyB {
+    execute() {}
+}
+class Context {
+    setStrategy(strategy) {
+        this.strategy = strategy;
+    }
+    executeStrategy() {
+        this.strategy.execute();
+    }
+}
+const context = new Context();
+context.setStrategy(new StrategyA());
+context.executeStrategy();
+context.setStrategy(new StrategyB());
+context.executeStrategy();
+```
+
+
+
 
 ### 如何实现小驼峰格式转换？
 
@@ -183,6 +441,20 @@ console.log(checkBinA('1111234', '111233455'))
 <!-- ![image-20201113105711953](./img/image-20201113105711953.png) -->
 
 ![类型转换](https://static001.geekbang.org/resource/image/71/20/71bafbd2404dc3ffa5ccf5d0ba077720.jpg)
+
+### 基本类型和引用类型的存储方式？（星巴克科技）
+
+1. 基本类型包括：String、Number、Boolean、Null、Undefined 和 Symbol，这些类型是**按值存储**，数据的值存在**栈内存**中
+2. 引用类型包括：Object、Array、Function 等等，这些类型是是**按引用存储**，存储在**堆内存**中
+
+什么是栈内存？
+- 栈是一种**后进先出**的数据结构，栈内存访问速度较快，因为存储靠近CPU的地方，但存储空间相对较小
+
+什么是堆内存？
+- 堆内存的访问速度相对较慢，因为一般在物理内存中，远离CPU，但存储空间相对较大
+
+什么是按引用存储？
+- 当我们执行 `let obj1 = { name: 'Alice', age: 18 }` 时，一个新的对象 `{ name: 'Alice', age: 18 }` 被创建在堆内存中，但 obj1 存储的并不是对象的本身，而是这个对象在内存中的地址（也就是引用）；当我们再执行 `let obj2 = obj1` 时，并没有创建一个新的对象，而是复制了 obj1 的引用，此时 obj1和obj2 都指向堆内存中的同一个对象
 
 ### 判断类型的方法有哪些？
 
@@ -417,11 +689,9 @@ subObj.__proto__ === superObj; // true;
   };
   function SubType(name, age) {
     // 调用SuperType构造函数
-    SuperType.call(this)
+    SuperType.call(this, name)
     this.age = age
   }
-  SubType.prototype = new SuperType(); // 继承SuperType的属性
-  SubType.prototype.constructor = SubType;
   ```
 
 - 组合继承:
@@ -454,6 +724,11 @@ class extends 方式继承，本质上也是基于原型,
 
 - es5 的继承，实质是先创建子类的实例对象 this，然后将父类实例对象的属性和方法，加到 this 上面（Parent.applt(this))
 - es6 的继承，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super），然后再用子类构造函数修改 this
+
+其余区别点：
+
+1. function 可以变量提升，class 不可以
+<!-- 2. function 内部可以使用未声明的变量，class 不可以，因为严格模式 -->
 
 补充：prototype和__proto__是两个与原型链相关但用途和行为不同的属性
 
@@ -516,16 +791,22 @@ es6
 
 ```js
 class A {
-  constructor(opt) {
-    this.name = opt.name;
+  constructor(name) {
+    this.name = name;
+  }
+  sayHello() {
+    console.log(`Hello, I'm ${this.name}`);
   }
 }
 class B extends A {
-  constructor() {
+  constructor(name) {
     // 向父类传参
-    super({ name: "B" });
+    super(name);
     // this 必须在 super() 下面使用
     console.log(this);
+  }
+  sayBye() {
+    console.log('Bye, ' + this.name);
   }
 }
 ```
@@ -729,9 +1010,9 @@ function deepClone(obj, hash = new WeakMap()) {
   let cloneObj = new obj.constructor();
   hash.set(obj, cloneObj);
 
-  for (let key in cloneObj) {
+  for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      cloneObj[key] = deepClone(value, hash); // 递归
+      cloneObj[key] = deepClone(obj[key], hash); // 递归
     }
   }
   return cloneObj;
@@ -800,6 +1081,38 @@ const bfs = (root) => {
   })
 }
 ```
+
+### 请分别用深度优先思想和广度优先思想实现一个拷贝函数？
+
+```js
+const dfClone = (obj, hash = new WeakMap()) => {
+  if (typeof obj !== 'object' || obj === null || obj === undefined) return obj
+  if (hash.get(obj)) return hash.get(obj)
+  const cloneObj = new obj.constructor()
+  hash.set(obj, cloneObj)
+  for(const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      cloneObj[key] = dfClone(obj[key], hash)
+    }
+  }
+}
+
+const bfClone = obj => {
+  if (typeof obj !== 'object' || obj === null || obj === undefined) return obj
+  let quene = [obj]
+  let res = Array.isArray(obj) ? [] : {}
+  while(quene.length) {
+    const current = quene.shift()
+    for (let key in current) {
+      if (current.hasOwnProperty(key)) {
+
+      }
+    }
+  }
+  
+}
+```
+
 ### new Set() 应用场景
 
 Set 是 JavaScript 中一种集合类型，它类似于数组，但成员的值是唯一的，没有重复的值
@@ -821,6 +1134,13 @@ const difference = new Set([...setA].filter(x => !setB.has(x))); // 差集
 ```
 
 3. 快速查找某个值是否存在集合中
+
+### Set、Map、WeakSet、WeakMap 的区别？
+
+- Set：类似于数组，但成员的值都是唯一的，没有重复的值，**值可以是任意类型**
+- Map：类似于对象，是键值对的集合，**键可以是任意值**
+- WeakSet：**只接受对象作为值**，不能重复，可以用来存储对象的引用，垃圾回收机制会自动回收该对象
+- WeakMap：**只接受对象作为键名**，不能重复，可以用来存储对象的引用，垃圾回收机制会自动回收该对象
 
 ### 实现一个简单的模版字符串替换
 
@@ -924,13 +1244,15 @@ const debounce = (func, delay) => {
 - 节流保证在指定时间间隔内至少执行一次函数
 - 防抖保证在指定时间间隔结束后才执行一次函数
 
-### 垃圾回收机制
+### 垃圾回收机制 (星巴克科技)
 
-定义：垃圾回收是一种自动内存管理机制，用于识别和回收不再使用的对象，从而释放内存资源
+定义：垃圾回收是一种自动内存管理机制，用于识别和回收不再**使用的内存**，从而释放内存资源
 
-1. JavaScript 创建字符串、对象需要**动态分配内存**，如果不对这些内存进行回收就会导致系统奔溃
+1. 为什么要回收？
+  - JavaScript 创建变量、对象、函数时需要**动态分配内存**，如果不对这些内存进行回收就会导致系统奔溃
 
-2. 什么时候回收？一个简单例子：比如有 a、b 两个变量，把 b 赋值给 a，那么 a 原来的值就会被回收掉
+2. 什么时候回收？
+  - 根据内存的使用情况，当内存达到阀值或者对象不再被引用时会进行回收
 
 3. 常用的垃圾回收方法有两种：引用计数 和 标记计数
 
@@ -961,23 +1283,30 @@ JavaScript 代码执行过程中，所有任务都是需要排队的，前一个
 1. 同步任务：首先执行同步任务，如函数调用、表达式计算等等
 2. 微任务：执行所有微任务队列中的任务
 3. 宏任务：执行一个宏任务（如setTimeout的回调）
-4. UI渲染：
+4. UI渲染：通常在宏任务与宏任务之间，或者在宏任务执行完毕后进行
 5. 事件循环：重复步骤2～4，直到调用栈和事件队列为空
 
+执行顺序：456->789->000(UI更新)->nextTick 111->nextTick 333(UI更新)->nextTick 555(UI更新)->setTimeout 222(UI更新)->setTimeout 444(UI更新)
 ```js
-// 到底是哪个先执行？
-while (true) {
-  for (macroTask of macroTaskQueue) {
-    // 1. Handle current MACRO-TASK
-    handleMacroTask(macroTask);
-
-    // 2. Handle all MICRO-TASK
-    for (microTask of microTaskQueue) {
-      handleMicroTask(microTask);
-    }
-
-    uiRender();
-  }
+mounted() {
+  this.text = '456'; // 执行 1 但 UI 没更新
+  setTimeout(()=>{
+    this.text = '222'; // 执行 7 UI 更新为 222
+  });
+  this.text = '789'; // 执行 2 但 UI 没更新
+  this.$nextTick(()=>{
+    this.text = '111'; // 执行 4 但 UI 没更新
+    this.$nextTick(() => {
+      this.text = '555'; // 执行 6 UI 更新为 555
+    })
+  });
+  this.$nextTick(()=>{
+    this.text = '333'; // 执行 5 UI 更新为 333
+  });
+  setTimeout(()=>{
+    this.text = '444'; // 执行 888 UI 更新为 444
+  });
+  this.text = '000'; // 执行 3 UI 更新为 000
 }
 ```
 
@@ -1106,11 +1435,13 @@ async/await 是异步编程的终极方案，是结合 promise + generator 的�
 ```js
 console.log("script start");
 async function f1() {
+  console.log("async f1 start");
   await f2();
+  // 如果 async2 没有返回值 入队1
   console.log("async f1 end");
 }
 async function f2() {
-  console.log("async f2 end");
+  console.log("async f2");
 }
 
 f1();
@@ -1124,24 +1455,37 @@ new Promise((resolve) => {
   resolve();
 })
   .then(() => {
+    // 入队2
     console.log("promise.then1");
   })
   .then(() => {
+    // 入队3
     console.log("promise.then2");
   });
-console.log("script end");
-// script start -> async f2 end -> promise -> script end ->
-// async f1 end -> promise.then1 -> promise.then2 -> setTimeout
-// 如果 f2 返回一个 promise
+```
+**执行结果**：
+1. script start
+2. async f1 start
+3. async f2
+4. promise
+5. async f1 end
+6. promise.then1
+7. promise.then2
+8. setTimeout
+
+**如果 f2 返回一个 promise.resolve.then**
+```js
 console.log("script start");
 async function f1() {
+  console.log("async f1 start");
   await f2();
   console.log("async f1 end");
 }
 async function f2() {
-  console.log("async f2 end");
+  console.log("async f2");
   return Promise.resolve().then(() => {
-    console.log("async f2 then end1");
+    // 入队 1，执行后才会将 await 后的代码入队
+    console.log("async f2 then end1"); 
   });
 }
 f1();
@@ -1155,15 +1499,23 @@ new Promise((resolve) => {
   resolve();
 })
   .then(() => {
-    console.log("promise.then1");
+    console.log("promise.then1"); // 入队2
   })
   .then(() => {
-    console.log("promise.then2");
+    console.log("promise.then2"); // 入队3
   });
-console.log("script end");
-// script start -> async f2 end -> promise -> script end ->
-// async f2 then end1 -> promise.then1 -> promise.then2 -> async f1 end -> setTimeout
 ```
+**执行结果**:
+1. script start  同步执行
+2. async f1 start  同步执行
+3. async f2  同步执行
+4. promise  同步执行
+5. async f2 then end1  执行微任务队列
+6. promise.then1  执行微任务队列
+7. promise.then2  执行微任务队列
+8. async f1 end  执行微任务队列
+9. setTimeout
+
 
 ### Promise
 
@@ -1540,6 +1892,50 @@ MyPromise.deferred = function() {
 module.exports = MyPromise;
 ```
 
+### async/await、promise、promise.then 等执行顺序？
+
+**如以下代码，他们的执行顺序为？**
+```js
+async function async1() {
+  console.log('async1 start')
+  await async2()
+  console.log('async1 end')
+}
+async function async2() {
+  console.log('async2')
+}
+console.log('script start')
+setTimeout(() => {
+  console.log('setTimeout')
+})
+async1()
+new Promise(resolve => {
+  console.log('promise1')
+  resolve()
+}).then(() => {
+  console.log('promise2')
+})
+```
+
+**执行顺序**：
+1. script start
+2. async1 start
+3. async2
+4. promise1
+5. script end
+6. async1 end
+7. promise2
+8. setTimeout
+
+**解析**：
+1. 首先，new Promise是同步的任务，会被放到主进程中去立即执行。而.then()函数是异步任务会放到异步队列中去，那什么时候放到异步队列中去呢？当你的promise状态结束的时候，就会立即放进异步队列中去了
+2. 带async关键字的函数会返回一个promise对象，如果里面没有await，执行起来等同于普通函数；如果没有await，async函数并没有很厉害是不是
+3. await 关键字要在 async 关键字函数的内部，await 写在外面会报错；await如同他的语意，就是在等待，等待右侧的表达式完成。此时的await会让出线程，阻塞async内后续的代码，先去执行async外的代码。等外面的同步代码执行完毕，才会执行里面的后续代码。**就算await的不是promise对象，是一个同步函数，也会等这样操作**
+
+**图解**
+![](../.vuepress/public/images/image5.png)
+
+
 ### 模块化
 
 **IFEE**：通过闭包方式私有化变量
@@ -1656,10 +2052,147 @@ export default function doStuff1() {}
 
 另一个 ESM 与 CommonJS 显著的差异在于，ESM 导入模块的变量都是强绑定，导出模块的变量一旦发生变化，对应导入模块的变量也会跟随变化，而 CommonJS 中导入的模块都是值传递与引用传递，类似于函数传参。
 
-## css
+## HTML
+
+### 语义化怎么理解？
+
+语义化是指根据内容的结构化选择合适的标签，通俗的讲就是用正确的标签做正确的事情
+
+### 常见的行内元素、块级元素、空元素有哪些？
+
+1. **行内元素**：span、img、input、a、select 等等
+2. **块级元素**：div、p、h1-6、ul、li、
+3. **空元素**：br、hr、img、input、link、meta
+
+### Canvas 和 SVG 有什么区别？
+
+**Canvas**
+
+1. **定义**：Canvas 画布是基于 HTML5 的 canvas 标签，是以像素作为渲染单位，不支持矢量缩放
+2. **特点**：
+   - 依赖分辨率
+   - 不支持事件处理器
+   - 较弱的文本渲染能力
+   - 适合图像密集型的游戏应用
+   - 能够以 png、jpg 等格式保存结果图像
+
+**Svg**
+
+1. **定义**：SVG 可缩放矢量图形是基于可扩展标记语言 XML 描述的2D图形语言
+2. **特点**：
+   - 不依赖分辨率
+   - 支持事件处理器（因为基于 XML，说明 DOM 中每个元素都是可用的）
+   - 适合带有大型渲染区域的应用，如地图
+   - 不适合游戏应用
+   - 复杂度高会减慢渲染速度（过度使用 DOM）
+
+### HTML5 的 drag API
+
+被拖放元素 A、目标元素 B
+1. **dragstart**：事件主体是A，在开始拖放A时触发
+2. **drag**：事件主体是A，正在拖放A时出发
+3. **dragenter**：事件主体是B，是A进入B边界时触发
+4. **dragover**：事件主体是B，是A在B内部移动时触发
+5. **dragleave**：事件主体是B，是A离开B边界时触发
+6. **drop**：事件主体是B，是A在B内部松开时触发
+7. **dragend**：事件主体是A，在整个拖放操作结束时触发
+
+## CSS
+
+### 对 CSS Sprites 的理解？
+
+CSS Sprites（精灵图）是一种技术，能够将多个小图片合并到一个图片中，然后使用 CSS 的 background-image 和 background-position 属性显示图片不同的部分
+
+**优点**：**性能优化**，减少 HTTP 请求，减少图片大小，加快页面加载速度
+
+**缺点**：**维护成本较高**，精灵图中每个小图的宽高都是不确定的，无法精确控制每个小图的精确位置
+
+**应用场景**：适合图标、按钮、小装饰等小尺寸图像的整合应用
+
+
+### link 和 @import 的区别？
+
+两者都是引用外部 css 资源的方式，区别如下：
+
+1. **语法**：
+   - **link**：是 XHTML 标签，除了加载 CSS 外，还可以定义 RSS、rel 连接属性、引用外部文件等
+   - **@import**：是 CSS 规则，只能用于加载 CSS，不支持 IE 浏览器，需要做兼容处理
+
+2. **位置**：
+   - **link**：位于 HTML 的 head 标签中
+   - **@import**：必须在 CSS 文件的开头使用，不能再任何规则或条件规则如 @media 后使用
+
+3. **加载方式**：
+   - **link**：使用 link 引入的 css 文件会与 HTML 文档同步加载，有助于提高页面加载速度，并且可以通过 JS 控制加载顺序
+   - **@import**：会在页面加载完成后，按顺序加载 css 文件，多个 @import 可能会导致页面闪烁
+
+4. **媒体类型**：
+   - **link**：link 标签可以包含 @media 属性，可以根据屏幕宽度等条件加载不同的 css 文件
+   - **@import**：不支持 @media 属性，但可以在 css 文件中使用 @media
+
+5. **兼容性**：
+   - **link**：在所有浏览器中都广泛支持
+   - **@import**：在现代浏览器中支持，低版本的浏览器需要做特殊处理
+
+6. **样式覆盖**：
+   - **link**：多个 link 的优先级取决于在 HTML 中的顺序
+   - **@import**：多个 @import 的优先级取决于在 css 文件中的顺序，后声明的覆盖前面的
+
+7. **HTTP请求**：
+   - **link**：使用 link 标签引入的 css 文件只会产生一个 HTTP 请求
+   - **@import**：如果一个 css 文件中有多个 @import，每个 @import 都可能产生额外的 HTTP请求
+
+8. **支持JS操作DOM**：
+   - **link**：link 标签是 HTML 元素，支持 JS 操作 DOM
+   **@import**：@import 是 css 规则，不支持 JS 操作 DOM
+
+9. **应用场景**：
+   - **link**：常规场景下推荐使用
+   - **@import**：可复用的大型项目中可考虑使用
+
 
 20240724
-### 什么是CSS 模块化？
+
+### 什么是CSS 工程化？
+
+CSS 工程化是为了解决以下几类问题：
+
+1. **宏观设计**：如何组织 CSS 代码、如何拆分、模块结构怎么设计
+2. **编码优化**：如何编写更好的 CSS 代码
+3. **构建**：如何处理 CSS 代码才能让它的打包结果最优
+4. **可维护性**：如何让 CSS 代码可维护
+
+**三个关键方向解决以上问题**：
+- 预处理器（Less、Sass）
+- 工程化插件（PostCss）
+- 构建工具（Webpack和loader）
+
+1. **为什么需要使用预处理器？**
+
+**预处理器**其实就是 CSS 世界的轮子，支持我们编写**类CSS代码**，然后将它编译成 CSS代码，最后交给浏览器解析
+
+**预处理器提供这些能力**：
+- **嵌套**：高效反映不同 css 属性之间的层级关系
+- **变量**：方便我们定义和重用变量
+- **计算函数**：支持更强的可编程性
+- **模块化**：支持将 css 文件模块化，实现复用
+
+2. **PostCss 是什么？**
+
+**PostCss**是一个对 CSS 进行解析和处理的工具，作用对象是 CSS 本身，可以对 CSS 进行扩展和兼容
+
+**PostCss提供以下能力**：
+- **自动添加前缀**：当 css 适配低版本浏览器时，能增加浏览器前缀，确保 css 的兼容性
+- **代码压缩和优化**：能够压缩、优化 css 代码，移除无效代码
+
+3. **Webpack 怎么处理 CSS？**
+
+**Webpack**在 loader 的协助下处理 CSS 代码
+
+**关键loader**
+- **css-loader**：用于解析 CSS 文件，并将 CSS 代码转换为 JavaScript 代码
+- **style-loader**：用于将 CSS 代码插入到 HTML 中
+
 
 ### CSS3 中 transition 和 animation 的属性分别有哪些？
 
@@ -2019,6 +2552,55 @@ CSS 预编语言是一种在浏览器解析CSS前通过**预处理器**进行处
 3. 使用 -webkit-text-size-adjust：`-webkit-text-size-adjust: none`，禁用浏览器对最小字体的限制
 4. 使用图片替代
 
+### 解决 1px 问题的方案有哪些？
+
+**1px问题**通常指的是在移动设备上，由于屏幕的高像素密度，CSS中的1像素在屏幕上看起来非常细或非常粗，也可能会消失或者变得不明显
+
+**原因**： CSS 中的 1px 与移动过设备的 1px 有比例关系：window.devicePixelRatio = 设备的物理像素 / CSS像素
+
+devicePixelRatio = 2，代表这个设备设备上会用**2个物理像素单元**进行渲染，因此实际效果会比 1px 要粗
+
+**解决方案**：
+
+1. **媒体查询**：使用 media 根据不同的设备像素比 devicePixelRadio 设置不同的样式
+```css
+@media only screen and (-webkit-min-device-pixel-ratio:2) {
+  .element {
+    border-width: 0.5px;
+  }
+}
+```
+
+2. **缩放方案**：通过设置 trasform: scale() 对元素进行缩放
+```css
+.element {
+  border-width: 1px;
+  transform: scale(0.5);
+}
+```
+
+3. **使用SVG**：使用 SVG 绘制 1px 的线，因为 SVG 是矢量图形，可以在不同分辨率屏幕上保持清晰
+```html
+<svg width="100%" height="1" viewBox="0 0 100 1" preserveAspectRatio="none">
+  <line x1="0" y1="0" x2="100" y2="0" stroke="#000" stroke-width="1"/>
+</svg>
+```
+   
+4. **使用伪元素**：使用伪元素，通过伪元素的边框设置为1px，再缩放
+```css
+.element::bofore {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #222;
+  transform: scaleY(0.5);
+}
+```
+
+
 ### 怎么使用 CSS 画一个三角形？
 
 方式一：使用border，上右下左，向哪边的border-width设置0,反方向设置颜色，
@@ -2078,17 +2660,24 @@ CSS 预编语言是一种在浏览器解析CSS前通过**预处理器**进行处
 
 BFC：块级格式化上下文，<u>是一个独立的渲染区域，子元素不会影响到外面布局</u>。
 
-产生BFC的场景：
+**产生BFC的场景**：
 
-- float 属性不为 none
-- position 为 absolute 或 fixed
+- 元素设置浮动：float 属性不为 none
+- 元素设置绝对定位：position 为 absolute 或 fixed
 - display 为 inline-block, table-cell, table-caption, flex, inline-flex
 - overflow 不为 visible。
 
-应用：
+**BFC特点**：
 
-- 清除元素内部浮动
-- 解决外边距合并(塌陷)问题
+- 垂直方向，自上而下排列，与文档流的排列方式一致
+- BFC 中上下两个相邻容器的 margin 会重叠
+- 计算 BFC 的高度时，需要计算浮动元素的高度
+- BFC 是独立的容器，容器内部元素不影响外部元素
+
+**应用**：
+
+- 清除元素内部浮动：确保父元素的高度包含其浮动子元素
+- 解决外边距合并(塌陷)问题：将两个元素变成两个 BFC
 - 实现右侧自适应的盒子
 
 ### 如何获取元素的宽高属性？
@@ -2152,6 +2741,23 @@ div {
 - 有选择的使用选择器（css 选择器的匹配规则是从 右到左）
 - 减少回流与重绘
 - 不要使用 @import，使用@import 引入 CSS 会影响浏览器的并行下载，尽量使用 link
+
+ CSS 优化性能分为以下几类：
+
+1. **加载性能**
+   - **进行css压缩**：利用构建工具将 CSS 文件压缩合并，减少文件体积
+   - **减少使用 @import，建议使用 link**：使用link会在页面加载时同步加载
+
+2. **选择器性能**
+   - **避免使用通配符**：通配符会匹配所有元素，会造成回流和重绘，并且会阻塞页面渲染
+   - **高效选择器使用**：CSS 选择符是从右到左进行匹配的，要尽可能的缩小选择器的范围
+   - **避免过深的嵌套规则**
+
+3. **渲染性能**
+   - **内联首屏渲染的CSS，确保优先加载**，避免因CSS阻塞页面渲染
+   - **慎重使用高性能属性**：如浮动、定位
+   - **尽量减少页面重排、重绘**
+   - **使用媒体查询加载适当资源**
 
 ### 重绘与回流
 
