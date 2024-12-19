@@ -2771,9 +2771,9 @@ Cookie 和 Session 都是用来在**无状态的 HTTP 协议**下保持用户状
 
 ### 常见的 Web 攻击有哪些？如何防御？
 
-### 描述一下 XSS 和 CRSF 攻击？防御方法？
+### 描述一下 XSS 和 CSRF 攻击？防御方法？
 
-**XSS 跨站脚本攻击**
+**XSS跨站脚本攻击**
 
 1. **是什么？**
 
@@ -2790,6 +2790,7 @@ Cookie 和 Session 都是用来在**无状态的 HTTP 协议**下保持用户状
      - 将重要的 cookie 标记 httponly true, 避免黑客利用脚本获取 cookie
 
      - 开启 CSP 网页安全政策，建立白名单，告诉浏览器哪些资源可以加载
+       - Content-Security-Policy: default-src 'self'; 代表 只允许加载来自同一来源（即网站自身）的资源。如果其他指令没有指定其他源，浏览器将只加载来自当前网站（'self'）的脚本、图片、样式表等资源
 
 **CSRF 跨站请求伪造攻击**
 
@@ -2800,28 +2801,120 @@ Cookie 和 Session 都是用来在**无状态的 HTTP 协议**下保持用户状
 2. **攻击要点**：
 
    - 黑客网站利用浏览器在某些情况下允许跨域携带 cookie的特点，发送请求时携带了用户信息的 cookie
-
    - 目标站点无法鉴别请求的来源，默认会认可这个请求的合法性
+
+**攻击流程**：
+- 受害者登录 a.com 网站，并保留了登录凭证
+- 攻击者诱导受害者访问 b.com 网站
+- b.com 网站向 a.com 网站发送了一个请求：a.com/action=xxx 浏览器会默认携带 a.com 的 Cookie
+- a.com 网站收到请求后，对请求进行验证，确认是受害者的凭证（Cookie），误以为是受害者自己发送的请求
+- a.com 网站根据请求执行了 action=xxx
+- 攻击完成，攻击者在受害者不知情的情况下，冒充受害者，让 a.com 执行了自己定义的操作
 
 3. **攻击方式**：
 
-   - 利用可以跨域的 html 标签发起跨域 GET 请求`<a> <script> <img> <link>`
+   - GET 请求：利用可以跨域的 html 标签发起跨域 GET 请求`<a> <script> <img> <link>`
+     -访问这个页面： <img src="https://a.com/action=xxx"> 会自动发起HTTP请求
 
-   - 隐藏表单发起 POST 请求
+   - POST 请求：隐藏表单发起 POST 请求
 
    - 如果后台允许跨域 CORS，也可以用 ajax 发请求
 
+**为什么能被攻击？**
+假设用户访问 A 网站（www.exampleA.com），并设置了一个 Cookie，如下：
+```Set-Cookie: user_session=abc123; Domain=.exampleA.com; Path=/; Secure; HttpOnly```
+表示：这个 Cookie 被设置为仅在 .exampleA.com 域下有效（Domain），并只能通过 HTTPS 发送（Secure），且不能通过 JS 访问（HttpOnly）
+
+此时，用户在没有登出 A 网站的情况下，被诱导访问了第三方网站 B（www.exampleB.com），B 网站有一个隐藏的 iframe 或者 img：
+```<img src="https://www.exampleA.com/action=xxx" style="display: none">```
+
+那么，这时浏览器会自动检查是否存在有效 Cookie，并且满足了上述条件（Domain、Path、Secure），浏览器会自动将 Cookie 附加到请求中，网站 A 根据凭证 Cookie 误以为是用户操作，执行了对应行为
+
 4. **防御手段**：
 
-   - **同源检测**：验证 HTTP Referer 字段；
+根据攻击要点和攻击方式，CSRF 有两个特点：
+1. **攻击发生在第三方域名**；
+2. **攻击并不能获取到 Cookie，只是使用**
 
+针对这两点制定防护策略：
+
+1. 限制不明外域的访问：
+
+   - **同源检测**：验证 HTTP Referer、Origin 字段；（这两个字段不能由前端自定义）
+   
    - **浏览器开启 SameSite**：跨域不能传 cookie，服务端也可以设置
 
+2. 提交时要求附加本域才能获取的信息：
+   
    - **使用 CSRF Token**：请求时附带验证信息 token，服务端需要验证 token 的有效性
 
-   - **服务端开启 http-only**：脚本无法访问 cookie
+   - **双重 Cookie 验证**
 
    （如果攻击者有权限在本域发布评论（含链接、图片等，统称 UGC），那么它可以直接在本域发起攻击，这种情况下同源策略无法达到防护的作用。**防止同源 CSRF 就必须使用 token 验证的方式**）
+
+**使用 Origin Header 确定源域名**
+
+大部分与 CSRF 相关的请求，请求头会携带 Origin 字段，字段值是请求方的域名（不包含 path 和 query）；如果 Origin 存在，直接校验 Origin 是否安全；
+
+特殊情况下，请求头不携带 Origin：
+- IE 11 同源策略：IE 11 不会在跨站的 CORS 请求中添加 Origin，只能通过 Referer 作为标识，因为 IE 11对同源的定义与其他浏览器有差别
+- 302 重定向：302 重定向之后 Origin 不会出现在重定向的请求中，因为 302 都是定向到新的URL，浏览器会认为是敏感信息，不想暴露到新的服务器上
+
+**使用 Referer Header 确定源域名**
+
+Referer 字段用于记录该 HTTP 请求的来源地址，对于 Ajax 请求，Referer 为发起请求的页面地址；对于页面跳转，Referer 为跳转前一个页面的地址
+
+但根据浏览器的 Referer 策略，攻击者可以隐藏请求的 Referer，此时请求就不会携带 Referer
+
+特殊情况下，也会不携带 referer 或者 referer 不可信：
+- IE6、7 使用 window.location.href 进行页面跳转会丢失 referer
+- HTTPS 页面跳转到 HTTP 页面，所有浏览器的 referer 都会丢失
+- 点击Flash上到达另外一个网站的时候，Referer的情况就比较杂乱，不太可信
+
+当一个请求是页面请求（比如网站的主页），而来源是搜索引擎的链接（例如百度的搜索结果），也会被当成疑似CSRF攻击。所以在判断的时候需要过滤掉页面请求情况，通常Header符合以下情况，但相应的 这类页面请求就会暴露在 CSRF 的攻击范围之内
+```
+Accept: text/html
+Method: GET
+```
+
+综上所述，同源检查是一个简单的防范方法，能够防止大部分的 CSRF 攻击，但对于本域攻击（如UGC场景：发布评论等）就需要做额外防护
+
+**CSRF Token**
+
+CSRF 攻击的其中一个特点，就是攻击者只是使用 Cookie 信息，而无法获取，服务器误认为攻击者发送的请求是正规请求；因此可以要求用户请求都携带一个攻击者违法获取到的Token，服务器校验请求Token，区分开正常请求和攻击请求
+
+**原理**
+
+1. **将CSRF Token 输出到页面中**
+2. **页面请求都携带这个 Token**
+3. **服务器校验Token是否正确**
+
+示例：
+1. 用户访问网站 A（https://exampleA.com），服务端生成一个 CSRF Token，通过 Cookie 返回（或者单独接口返回）
+2. 前端获取 Token 并将其添加到请求头：
+   ```
+   fetch('https://exampleA.com/submit', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': 'abc123', // 从 Cookie 或 接口 中提取的 Token
+    },
+    body: JSON.stringify({ data: 'test' }),
+  });
+
+   ```javascript
+3. 攻击者尝试诱导用户点击 ```<img src="https://example.com/submit?data=test">```
+4. 因为 CSRF Token只有网站 A能读取，因此从攻击者网站发起的跨域请求无法读取附加到请求上（第三方网站无法通过 JavaScript 获取用户的 Cookie 或 HTML 中的 CSRF Token）
+5. 服务器验证 CSRF Token，空或不匹配就会拒绝请求，防御成功
+
+**双重 Cookie**
+其实就是上述利用 csrf token 的一种
+
+**原理**
+1. 后端生成 CSRF Token，通过 Set-Cookie 发送到客户端
+2. 前端读取并添加到请求头，后续请求都携带该信息
+3. 后端验证双 cookie，确保请求头和cookie中的token 一致
+（通过特定接口获取 CSRF Token，可以避免 Cookie 方式的不足）
 
 ### 网络劫持有几种？如何防范
 
