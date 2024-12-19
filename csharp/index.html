@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>C# | Yolanda</title>
+    <meta name="description" content="每天学习一点点">
+    <link rel="icon" href="/Notebook/images/mylogo.jpg">
+    
+    <link rel="preload" href="/Notebook/assets/css/0.styles.4f932b82.css" as="style"><link rel="preload" href="/Notebook/assets/js/app.fae3116e.js" as="script"><link rel="preload" href="/Notebook/assets/js/3.8a90166b.js" as="script"><link rel="preload" href="/Notebook/assets/js/2.e3a9cac0.js" as="script"><link rel="prefetch" href="/Notebook/assets/js/10.7c0500f6.js"><link rel="prefetch" href="/Notebook/assets/js/11.96ce6645.js"><link rel="prefetch" href="/Notebook/assets/js/12.295d52cd.js"><link rel="prefetch" href="/Notebook/assets/js/13.6db71019.js"><link rel="prefetch" href="/Notebook/assets/js/14.0c1400d8.js"><link rel="prefetch" href="/Notebook/assets/js/15.edab26a3.js"><link rel="prefetch" href="/Notebook/assets/js/16.88fd161d.js"><link rel="prefetch" href="/Notebook/assets/js/17.408350d5.js"><link rel="prefetch" href="/Notebook/assets/js/18.6ab68d1c.js"><link rel="prefetch" href="/Notebook/assets/js/19.9e9ef1da.js"><link rel="prefetch" href="/Notebook/assets/js/20.56c42c66.js"><link rel="prefetch" href="/Notebook/assets/js/21.8d087c07.js"><link rel="prefetch" href="/Notebook/assets/js/22.cf2b0a03.js"><link rel="prefetch" href="/Notebook/assets/js/23.7413880a.js"><link rel="prefetch" href="/Notebook/assets/js/24.28bab990.js"><link rel="prefetch" href="/Notebook/assets/js/25.75c60686.js"><link rel="prefetch" href="/Notebook/assets/js/26.ef1edf61.js"><link rel="prefetch" href="/Notebook/assets/js/27.5aeea7cc.js"><link rel="prefetch" href="/Notebook/assets/js/28.8476b7e4.js"><link rel="prefetch" href="/Notebook/assets/js/29.956345a3.js"><link rel="prefetch" href="/Notebook/assets/js/30.b96e226e.js"><link rel="prefetch" href="/Notebook/assets/js/31.04440a69.js"><link rel="prefetch" href="/Notebook/assets/js/32.273112ca.js"><link rel="prefetch" href="/Notebook/assets/js/33.e709b2b3.js"><link rel="prefetch" href="/Notebook/assets/js/34.dc2136ae.js"><link rel="prefetch" href="/Notebook/assets/js/35.30ab0118.js"><link rel="prefetch" href="/Notebook/assets/js/36.cb41bc4a.js"><link rel="prefetch" href="/Notebook/assets/js/37.dd26a76e.js"><link rel="prefetch" href="/Notebook/assets/js/38.68398169.js"><link rel="prefetch" href="/Notebook/assets/js/39.93b8990e.js"><link rel="prefetch" href="/Notebook/assets/js/4.5f27db7e.js"><link rel="prefetch" href="/Notebook/assets/js/40.ed267aa9.js"><link rel="prefetch" href="/Notebook/assets/js/41.985eec03.js"><link rel="prefetch" href="/Notebook/assets/js/42.260a858d.js"><link rel="prefetch" href="/Notebook/assets/js/43.6cb97df7.js"><link rel="prefetch" href="/Notebook/assets/js/44.869ede03.js"><link rel="prefetch" href="/Notebook/assets/js/45.bf3e5a26.js"><link rel="prefetch" href="/Notebook/assets/js/46.a54b425c.js"><link rel="prefetch" href="/Notebook/assets/js/47.8ebe066b.js"><link rel="prefetch" href="/Notebook/assets/js/48.416ad307.js"><link rel="prefetch" href="/Notebook/assets/js/49.7394cd78.js"><link rel="prefetch" href="/Notebook/assets/js/5.01244a1f.js"><link rel="prefetch" href="/Notebook/assets/js/50.4675f4c4.js"><link rel="prefetch" href="/Notebook/assets/js/51.a112471f.js"><link rel="prefetch" href="/Notebook/assets/js/52.a6195fbf.js"><link rel="prefetch" href="/Notebook/assets/js/53.15f5f0a8.js"><link rel="prefetch" href="/Notebook/assets/js/54.bbc6eb3c.js"><link rel="prefetch" href="/Notebook/assets/js/55.ba5d1f28.js"><link rel="prefetch" href="/Notebook/assets/js/56.2d5a7c0d.js"><link rel="prefetch" href="/Notebook/assets/js/57.b6f47637.js"><link rel="prefetch" href="/Notebook/assets/js/58.3ce0f8ce.js"><link rel="prefetch" href="/Notebook/assets/js/59.66784ebf.js"><link rel="prefetch" href="/Notebook/assets/js/6.4d03de1b.js"><link rel="prefetch" href="/Notebook/assets/js/60.2c355106.js"><link rel="prefetch" href="/Notebook/assets/js/61.1fb23164.js"><link rel="prefetch" href="/Notebook/assets/js/62.5ee4cd1c.js"><link rel="prefetch" href="/Notebook/assets/js/63.08a71f63.js"><link rel="prefetch" href="/Notebook/assets/js/64.e7464a6a.js"><link rel="prefetch" href="/Notebook/assets/js/65.de9108af.js"><link rel="prefetch" href="/Notebook/assets/js/66.83e75f1b.js"><link rel="prefetch" href="/Notebook/assets/js/67.3caaf58d.js"><link rel="prefetch" href="/Notebook/assets/js/68.2dd69095.js"><link rel="prefetch" href="/Notebook/assets/js/69.927efe78.js"><link rel="prefetch" href="/Notebook/assets/js/7.a97cfeeb.js"><link rel="prefetch" href="/Notebook/assets/js/70.92fd8264.js"><link rel="prefetch" href="/Notebook/assets/js/71.0ef73e07.js"><link rel="prefetch" href="/Notebook/assets/js/72.7e0a2fee.js"><link rel="prefetch" href="/Notebook/assets/js/73.816bc4b8.js"><link rel="prefetch" href="/Notebook/assets/js/74.e1c44e90.js"><link rel="prefetch" href="/Notebook/assets/js/75.52d5991e.js"><link rel="prefetch" href="/Notebook/assets/js/76.3ab263b9.js"><link rel="prefetch" href="/Notebook/assets/js/77.76e6e752.js"><link rel="prefetch" href="/Notebook/assets/js/78.e2711be8.js"><link rel="prefetch" href="/Notebook/assets/js/79.ecf0c259.js"><link rel="prefetch" href="/Notebook/assets/js/8.698b291a.js"><link rel="prefetch" href="/Notebook/assets/js/80.6defbc57.js"><link rel="prefetch" href="/Notebook/assets/js/81.650b6435.js"><link rel="prefetch" href="/Notebook/assets/js/82.f41e2c82.js"><link rel="prefetch" href="/Notebook/assets/js/83.62a3d0ce.js"><link rel="prefetch" href="/Notebook/assets/js/84.f2e0ba7a.js"><link rel="prefetch" href="/Notebook/assets/js/85.7d5af1cd.js"><link rel="prefetch" href="/Notebook/assets/js/86.883b02f7.js"><link rel="prefetch" href="/Notebook/assets/js/87.dc5913fb.js"><link rel="prefetch" href="/Notebook/assets/js/88.369e5f01.js"><link rel="prefetch" href="/Notebook/assets/js/89.fd496723.js"><link rel="prefetch" href="/Notebook/assets/js/9.220abfab.js"><link rel="prefetch" href="/Notebook/assets/js/90.1d16c82f.js"><link rel="prefetch" href="/Notebook/assets/js/91.6bcdcb57.js"><link rel="prefetch" href="/Notebook/assets/js/92.3f6beaea.js"><link rel="prefetch" href="/Notebook/assets/js/93.d98ca184.js">
+    <link rel="stylesheet" href="/Notebook/assets/css/0.styles.4f932b82.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/Notebook/" class="home-link router-link-active"><!----> <span class="site-name">Yolanda</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/Notebook/dailyRecord/" class="nav-link">📝日常记录</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">开发者</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/Notebook/frontend-web/" class="nav-link">💻大前端</a></li><li class="dropdown-item"><!----> <a href="/Notebook/rethink/" class="nav-link">🤔复盘</a></li><li class="dropdown-item"><h4>️️🧘算法修炼</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/Notebook/algorithm/computerBasics.html" class="nav-link">计算机基础</a></li><li class="dropdown-subitem"><a href="/Notebook/algorithm/dataStructure.html" class="nav-link">数据结构</a></li><li class="dropdown-subitem"><a href="/Notebook/algorithm/algorithm.html" class="nav-link">算法分类</a></li><li class="dropdown-subitem"><a href="/Notebook/dataBase/index.html" class="nav-link">数据库</a></li></ul></li><li class="dropdown-item"><!----> <a href="/Notebook/devops/" class="nav-link">☁️运维</a></li><li class="dropdown-item"><!----> <a href="/Notebook/test/" class="nav-link">🚬测试</a></li><li class="dropdown-item"><!----> <a href="/Notebook/gis/" class="nav-link">🌍GIS</a></li><li class="dropdown-item"><!----> <a href="/Notebook/software/" class="nav-link">️️🖱️软件</a></li><li class="dropdown-item"><!----> <a href="/Notebook/network/" class="nav-link">️️🐛网络工程</a></li><li class="dropdown-item"><!----> <a href="/Notebook/csharp/" class="nav-link router-link-exact-active router-link-active">🚗C#</a></li><li class="dropdown-item"><!----> <a href="/Notebook/unity/" class="nav-link">🎮Unity</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">设计</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/Notebook/design/" class="nav-link">🖌️UI</a></li></ul></div></div><div class="nav-item"><a href="/Notebook/bookmark/" class="nav-link">🏷书签整理</a></div><div class="nav-item"><a href="/Notebook/lint/" class="nav-link">✔️编码规范&amp;协同开发</a></div><div class="nav-item"><a href="http://shooterblog.site/Learn-JS-Demo/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  📖知识脑图
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://jecyu.github.io/blog/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  🔧个人博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">🔗Github</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/Yolanda177" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Yolanda github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://jecyu.github.io/language-learning/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  英语学习
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://jecyu.github.io/Fe-Auto-Testing/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端自动化测试
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/Notebook/dailyRecord/" class="nav-link">📝日常记录</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">开发者</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/Notebook/frontend-web/" class="nav-link">💻大前端</a></li><li class="dropdown-item"><!----> <a href="/Notebook/rethink/" class="nav-link">🤔复盘</a></li><li class="dropdown-item"><h4>️️🧘算法修炼</h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/Notebook/algorithm/computerBasics.html" class="nav-link">计算机基础</a></li><li class="dropdown-subitem"><a href="/Notebook/algorithm/dataStructure.html" class="nav-link">数据结构</a></li><li class="dropdown-subitem"><a href="/Notebook/algorithm/algorithm.html" class="nav-link">算法分类</a></li><li class="dropdown-subitem"><a href="/Notebook/dataBase/index.html" class="nav-link">数据库</a></li></ul></li><li class="dropdown-item"><!----> <a href="/Notebook/devops/" class="nav-link">☁️运维</a></li><li class="dropdown-item"><!----> <a href="/Notebook/test/" class="nav-link">🚬测试</a></li><li class="dropdown-item"><!----> <a href="/Notebook/gis/" class="nav-link">🌍GIS</a></li><li class="dropdown-item"><!----> <a href="/Notebook/software/" class="nav-link">️️🖱️软件</a></li><li class="dropdown-item"><!----> <a href="/Notebook/network/" class="nav-link">️️🐛网络工程</a></li><li class="dropdown-item"><!----> <a href="/Notebook/csharp/" class="nav-link router-link-exact-active router-link-active">🚗C#</a></li><li class="dropdown-item"><!----> <a href="/Notebook/unity/" class="nav-link">🎮Unity</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">设计</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/Notebook/design/" class="nav-link">🖌️UI</a></li></ul></div></div><div class="nav-item"><a href="/Notebook/bookmark/" class="nav-link">🏷书签整理</a></div><div class="nav-item"><a href="/Notebook/lint/" class="nav-link">✔️编码规范&amp;协同开发</a></div><div class="nav-item"><a href="http://shooterblog.site/Learn-JS-Demo/%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  📖知识脑图
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://jecyu.github.io/blog/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  🔧个人博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">🔗Github</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/Yolanda177" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Yolanda github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://jecyu.github.io/language-learning/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  英语学习
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://jecyu.github.io/Fe-Auto-Testing/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端自动化测试
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>C#</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/Notebook/csharp/" class="active sidebar-link">C#</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#七-类和集成" class="sidebar-link">七.类和集成</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#使用基类的引用" class="sidebar-link">使用基类的引用</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#构造函数的执行" class="sidebar-link">构造函数的执行</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#程序集间的继承" class="sidebar-link">程序集间的继承</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#成员访问修饰符" class="sidebar-link">成员访问修饰符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#抽象成员" class="sidebar-link">抽象成员</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#密封类" class="sidebar-link">密封类</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#静态类" class="sidebar-link">静态类</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#扩展方法" class="sidebar-link">扩展方法</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#八-表达式和运算符" class="sidebar-link">八.表达式和运算符</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#表达式" class="sidebar-link">表达式</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#字面量" class="sidebar-link">字面量</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#求值顺序" class="sidebar-link">求值顺序</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#简单算术运算符" class="sidebar-link">简单算术运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#求余运算符" class="sidebar-link">求余运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#关系比较运算符和相等比较运算符" class="sidebar-link">关系比较运算符和相等比较运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#递增运算符和递减运算符" class="sidebar-link">递增运算符和递减运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#条件逻辑运算符" class="sidebar-link">条件逻辑运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#逻辑运算符" class="sidebar-link">逻辑运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#移位运算符" class="sidebar-link">移位运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#赋值运算符" class="sidebar-link">赋值运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#条件运算符" class="sidebar-link">条件运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#一元算术运算符" class="sidebar-link">一元算术运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#用户定义运算符" class="sidebar-link">用户定义运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#运算符重载" class="sidebar-link">运算符重载</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#typeof-运算符" class="sidebar-link">typeof 运算符</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#九-语句" class="sidebar-link">九.语句</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是语句" class="sidebar-link">什么是语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#表达式语句" class="sidebar-link">表达式语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#控制流语句" class="sidebar-link">控制流语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#if语句" class="sidebar-link">if语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#if-else语句" class="sidebar-link">if...else语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#while语句" class="sidebar-link">while语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#do循环" class="sidebar-link">do循环</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#for循环" class="sidebar-link">for循环</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#switch语句" class="sidebar-link">switch语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#跳转语句" class="sidebar-link">跳转语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#break语句" class="sidebar-link">break语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#continue语句" class="sidebar-link">continue语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#标签语句" class="sidebar-link">标签语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#goto语句" class="sidebar-link">goto语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#using语句" class="sidebar-link">using语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#其他语句" class="sidebar-link">其他语句</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十-结构" class="sidebar-link">十.结构</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是结构" class="sidebar-link">什么是结构</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#结构是值类型" class="sidebar-link">结构是值类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#对结构赋值" class="sidebar-link">对结构赋值</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#构造函数和析构函数" class="sidebar-link">构造函数和析构函数</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#字段初始化时是不允许的" class="sidebar-link">字段初始化时是不允许的</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#结构是密封的" class="sidebar-link">结构是密封的</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#装箱和拆箱" class="sidebar-link">装箱和拆箱</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#结构作为返回值和参数" class="sidebar-link">结构作为返回值和参数</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十一-枚举" class="sidebar-link">十一.枚举</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#枚举" class="sidebar-link">枚举</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#位标志" class="sidebar-link">位标志</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#关于枚举的补充" class="sidebar-link">关于枚举的补充</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十二-数组" class="sidebar-link">十二.数组</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数组" class="sidebar-link">数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数组的类型" class="sidebar-link">数组的类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数组是对象" class="sidebar-link">数组是对象</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#一维数组和矩形数组" class="sidebar-link">一维数组和矩形数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#实例化一维数组或矩形数组" class="sidebar-link">实例化一维数组或矩形数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#访问数组元素" class="sidebar-link">访问数组元素</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#初始化数组" class="sidebar-link">初始化数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#交错数组" class="sidebar-link">交错数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#比较矩形数组和交错数组" class="sidebar-link">比较矩形数组和交错数组</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#foreach语句" class="sidebar-link">foreach语句</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数组协变" class="sidebar-link">数组协变</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数组继承的有用成员" class="sidebar-link">数组继承的有用成员</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#比较数组的类型" class="sidebar-link">比较数组的类型</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十三-委托" class="sidebar-link">十三.委托</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是委托" class="sidebar-link">什么是委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#委托概述" class="sidebar-link">委托概述</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#声明委托类型" class="sidebar-link">声明委托类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#创建委托对象" class="sidebar-link">创建委托对象</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#给委托赋值" class="sidebar-link">给委托赋值</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#组合委托" class="sidebar-link">组合委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#为委托添加方法" class="sidebar-link">为委托添加方法</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#为委托移除方法" class="sidebar-link">为委托移除方法</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#调用委托" class="sidebar-link">调用委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#委托的示例" class="sidebar-link">委托的示例</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#调用带返回值的委托" class="sidebar-link">调用带返回值的委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#调用带引用参数的委托" class="sidebar-link">调用带引用参数的委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#匿名方法" class="sidebar-link">匿名方法</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#lambda表达式" class="sidebar-link">Lambda表达式</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十四-事件" class="sidebar-link">十四.事件</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#发布者和订阅者" class="sidebar-link">发布者和订阅者</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#源代码组件概览" class="sidebar-link">源代码组件概览</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#声明事件" class="sidebar-link">声明事件</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#订阅事件" class="sidebar-link">订阅事件</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#触发事件" class="sidebar-link">触发事件</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#标准事件的用法" class="sidebar-link">标准事件的用法</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#事件访问器" class="sidebar-link">事件访问器</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十五-接口" class="sidebar-link">十五.接口</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是接口" class="sidebar-link">什么是接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#声明接口" class="sidebar-link">声明接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#实现接口" class="sidebar-link">实现接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#接口是引用类型" class="sidebar-link">接口是引用类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#接口和as运算符" class="sidebar-link">接口和as运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#实现多个接口" class="sidebar-link">实现多个接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#实具有重复成员的接口" class="sidebar-link">实具有重复成员的接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#多个接口的引用" class="sidebar-link">多个接口的引用</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#派生成员实现" class="sidebar-link">派生成员实现</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#显式接口成员实现" class="sidebar-link">显式接口成员实现</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#接口可以继承接口" class="sidebar-link">接口可以继承接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#不同类实现同一个接口的示例" class="sidebar-link">不同类实现同一个接口的示例</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十六-转换" class="sidebar-link">十六.转换</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是转换" class="sidebar-link">什么是转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#隐式转换" class="sidebar-link">隐式转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#显式转换和强制转换" class="sidebar-link">显式转换和强制转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#转换的类型" class="sidebar-link">转换的类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#数字的转换" class="sidebar-link">数字的转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#引用转换" class="sidebar-link">引用转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#装箱转换" class="sidebar-link">装箱转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#拆箱转换" class="sidebar-link">拆箱转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#用户自定义转换" class="sidebar-link">用户自定义转换</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#is运算符" class="sidebar-link">is运算符</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#as运算符" class="sidebar-link">as运算符</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十七-泛型" class="sidebar-link">十七.泛型</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#什么是泛型" class="sidebar-link">什么是泛型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#c-中的泛型" class="sidebar-link">C#中的泛型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型类" class="sidebar-link">泛型类</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#声明泛型类" class="sidebar-link">声明泛型类</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#创建构造类型" class="sidebar-link">创建构造类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#创建变量和实例" class="sidebar-link">创建变量和实例</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#类型参数的约束" class="sidebar-link">类型参数的约束</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型方法" class="sidebar-link">泛型方法</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#扩展方法和泛型类" class="sidebar-link">扩展方法和泛型类</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型结构" class="sidebar-link">泛型结构</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型委托" class="sidebar-link">泛型委托</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型接口" class="sidebar-link">泛型接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#协变" class="sidebar-link">协变</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#逆变" class="sidebar-link">逆变</a></li></ul></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#十八-枚举器和迭代器" class="sidebar-link">十八.枚举器和迭代器</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/Notebook/csharp/#枚举器和可枚举类型" class="sidebar-link">枚举器和可枚举类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#ienumerator接口" class="sidebar-link">IEnumerator接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#ienumerable接口" class="sidebar-link">IEnumerable接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#泛型枚举接口" class="sidebar-link">泛型枚举接口</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#迭代器" class="sidebar-link">迭代器</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#常见迭代器模式" class="sidebar-link">常见迭代器模式</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#产生多个可枚举类型" class="sidebar-link">产生多个可枚举类型</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#将迭代器作为属性" class="sidebar-link">将迭代器作为属性</a></li><li class="sidebar-sub-header"><a href="/Notebook/csharp/#迭代器的实质" class="sidebar-link">迭代器的实质</a></li></ul></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="c"><a href="#c" aria-hidden="true" class="header-anchor">#</a> C#</h1> <h2 id="七-类和集成"><a href="#七-类和集成" aria-hidden="true" class="header-anchor">#</a> 七.类和集成</h2> <h3 id="使用基类的引用"><a href="#使用基类的引用" aria-hidden="true" class="header-anchor">#</a> 使用基类的引用</h3> <p>派生类的实例由基类的实例加上派生类新增的成员组成。可以通过<strong>类型转换符</strong>和<strong>派生类对象的引用</strong>获得基类部分的引用：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyBaseClass
+    {
+        public void Print()
+        {
+            Console.WriteLine(&quot;This is the base class&quot;);
+        }
+    }
+    class MyDerivedClass: MyBaseClass
+    {
+        new public void Print() // 使用 new 修饰符 告诉编译器需要屏蔽基类的同名方法
+        {
+            Console.WriteLine(&quot;This is the dervied class&quot;);
+        }
+    }
+        class Program
+    {
+        static void Main(string[] args)
+        {
+             MyDerivedClass dervied = new MyDerivedClass();
+             MyBaseClass mybc = (MyBaseClass)dervied;
+             dervied.Print(); // This is the base class
+             mybc.Print(); // This is the dervied class
+        }
+    }
+</code></pre></div><p><strong>虚方法</strong>：使用基类的引用可以访问到派生类的成员</p> <ul><li>方法具有相同的签名和返回类型，可访问性也需要一致</li> <li>基类方法用 <code>virtual</code> 标注</li> <li>派生类方法用 <code>override</code> 标注</li> <li>不能复写 <code>static</code> 方法或非虚方法</li> <li>方法、属性和索引器都可以被声明为<code>virtual</code>和<code>override</code></li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyBaseClass
+    {
+        virtual public void Print()
+        {
+            Console.WriteLine(&quot;This is the base class&quot;);
+        }
+    }
+    class MyDerivedClass: MyBaseClass
+    {
+        override public void Print()
+        {
+            Console.WriteLine(&quot;This is the dervied class&quot;);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+             MyDerivedClass dervied = new MyDerivedClass();
+             MyBaseClass mybc = (MyBaseClass)dervied;
+             dervied.Print(); // This is the dervied class
+             mybc.Print(); // This is the dervied class
+        }
+    }
+</code></pre></div><p>注意：无论继承的层次有多少，如果使用基类部分的引用去调用一个覆写方法时，会根据派生层往上寻找，直到找到最高派生层对应被标记的<code>override</code>方法</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyBaseClass
+    {
+        virtual public void Print()
+        {
+            Console.WriteLine(&quot;This is the base class&quot;);
+        }
+    }
+    class MyDerivedClass: MyBaseClass
+    {
+        override public void Print()
+        {
+            Console.WriteLine(&quot;This is the dervied class&quot;);
+        }
+    }
+    class SecondDerived: MyDerivedClass
+    {
+        override public void Print()
+        // new public void Print() // 如果此处用的是 new，则下面 Main 中第二个应打印 This is the dervied class
+        {
+            Console.WriteLine(&quot;This is the second deroved class&quot;);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+             SecondDerived dervied = new SecondDerived();
+             MyBaseClass mybc = (MyBaseClass)dervied;
+             dervied.Print(); // This is the second deroved class
+             mybc.Print(); // This is the second deroved class
+        }
+    }
+</code></pre></div><h3 id="构造函数的执行"><a href="#构造函数的执行" aria-hidden="true" class="header-anchor">#</a> 构造函数的执行</h3> <p>创造一个派生类的实例过程：初始化对象的所有实例成员——&gt;调用基类无参数构造函数——&gt;执行自己的构造函数体</p> <p>因为构造函数可以重载，如果希望派生类使用一个指定的构造函数而不是无参数的构造函数，需要在<em>构造函数初始化语句</em>中指定：（两种形式）</p> <ul><li>第一种：使用关键字<code>base</code>指明希望使用的基类构造函数（即指定执行继承类的哪一个构造函数）</li> <li>第二种：使用关键字<code>this</code>指明应该使用当前类的哪一个构造函数（即指定先执行当前类的哪一个构造函数）</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>      // 类 MyBaseClass 的构造函数
+      public MyBaseClass(string s, int x)
+      {
+          // 执行代码
+      }
+      // 类 MyDerivedClass 的构造函数
+      public MyDerivedClass(int x, string s): base(s, x)
+      {
+          // 执行代码
+      }
+      // 第二种方式
+  class MyBaseClass
+  {
+      public MyBaseClass()
+      {
+          Console.WriteLine(&quot;this is MyBaseClass constructor&quot;);
+      }
+  }
+  class MyDerivedClass: MyBaseClass
+  {
+      readonly int firstVar;
+      readonly double secondVar;
+      public string UserName;
+      private MyDerivedClass()
+      {
+          firstVar = 20;
+          secondVar = 30.5;
+          Console.WriteLine(&quot;this is first constructor&quot;);
+      }
+      public MyDerivedClass(string firstName): this()
+      {
+          UserName = firstName;
+          UserIdNumber = -1;
+          Console.WriteLine(&quot;this is second constructor&quot;);
+      }
+  }
+  // Main
+  MyDerivedClass dervied = new MyDerivedClass(&quot;test&quot;);
+  // 打印
+  // this is MyBaseClass constructor
+  // this is first constructor
+  // this is second constructor
+</code></pre></div><p><strong>类的可访问级别</strong>：</p> <ul><li>public：可以被系统内任何程序集中的代码访问</li> <li>internal：只能被自己所在的程序集内的类访问（默认的访问级别）</li></ul> <h3 id="程序集间的继承"><a href="#程序集间的继承" aria-hidden="true" class="header-anchor">#</a> 程序集间的继承</h3> <p>C# 允许在不同的程序集内定义的基类来派生类：也就是只要 A程序集的一个基类显示声明 <code>public</code>,当在VS添加对包含基类的程序集的引用时，就能够在 B程序集内继承 A程序集的类</p> <p>如果要引用其他程序集中的类和类型，可以在文件顶部放置一个<code>using</code>指令，并带上将要访问的类或类型所在的命名空间</p> <p><strong>注意</strong>，添加引用和增加<code>using</code>指令是两回事，添加引用时告诉编译器所需的类型在哪里定义；增加<code>using</code>指令时允许引用其他的类而不必使用它们的完全限定名称</p> <div class="language-cs extra-class"><pre class="language-text"><code>// ClassDemo 程序集（项目）
+namespace ClassDemo.BaseClassNS
+{
+    public class BaseClass
+    {
+        public void PrintMe()
+        {
+            Console.WriteLine(&quot;I am BaseClass&quot;);
+        }
+    }
+}
+// HelloWorld 程序集（项目）
+using ClassDemo.BaseClassNS;
+
+namespace HelloWorld
+{
+    class DerivedClass: BaseClass
+    {
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DerivedClass mdc = new DerivedClass();
+            mdc.PrintMe(); // I am BaseClass
+        }
+    }
+}
+</code></pre></div><h3 id="成员访问修饰符"><a href="#成员访问修饰符" aria-hidden="true" class="header-anchor">#</a> 成员访问修饰符</h3> <p>通用内容:</p> <ul><li>所有在同一类中显示声明的成员，在同一类中都是可见的，无论访问性如何</li> <li>继承的成员不在类的声明中显式声明，所以继承的成员对派生类的成员既可以是可见的，也可以是不可见的</li> <li>五种访问级别：public、private、protected、internal、protected internal</li> <li>必须对每个成员指定访问级别，不指定默认为private</li> <li>成员不能比所在类有更高的访问性，如果类仅限于所在的程序集访问，则它成员也不能从程序集外部访问
+<img src="/Notebook/assets/img/7-16.4a980c73.png" alt=""> <img src="/Notebook/assets/img/7-17.8e7f6884.png" alt=""> <img src="/Notebook/assets/img/7-18.cec78d48.png" alt=""> <img src="/Notebook/assets/img/7-19.e25bfbaf.png" alt=""> <img src="/Notebook/assets/img/7-20.6bf7a260.png" alt=""></li></ul> <p><strong>总结</strong>：</p> <ul><li>private：只在类的内部可访问</li> <li>internal：对该程序集内的所有类可访问</li> <li>protected：对所有继承该类的类可访问</li> <li>protected internal：对所有继承该类或在该程序集内声明的类可访问</li> <li>public：对任何类可访问</li></ul> <p><img src="/Notebook/assets/img/7-2.7a1bca5a.png" alt=""></p> <h3 id="抽象成员"><a href="#抽象成员" aria-hidden="true" class="header-anchor">#</a> 抽象成员</h3> <p><strong>抽象成员</strong>是指设计为被覆写的函数成员：</p> <ul><li>必须是函数成员，即方法、属性、事件、索引（字段和常量不能是抽象成员）</li> <li>必须用 <code>abstract</code>修饰符标记</li> <li>不能有实现代码</li> <li>只能在抽象类中声明</li> <li>抽象成员在派生类中必须被覆写，但<code>virtual</code>修饰符不能附加到<code>abstract</code>上</li> <li>类似虚成员，派生类中的抽象成员实现必须指定<code>override</code>修饰符</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    abstract class Example2
+    {
+        abstract public void PrintStuff(string s);
+        abstract public int MyProperty
+        {
+            get;
+            set;
+        }
+    }
+</code></pre></div><p><strong>抽象类</strong>是指设计为被继承的类：</p> <ul><li>抽象类只能用作其他类的基类，不能创建实例</li> <li>使用<code>abstract</code>修饰符声明</li> <li>抽象类的成员可以包含普通成员和抽象成员</li> <li>抽象类可以派生自另外一个抽象类</li> <li>任何派生自抽象类的类必须使用<code>override</code>关键字实现该类的所有抽象成员，除非派生类自己也是抽象类</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    abstract class AbClass
+    {
+        abstract public void PrintStuff(string s);
+        public void IdentifyBase() 
+        {
+            Console.WriteLine(&quot;I am AbClass&quot;);
+        }
+    }
+    class MyAbClass: AbClass
+    {
+        override public void PrintStuff(string s)
+        {
+            Console.WriteLine(&quot;{0}&quot;, s);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyAbClass mab = new MyAbClass();
+            mab.PrintStuff(&quot;test&quot;); // test 调用抽象方法
+            mab.IdentifyBase(); // I am AbClass 调用继承的方法
+        }
+    }
+</code></pre></div><h3 id="密封类"><a href="#密封类" aria-hidden="true" class="header-anchor">#</a> 密封类</h3> <p><strong>密封类</strong>刚好与抽象类相反</p> <ul><li>只能被用作独立的类，不能用作基类</li> <li>使用<code>sealed</code>修饰符标注</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    sealed class MyClass 
+    {
+        // 
+    }
+</code></pre></div><h3 id="静态类"><a href="#静态类" aria-hidden="true" class="header-anchor">#</a> 静态类</h3> <p><strong>静态类</strong>中的所有成员都是静态的，用于存放不受实例数据影响的数据和函数，常见的用途是创建一个包含一组数学方法和值的数学库</p> <ul><li>使用<code>static</code>修饰符标注</li> <li>所有成员都是静态的</li> <li>类可以有一个静态构造函数，但不能有实例构造函数，不能创建该类的实例</li> <li>静态类是隐式密封的，所以不能继承静态类</li> <li>使用类名和成员名访问</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    static class MyMath
+    {
+        public static float PI = 3.14f;
+        public static bool IsOdd(int x)
+        {
+            return x % 2 == 1;
+        }
+        public static  int Times2(int x)
+        {
+            return 2 * x;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int val = 3;
+            Console.WriteLine(&quot;{0} is Odd is {1}&quot;, val, MyMath.IsOdd(val));
+            Console.WriteLine(&quot;{0} * 2 = {1}&quot;, val, MyMath.Times2(val));
+        }
+    }
+</code></pre></div><h3 id="扩展方法"><a href="#扩展方法" aria-hidden="true" class="header-anchor">#</a> 扩展方法</h3> <p><strong>扩展方法</strong>允许编写的方法和声明它的类之外的类关联</p> <ul><li>声明扩展方法的类必须声明为<code>static</code></li> <li>扩展方法本身必须声明为<code>static</code></li> <li>扩展方法必须包含关键字<code>this</code>作为它的第一个参数类型，并在后面跟着它所扩展的类的名称</li></ul> <p><img src="/Notebook/assets/img/7-22.11097efc.png" alt=""></p> <div class="language-cs extra-class"><pre class="language-text"><code>sealed class MyData
+    {
+        private double D1;
+        private double D2;
+        private double D3;
+        public MyData(double d1, double d2, double d3)
+        {
+            D1 = d1;
+            D2 = d2;
+            D3 = d3;
+        }
+        public double Sum()
+        {
+            return D1 + D2 + D3;
+        }
+    }
+    static class ExtendMyData
+    {
+        public static double Average(this MyData md)
+        {
+            return md.Sum()/3;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+ 
+            MyData md = new MyData(3, 4, 5);
+            Console.WriteLine(&quot;Average: {0}&quot;, ExtendMyData.Average(md)); // 静态调用形式
+            Console.WriteLine(&quot;Average: {0}&quot;, md.Average()); // 当作类的实例成员调用 等价于上一行
+        }
+    }
+</code></pre></div><h2 id="八-表达式和运算符"><a href="#八-表达式和运算符" aria-hidden="true" class="header-anchor">#</a> 八.表达式和运算符</h2> <h3 id="表达式"><a href="#表达式" aria-hidden="true" class="header-anchor">#</a> 表达式</h3> <p><strong>运算符</strong>是一个符号，表示返回单个结果的操作</p> <p><strong>操作数</strong>是指作为运算符输入的数据元素，有：</p> <ul><li>字面量</li> <li>常量</li> <li>变量</li> <li>方法调用</li> <li>元素访问器</li> <li>其他表达式</li></ul> <p><strong>表达式</strong>是运算符和操作数的字符串</p> <h3 id="字面量"><a href="#字面量" aria-hidden="true" class="header-anchor">#</a> 字面量</h3> <p><strong>字面量</strong>是源代码中键入的数字或字符串，表示一个指定类型的明确的、固定的值</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    static void Main() {
+        Console.WriteLine(&quot;{0}&quot;, 1024); // 整数字面量
+        Console.WriteLine(&quot;{0}&quot;, 3.1416); // 双精度字面量
+        Console.WriteLine(&quot;{0}&quot;, 3.1416F); // 浮点型字面量
+        Console.WriteLine(&quot;{0}&quot;, true); // 布尔型字面量
+        Console.WriteLine(&quot;{0}&quot;, 'x'); // 字符型字面量
+        Console.WriteLine(&quot;{0}&quot;, 'Hi there'); // 字符串型字面量
+    }
+</code></pre></div><p><strong>整数字面量</strong>最常用的字面量，没有小数点，带可选的后缀，指明整数类型
+<img src="/Notebook/assets/img/8-1.16497048.png" alt=""></p> <p><strong>实数字面量</strong>组成：</p> <ul><li>十进制数字</li> <li>一个可选的小数点</li> <li>一个可选的指数部分</li> <li>一个可选的后缀</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    float f1 = 236F;
+    dpuble d1 = 236.714;
+    double d2 = .35192;
+    double d3 = 6.338e-26;
+</code></pre></div><p><strong>字符字面量</strong>由两个单引号内的字符组成，类型为<code>char</code>，可以是</p> <ul><li>单个字符</li> <li>一个简单转义序列</li> <li>一个十六进制转义序列</li> <li>一个<code>Unicode</code>转义序列</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    char c1 = 'd'; // 单个字符
+    char c2 = '\n'; // 简单转移序列
+    char c3 = '\x0061'; // 十六进制转义序列
+    char c4 = '\u005a'; // Unicode转义序列
+</code></pre></div><p><img src="/Notebook/assets/img/8-3.6463840c.png" alt=""></p> <p><strong>字符串字面量</strong>由双引号标记，分为两种：</p> <ul><li>常规字符串字面量</li> <li>逐字字符串字面量：以<code>@</code>字符为前缀，双引号内的转义字符串不会被求值</li></ul> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    string rst1 = &quot;Hi there!&quot;; // Hi there!
+    string vst1 = @&quot;Hi there!&quot;; // Hi there!
+
+    string rst2 = &quot;Value 1 \t 5, Val2 \t 10&quot;; // Value 1     5, Val2     10 解释制表符转义字符串
+    string vst2 = @&quot;Value 1 \t 5, Val2 \t 10&quot;; // Value 1 \t 5, Val2 \t 10 不解释制表符
+</code></pre></div><h3 id="求值顺序"><a href="#求值顺序" aria-hidden="true" class="header-anchor">#</a> 求值顺序</h3> <p><strong>运算符优先级</strong> <img src="/Notebook/assets/img/8-4.2afda9d6.png" alt=""></p> <p><strong>运算符结合性</strong>：当两个连续的运算符有相同的优先级时，根据操作结合性判断优先级：</p> <ul><li>左结合运算符从左至右求值</li> <li>右结合运算符从右至左求值</li> <li>除赋值运算符以外，其他<em>二元运算符都是左结合</em></li> <li><em>赋值运算符和条件运算符都是右结合</em></li></ul> <p>此外可以用<strong>圆括号</strong>显式设定子表达式的求值顺序，从嵌套的最内层到最外层顺序</p> <h3 id="简单算术运算符"><a href="#简单算术运算符" aria-hidden="true" class="header-anchor">#</a> 简单算术运算符</h3> <p><strong>简单算术运算符</strong>执行基本的四则运算（加减乘除），都是二元<em>左结合</em>运算符</p> <h3 id="求余运算符"><a href="#求余运算符" aria-hidden="true" class="header-anchor">#</a> 求余运算符</h3> <p><strong>求余运算符</strong>(%)是用第二个操作数除第一个操作数，忽略商，返回余数，是二元<em>左结合</em>运算符</p> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    0 % 3 = 0; // 0除以3得0余0
+    1 % 3 = 1; // 1除以3得0余1
+    2 % 3 = 2; // 2除以3得0余2
+    3 % 3 = 0; // 3除以3得1余0
+    4 % 3 = 1; // 4除以3得1余1 
+</code></pre></div><h3 id="关系比较运算符和相等比较运算符"><a href="#关系比较运算符和相等比较运算符" aria-hidden="true" class="header-anchor">#</a> 关系比较运算符和相等比较运算符</h3> <p><strong>关系比较运算符</strong>和<strong>相等比较运算符</strong>都是二元<em>左结合</em>运算符：</p> <ul><li>小于：&lt;</li> <li>大于：&gt;</li> <li>小于等于：&lt;=</li> <li>大于等于：&gt;=</li> <li>等于：=</li> <li>不等于：!=</li></ul> <p><strong>引用类型比较</strong>，只比较它们的<em>引用</em>:</p> <ul><li>引用相等，也就是说指向内存相同对象，则相等性比较为<code>true</code>,否则为<code>false</code></li> <li>是一种浅比较</li></ul> <p>注意，<code>string</code>类型对象也是引用类型，但它的比较方式不同于上述，它们比较的是长度和内容（区分大小写），是一种深比较；<em>委托</em>也是引用类型，使用的是深比较</p> <h3 id="递增运算符和递减运算符"><a href="#递增运算符和递减运算符" aria-hidden="true" class="header-anchor">#</a> 递增运算符和递减运算符</h3> <p><strong>递增运算符</strong>和<strong>递减运算符</strong>都是二元<em>左结合</em>运算符，分别对操作数加1、减1：</p> <ul><li>前置形式：++x或--y</li> <li>后置形式：x++或y--</li></ul> <table><thead><tr><th>表达式：x=10</th> <th>返回表达式的值</th> <th>计算后变量的值</th></tr></thead> <tbody><tr><td>++x</td> <td>11</td> <td>11</td></tr> <tr><td>x++</td> <td>10</td> <td>11</td></tr> <tr><td>--x</td> <td>9</td> <td>9</td></tr> <tr><td>x--</td> <td>10</td> <td>9</td></tr></tbody></table> <h3 id="条件逻辑运算符"><a href="#条件逻辑运算符" aria-hidden="true" class="header-anchor">#</a> 条件逻辑运算符</h3> <p><strong>逻辑运算符</strong>用于比较或否定它们的操作数的逻辑值：</p> <ul><li>逻辑与(&amp;&amp;)和逻辑或(||)是二元<em>左结合</em>运算符，逻辑非(!)是一元运算符</li> <li>逻辑与(&amp;&amp;)和逻辑或(||)使用<em>短路</em>模式，如果前一个表达式为<code>false</code>则不会执行后一个表达式</li></ul> <h3 id="逻辑运算符"><a href="#逻辑运算符" aria-hidden="true" class="header-anchor">#</a> 逻辑运算符</h3> <p><strong>按位逻辑运算符</strong>用于设置位组的方法参数，除了<em>按非</em>是一元运算符外，其他都是二元<em>左结合</em>运算符</p> <h3 id="移位运算符"><a href="#移位运算符" aria-hidden="true" class="header-anchor">#</a> 移位运算符</h3> <p><strong>按位移位运算符</strong>是指向左或向右把位组移动指定数量个位置，空出的位用0或1填充，都是二元<em>左结合</em>运算符</p> <h3 id="赋值运算符"><a href="#赋值运算符" aria-hidden="true" class="header-anchor">#</a> 赋值运算符</h3> <p><strong>赋值运算符</strong>是二元<em>右结合</em>运算符</p> <h3 id="条件运算符"><a href="#条件运算符" aria-hidden="true" class="header-anchor">#</a> 条件运算符</h3> <p><strong>条件运算符</strong>是基于条件的结果，返回两个值之一的三元运算符</p> <h3 id="一元算术运算符"><a href="#一元算术运算符" aria-hidden="true" class="header-anchor">#</a> 一元算术运算符</h3> <p><strong>一元算术运算符</strong>设置数字值的符号</p> <h3 id="用户定义运算符"><a href="#用户定义运算符" aria-hidden="true" class="header-anchor">#</a> 用户定义运算符</h3> <p><strong>用户定义的类型转换</strong>可以为自己的类或结构定义隐式转换和显式转换，即可将用户定义类型的对象转换成某个其他类型：</p> <ul><li>隐式转换：当决定载特定的上下文中使用特定类型时，如有必要，编译器会自动执行转换，使用<code>implicit</code>关键字</li> <li>显式转换：编译器只在使用显式转换运算符时才执行转换，使用<code>explicit</code>关键字</li></ul> <p><strong>显式转换</strong>，需要在转换时用上<em>强制转化运算符</em>，由一对圆括号加上目标类型组成</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class LimitedInt
+    {
+        const int MaxValue = 100;
+        public int MinValue = 0;
+        public static implicit operator int(LimitedInt li)
+        {
+            Console.WriteLine(&quot;1&quot;);
+            return li.TheValue;
+        }
+        public static explicit operator LimitedInt(int x)
+        {
+            Console.WriteLine(&quot;2&quot;);
+            LimitedInt li = new LimitedInt();
+            li.TheValue = x;
+            return li;
+        }
+        private int _theValue = 0;
+        public int TheValue
+        {
+            get {
+                Console.WriteLine(&quot;get&quot;);
+                return _theValue;
+            }
+            set
+            {
+                if (value &lt; MinValue)
+                {
+                    _theValue = 0;
+                } else
+                {
+                    Console.WriteLine(&quot;set&quot;);
+                    _theValue = value &gt; MaxValue ? MaxValue : value;
+                }
+            }
+        }
+        class Program {
+            static void Main() {
+                Limited li = 500; // 隐式转换
+                int value = (int) li; // 显式转换
+            }
+        }
+        // 执行顺序为
+        // 2 set 1 get get li: 100, value: 100
+    }
+</code></pre></div><h3 id="运算符重载"><a href="#运算符重载" aria-hidden="true" class="header-anchor">#</a> 运算符重载</h3> <p><strong>运算符重载</strong>允许用户定义C#运算符如何操作自定义类型的操作数：</p> <ul><li>运算符重载只能用于类和结构</li> <li>为类或结构重载一个运算符x，可以声明一个名称为<code>operator x</code>的方法并实现它的行为</li> <li>一元运算符的重载方法带一个单独的<code>class</code>或<code>struct</code>类型的参数</li> <li>二元运算符的重载方法带两个参数，至少有一个必须是<code>class</code>或<code>struct</code>类型</li> <li>声明时必须同时使用<code>public</code>和<code>static</code>修饰符</li> <li>运算符必须是操作类或结构的成员</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class LimitedIntOverLoad
+    {
+        const int MaxValue = 100;
+        const int MinValue = 0;
+        public static LimitedIntOverLoad operator -(LimitedIntOverLoad x)
+        {
+            Console.WriteLine(&quot;1&quot;);
+            LimitedIntOverLoad li = new LimitedIntOverLoad();
+            li.TheValue = 0;
+            return li;
+        }
+        public static LimitedIntOverLoad operator -(LimitedIntOverLoad x, LimitedIntOverLoad y)
+        {
+            Console.WriteLine(&quot;2&quot;);
+            LimitedIntOverLoad li = new LimitedIntOverLoad();
+            li.TheValue = x.TheValue - y.TheValue;
+            return li;
+        }
+        public static LimitedIntOverLoad operator +(LimitedIntOverLoad x, double y)
+        {
+            Console.WriteLine(&quot;3&quot;);
+            LimitedIntOverLoad li = new LimitedIntOverLoad();
+            li.TheValue = x.TheValue + (int)y;
+            return li;
+        }
+        private int _theValue = 0;
+        public int TheValue
+        {
+            get
+            {
+                Console.WriteLine(&quot;get&quot;);
+                return _theValue;
+            }
+            set
+            {
+                if (value &lt; MinValue)
+                {
+                    _theValue = 0;
+                }
+                else
+                {
+                    Console.WriteLine(&quot;set&quot;);
+                    _theValue = value &gt; MaxValue ? MaxValue : value;
+                }
+            }
+        }
+    }
+    class Program () {
+        static void Main() {
+            LimitedIntOverLoad li1 = new LimitedIntOverLoad();
+            LimitedIntOverLoad li2 = new LimitedIntOverLoad();
+            LimitedIntOverLoad li3 = new LimitedIntOverLoad();
+            li1.TheValue = 10;
+            li2.TheValue = 26;
+            Console.WriteLine(&quot;li1:{0}, li2: {1}&quot;, li1.TheValue, li2.TheValue); // 10 , 26
+            li3 = -li1;
+            Console.WriteLine(&quot;-{0} = {1}&quot;, li1.TheValue, li3.TheValue); // -10 = 0
+            li3 = li2 - li1;
+            Console.WriteLine(&quot;{0} - {1} = {2}&quot;, li2.TheValue, li1.TheValue, li3.TheValue); // 26 - 10 = 16
+            li3 = li1 - li2;
+            Console.WriteLine(&quot;{0} - {1} = {2}&quot;, li1.TheValue, li2.TheValue, li3.TheValue); // 10 - 26 = 0
+        }
+    }
+</code></pre></div><p>注意。并不是所有运算符都能够重载，只有以下几种才可以：</p> <ul><li>一元运算符：+、-、!、~、++、--、true、false</li> <li>二元运算符：+、-、*、/、%、&amp;、|、^、&lt;&lt;、&gt;&gt;、== 、!==、&lt;、&gt;、&lt;=、&gt;=</li> <li>递增和递减运算符也能重载，但无后置前置之分</li></ul> <p><strong>重载运算符不能做的事情</strong>：</p> <ul><li>创建新得运算符</li> <li>改变运算符的语法</li> <li>重新定义运算符如何处理预定义类型</li> <li>改变运算符的优先级或结合性</li></ul> <h3 id="typeof-运算符"><a href="#typeof-运算符" aria-hidden="true" class="header-anchor">#</a> typeof 运算符</h3> <p><strong>typeof运算符</strong>返回作为其参数的任何类型的<code>System.Type</code>对象，不能重载的一元运算符</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class SomeClass
+    {
+        public int Field1;
+        public int Field2;
+        public void Method1() { }
+        public int Method2()
+        {
+            return 1;
+        }
+    }
+
+    // Program.cs
+    using System.Reflection;
+    class Program {
+        Type t = typeof(SomeClass);
+        FieldInfo[] fi = t.GetFields();
+        MethodInfo[] mi = t.GetMethods();
+        foreach (FieldInfo f in fi)
+            Console.WriteLine(&quot;Field: {0}&quot;, f.Name);
+        foreach (MethodInfo m in mi)
+            Console.WriteLine(&quot;Method: {0}&quot;, m.Name);
+        //Field: Field1
+        //Field: Field2
+        //Method: Method1
+        //Method: Method2
+        //Method: GetType
+        //Method: ToString
+        //Method: Equals
+        //Method: GetHashCode
+    }
+</code></pre></div><h2 id="九-语句"><a href="#九-语句" aria-hidden="true" class="header-anchor">#</a> 九.语句</h2> <h3 id="什么是语句"><a href="#什么是语句" aria-hidden="true" class="header-anchor">#</a> 什么是语句</h3> <p><strong>语句</strong>是描述某个类型或让程序执行某某个动作的源代码指令：</p> <ul><li>声明语句 声明类型或变量</li> <li>嵌入语句 执行动作或管理控制流</li> <li>标签语句 控制跳转</li></ul> <p><em>空语句</em>由一个分号组成</p> <h3 id="表达式语句"><a href="#表达式语句" aria-hidden="true" class="header-anchor">#</a> 表达式语句</h3> <p><code>x=10;</code>这个表达式把运算符右边的值赋给变量x引用的内存位置，虽然这可能是这条语句的主要动机，但却被视为<em>副作用</em></p> <h3 id="控制流语句"><a href="#控制流语句" aria-hidden="true" class="header-anchor">#</a> 控制流语句</h3> <p><strong>条件执行语句</strong>是指依据一个条件执行或跳过 一个代码片段：</p> <ul><li>if</li> <li>if...else</li> <li>switch</li></ul> <p><strong>循环语句</strong>是指重复执行一个代码片段：</p> <ul><li>while</li> <li>do</li> <li>for</li> <li>foreach</li></ul> <p><strong>跳转语句</strong>是指把控制流从一个代码片段改变到另一个代码片段中的指定语句：</p> <ul><li>break</li> <li>continue</li> <li>return</li> <li>goto</li> <li>throw</li></ul> <p><em>注意</em>，条件执行和循环结构必须有一个<strong>测试表达式</strong>或<strong>条件</strong>决定程序在哪里继续执行，这个测试表达式必须返回<code>bool</code>型值</p> <h3 id="if语句"><a href="#if语句" aria-hidden="true" class="header-anchor">#</a> if语句</h3> <p><img src="/Notebook/assets/img/9-1.ea7327d1.png" alt=""></p> <h3 id="if-else语句"><a href="#if-else语句" aria-hidden="true" class="header-anchor">#</a> if...else语句</h3> <p><img src="/Notebook/assets/img/9-2.3c51f58c.png" alt=""></p> <h3 id="while语句"><a href="#while语句" aria-hidden="true" class="header-anchor">#</a> while语句</h3> <p><img src="/Notebook/assets/img/9-3.405d50db.png" alt=""></p> <h3 id="do循环"><a href="#do循环" aria-hidden="true" class="header-anchor">#</a> do循环</h3> <p><img src="/Notebook/assets/img/9-4.ba83aeac.png" alt=""></p> <h3 id="for循环"><a href="#for循环" aria-hidden="true" class="header-anchor">#</a> for循环</h3> <p><img src="/Notebook/assets/img/9-5.3d8c95fc.png" alt=""></p> <p><strong>for循环</strong>表达式：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    for( Initializer ; TestExpr; IterationExpr )
+        statement
+</code></pre></div><ul><li>for循环开始，<strong>只执行一次</strong> Initializer</li> <li>对 TestExpr 求值，为 true 则执行 statement，接着执行 IterationExpr</li> <li>再重复执行一步，如果为 false 就执行 statement 以外的语句</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    for(int i = 0; i &lt; 3; i++) // 注意变量 i 值在 for 语句的内部可见
+    {
+        Console.WriteLine(&quot;i: {0}&quot;, i);
+    }
+    // 0 1 2
+</code></pre></div><p><strong>注意</strong>：</p> <ul><li>任何声明在 initializer中的变量只在 for语句中可见</li> <li>初始化和迭代表达式都可以包含多个表达式，用逗号隔开</li></ul> <h3 id="switch语句"><a href="#switch语句" aria-hidden="true" class="header-anchor">#</a> switch语句</h3> <p><img src="/Notebook/assets/img/9-6.55f929ef.png" alt=""></p> <p><strong>注意</strong>：</p> <ul><li>一个<code>switch</code>语句可以有任意数目的分支，包括没有分支，<code>default</code>段不是必须的，但有<code>default</code>段可以捕获潜在错误，是个好习惯</li> <li><code>case</code>关键字后的分支标签必须是一个常量表达式，也就是说必须在<em>编译时</em>就完全获取运算结果，且类型应与测试表达式的一致</li> <li>每一个<code>switch</code>段，包括可选的<code>default</code>段，都必须以一个跳转语句结尾</li> <li>C#中不可执行一个<code>switch</code>段中的代码就直接执行下一个段的代码</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    for( int x = 1; x &lt; 6; x++ )
+    {
+        switch(x)
+        {
+            case 2:
+                Console.WriteLine(&quot;x is {0} -- In Case 2&quot;, x);
+                break;
+            case 3:
+                Console.WriteLine(&quot;x is {0} -- In Case 3&quot;, x);
+                break;
+            case 4:
+                Console.WriteLine(&quot;x is {0} -- In Case 4&quot;, x);
+                break;
+            default:
+                Console.WriteLine(&quot;x is {0} -- In Default case&quot;, x);
+                break;
+        }
+        //x is 1-- In Default case
+        //x is 2-- In Case 2
+        //x is 3-- In Case 3
+        //x is 4-- In Case 4
+        //x is 5-- In Default case
+    }
+</code></pre></div><h3 id="跳转语句"><a href="#跳转语句" aria-hidden="true" class="header-anchor">#</a> 跳转语句</h3> <p><strong>跳转语句</strong>包括：break; continue; return; goto; throw;</p> <h3 id="break语句"><a href="#break语句" aria-hidden="true" class="header-anchor">#</a> break语句</h3> <p><strong>break语句</strong>可用于 switch、for、foreach、while、do等语句中，<code>break</code>导致执行跳出<em>最内层封装语句</em></p> <h3 id="continue语句"><a href="#continue语句" aria-hidden="true" class="header-anchor">#</a> continue语句</h3> <p><strong>continue语句</strong>可用于 while、do、for、foreach等语句中，<code>continue</code>导致执行跳出最内层封装语句的<em>顶端</em></p> <div class="language-cs extra-class"><pre class="language-text"><code>    for(int x = 0; x &lt; 5; x++)
+    {
+        if (x &lt; 3)
+            continue;
+        Console.WriteLine(&quot;Value of x is {0}&quot;, x);
+        // Value of x is 3
+        // Value of x is 4
+    }
+</code></pre></div><h3 id="标签语句"><a href="#标签语句" aria-hidden="true" class="header-anchor">#</a> 标签语句</h3> <p><strong>标签语句</strong>：由一个<em>标识符</em>后面跟着一个<em>冒号</em>再跟着<em>一条语句</em>组成：</p> <ul><li>Indentifier: Statement;</li> <li>标签语句只执行<code>Statement</code>部分，这个标签是用于允许控制流从代码的其他部分转移到该语句</li> <li>标签语句只能用于<em>块内部</em>，作用域范围在它声明的块内（和任何嵌套在该块内部的块）</li></ul> <p><strong>标签</strong>标签语句中的表示符可以是任何有效的标识符，包括在重叠作用域内声明的标识符如本地变量或参数名：</p> <ul><li>不能是关键字</li> <li>不能在重叠的范围内与另外一个标签标识符相同</li></ul> <h3 id="goto语句"><a href="#goto语句" aria-hidden="true" class="header-anchor">#</a> goto语句</h3> <p><strong>goto语句</strong>：无条件转移控制到一个<em>标签语句</em>，结构是：</p> <ul><li>goto Indentifier;</li> <li>goto语句必须在标签语句的<em>作用域之内</em></li> <li>goto语句可以<em>跳到</em>它本身所在块内的任何标签语句，或<em>跳出</em>到任何它<em>被嵌套</em>的块内的标签语句</li> <li>goto语句不能<em>跳入</em>任何嵌套在该语句本身所在块内部的任何块</li> <li>还可用于<code>switch</code>语句，即：goto case ConstantExpr; 和 goto default;</li></ul> <h3 id="using语句"><a href="#using语句" aria-hidden="true" class="header-anchor">#</a> using语句</h3> <p><strong>using语句</strong>能帮助减少意外的运行时错误带来的潜在问题，它整洁地包装了资源地使用，有两种形式：</p> <ul><li>using( ResourceType Identifier = Expression ) Statement</li> <li><pre><code>             ↑分配资源                     ↑使用资源
+</code></pre></li> <li>using( Expression ) EmbeddedStatement</li> <li><pre><code>    ↑资源          ↑使用资源
+</code></pre></li></ul> <p>注意：</p> <ul><li>using语句不同于using指令</li></ul> <h3 id="其他语句"><a href="#其他语句" aria-hidden="true" class="header-anchor">#</a> 其他语句</h3> <p><img src="/Notebook/assets/img/9-16.5ff1b2af.png" alt=""></p> <h2 id="十-结构"><a href="#十-结构" aria-hidden="true" class="header-anchor">#</a> 十.结构</h2> <h3 id="什么是结构"><a href="#什么是结构" aria-hidden="true" class="header-anchor">#</a> 什么是结构</h3> <p><strong>结构</strong>是程序员定义的数据类型：</p> <ul><li>与类相似，有数据成员和函数成员</li> <li>结构是值类型，类是引用类型</li> <li>结构是隐式密封的，不能被派生</li> <li>用关键字<code>struct</code>声明</li></ul> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    struct Point
+    {
+        public int x;
+        public int y;
+    }
+</code></pre></div><h3 id="结构是值类型"><a href="#结构是值类型" aria-hidden="true" class="header-anchor">#</a> 结构是值类型</h3> <p>结构变量含有自己的数据：</p> <ul><li>结构类型的变量不能为<code>null</code></li> <li>两个结构变量不能引用同一个对象</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    struct Simple
+    {
+        public int x;
+        public int y;
+    }
+    class CSimple
+    {
+        public int x;
+        public int y
+    }
+    class Program {
+        static void Main() {
+            CSimple cs = new CSimple();
+            Simple ss = new Simple();
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/10-1.d8b3aff8.png" alt=""></p> <h3 id="对结构赋值"><a href="#对结构赋值" aria-hidden="true" class="header-anchor">#</a> 对结构赋值</h3> <div class="language-cs extra-class"><pre class="language-text"><code>    struct Simple
+    {
+        public int x;
+        public int y;
+    }
+    class CSimple
+    {
+        public int x;
+        public int y
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+        CSimple cs1 = new CSimple(), cs2 = null;
+        Simple ss1 = new Simple(), ss2 = new Simple();
+        cs1.x = ss1.x = 5;
+        cs1.y = ss1.y = 10;
+        cs2 = cs1;
+        ss2 = ss1;
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/10-2.27388ea2.png" alt=""></p> <h3 id="构造函数和析构函数"><a href="#构造函数和析构函数" aria-hidden="true" class="header-anchor">#</a> 构造函数和析构函数</h3> <p>注意：结构可以有实例构造函数和静态构造函数，<em>不能</em>有析构函数</p> <p><strong>结构的实例构造函数</strong>：语言隐式为每个结构提供一个无参构造函数</p> <ul><li>预定义的无参构造函数不允许删除或重定义</li> <li>只能自定义含参的实例构造函数</li> <li>也可以不通过<code>new</code>运算符创建结构实例，但会有一些限制：
+<ul><li>在显式设置数据之后，才能使用它们的值，否者编译器会报错</li> <li>在对所有数据成员赋值之后，才能<em>调用任何</em>函数成员</li></ul></li></ul> <p><img src="/Notebook/assets/img/10-4-1.8d435d16.png" alt=""></p> <p><strong>静态构造函数</strong>：创建并初始化静态数据成员，不能引用实例成员：</p> <ul><li>调用显式声明的构造函数</li> <li>引用结构的静态成员</li></ul> <h3 id="字段初始化时是不允许的"><a href="#字段初始化时是不允许的" aria-hidden="true" class="header-anchor">#</a> 字段初始化时是不允许的</h3> <div class="language-cs extra-class"><pre class="language-text"><code>    struct Simple {
+        public int x = 10; // 不允许，编译错误
+    }
+</code></pre></div><h3 id="结构是密封的"><a href="#结构是密封的" aria-hidden="true" class="header-anchor">#</a> 结构是密封的</h3> <p><strong>结构总是隐式密封</strong>。不能继承，所以不能用于结构的修饰符：protected、internal、abstract、virtual</p> <p>结构本身派生自<code>System.ValueType</code>,而<code>System.ValueType</code>派生自<code>Object</code></p> <h3 id="装箱和拆箱"><a href="#装箱和拆箱" aria-hidden="true" class="header-anchor">#</a> 装箱和拆箱</h3> <p>目的：将一个结构实例作为引用类型对象，创建<em>装箱</em>的副本</p> <p>装箱：是指制作值类型变量的引用类型副本</p> <h3 id="结构作为返回值和参数"><a href="#结构作为返回值和参数" aria-hidden="true" class="header-anchor">#</a> 结构作为返回值和参数</h3> <p><strong>结构</strong>可以用作<em>返回值</em>和<em>参数</em>：</p> <ul><li>返回值时，将创建它的副本并从函数成员返回</li> <li>参数时，将创建实参结构的副本，该副本用于方法的执行中</li> <li>ref和out参数，传入方法的是该结构的一个引用，这样就能修改其数据成员</li></ul> <h2 id="十一-枚举"><a href="#十一-枚举" aria-hidden="true" class="header-anchor">#</a> 十一.枚举</h2> <h3 id="枚举"><a href="#枚举" aria-hidden="true" class="header-anchor">#</a> 枚举</h3> <p><strong>枚举</strong>是自定义的类型，与类和结构一样：</p> <ul><li>枚举是<em>值类型</em>，直接存储数据</li> <li>枚举只有一种类型成员: 命名的整数值常量</li> <li>用关键字<code>enum</code>声明</li> <li>成员声明列表用<em>逗号</em>分隔，在枚举声明中没有分号</li> <li>每个枚举成员都被赋予一个底层类型(默认是整型)的常量值</li> <li>默认情况下，编译器会把第一个值赋值0，并对每一个后续成员赋值比前一个成员多1</li></ul> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    enum TrafficLight {
+        Green,
+        Yellow,
+        Red
+    }
+    class Program {
+        static void Main() {
+            TrafficLight t1 = 
+        }
+    }
+</code></pre></div><p><strong>设置底层类型</strong>：在声明时用冒号和类型加在声明后,所有成员常量都属于枚举的底层类型</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    enum TrafficLight: ulong {
+        //
+    }
+</code></pre></div><p>成员常量的值也可以是底层类型的任何值:如要显式设置一个成员的值，只需在枚举声明中的变量名后使用初始化表达式，不能有重复的变量名，但可有重复的值：</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    enum TrafficLight {
+        Green = 10,
+        Yellow = 15,
+        Red = 15
+    }
+</code></pre></div><h3 id="位标志"><a href="#位标志" aria-hidden="true" class="header-anchor">#</a> 位标志</h3> <pre><code>使用单个字的不同位作为表示一组开/关标志的紧凑方法
+</code></pre> <h3 id="关于枚举的补充"><a href="#关于枚举的补充" aria-hidden="true" class="header-anchor">#</a> 关于枚举的补充</h3> <p>补充：</p> <ul><li>枚举只有单一的成员类型：声明的成员常量</li> <li>不能对成员使用修饰符，它们都隐式地具有与枚举相同地可访问性</li> <li>由于成员是常量，即使在没有该枚举类型地变量时它们也能被访问，使用枚举类型名跟点和成员名</li> <li>比较不同枚举类型地成员会导致编译时错误（指的是同一个枚举中地成员比较不会出错，不同一个就会出错）</li></ul> <h2 id="十二-数组"><a href="#十二-数组" aria-hidden="true" class="header-anchor">#</a> 十二.数组</h2> <h3 id="数组"><a href="#数组" aria-hidden="true" class="header-anchor">#</a> 数组</h3> <p><strong>数组</strong>是由一个变量名称表示的一组<em>同类型</em>的数据元素</p> <ul><li>元素：数组的独立数据项</li> <li>秩/维度：数组可以有任何为正数的维度数（秩）</li> <li>维度长度：朝一个方向的位置个数</li> <li>数组长度：所有维度中的元素总和</li></ul> <p>注意：数组一旦创建，大小就固定，不支持动态数组</p> <h3 id="数组的类型"><a href="#数组的类型" aria-hidden="true" class="header-anchor">#</a> 数组的类型</h3> <ul><li>一维数组：单行元素或元素向量</li> <li>多维数组：由主向量中的位置组成，每一个位置本身又是一个数组，称为子数组；
+<ul><li>矩形数组：
+<ul><li>某个维度的所有子数组有相同长度的多维数组</li> <li>不管有多少维度，总是使用一组方括号： `int x = myArray[4, 6, 1]</li></ul></li> <li>交错数组：
+<ul><li>每一个子数组都是独立数组的多维数组</li> <li>可以有不同长度的子数组</li> <li>为数组的每一个维度使用一对方括号：<code>int y = jagArray[2][7][4]</code></li></ul></li></ul></li></ul> <p><img src="/Notebook/assets/img/12-2.44dd1fcf.png" alt=""></p> <h3 id="数组是对象"><a href="#数组是对象" aria-hidden="true" class="header-anchor">#</a> 数组是对象</h3> <p>数组实例是从<code>System.Array</code>继承的对象，继承了很多有用的方法如：Rank(返回数组维度数的属性)、Length(返回数组的长度)；数组也是<strong>引用类型</strong>，但数组元素可以是值类型或引用类型</p> <p><img src="/Notebook/assets/img/12-4.e217915c.png" alt=""></p> <h3 id="一维数组和矩形数组"><a href="#一维数组和矩形数组" aria-hidden="true" class="header-anchor">#</a> 一维数组和矩形数组</h3> <p><strong>声明</strong>一维数组或矩形数组：</p> <ul><li>在类型和变量名之间使用一对方括号</li> <li>方括号内的逗号称为秩说明符，秩就是逗号数加1</li> <li>不可再数组类型区域中放数组维度的长度，维度长度直到数组实例化才会确定</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    int[,,] firstArray; // 正确
+    int[,,,] array3; // 正确
+    long[3,2,6] secondArray; // 错误示例，不能写维度长度，会出现编译错误
+</code></pre></div><h3 id="实例化一维数组或矩形数组"><a href="#实例化一维数组或矩形数组" aria-hidden="true" class="header-anchor">#</a> 实例化一维数组或矩形数组</h3> <p><strong>数组创建表达式</strong>：由 <code>new</code>运算符加基类名称和一对方括号组成</p> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    int[] arr2 = new int[4]; // arr2数组是包含4个int的一维数组
+    int[,,] arr3 = new int[3,6,2]; // arr3数组是三维数组
+    MyClass[] mcArr = new MyClass[4]; // mcArr数组是包含4个MyClass引用的一维数组
+</code></pre></div><p><img src="/Notebook/assets/img/12-5.5b02664d.png" alt=""></p> <h3 id="访问数组元素"><a href="#访问数组元素" aria-hidden="true" class="header-anchor">#</a> 访问数组元素</h3> <p><strong>访问数组元素</strong>：使用整型值作为索引来访问数组元素</p> <ul><li>每一个维度的索引从0开始</li> <li>方括号内的索引在数组名称之后</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class Example12
+    {
+        public void test ()
+        {
+            int[] intArr1 = new int[15];
+            intArr1[2] = 10;
+            int var1 = intArr1[2];
+
+            int[,] intArr2 = new int[5, 10];
+            intArr2[2, 3] = 7;
+            int var2 = intArr2[2, 3];
+
+            int[] myIntArray;
+            myIntArray = new int[4];
+            for( int i =0; i&lt; 4;i++)
+            {
+                myIntArray[i] = i * 10;
+            }
+            for(int i = 0; i&lt;4; i++)
+            {
+                Console.WriteLine(&quot;Value of element {0} = {1}&quot;, i, myIntArray[i]);
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+        Example12 eg12 = new Example12();
+        eg12.test();
+        }
+        // Value of element 0 = 0
+        // Value of element 1 = 10
+        // Value of element 2 = 20
+        // Value of element 3 = 30
+    }
+</code></pre></div><h3 id="初始化数组"><a href="#初始化数组" aria-hidden="true" class="header-anchor">#</a> 初始化数组</h3> <p><strong>数组初始化</strong>：当数组被创建后，每一个元素被自动初始化为类型的默认值，对于预定义类型，整型默认值为0，浮点型默认值为0.0，布尔型默认值为false，引用类型默认值为null</p> <p><strong>显式初始化一维数组</strong>：显式初始化一维数组，可以在实例化的数组创建表达式后加上一个<em>初始化列表</em></p> <ul><li>初始值必须用逗号分隔开，并封闭在一组大括号内</li> <li>不必输入维度的长度，编译器直接根据初始化值得个数来推断</li> <li>数组创建表达式和初始化列表之间没有分隔符</li></ul> <p>eg: <code>int[] intArr = new int[] {10, 20, 30, 40};</code></p> <p><strong>显式初始化矩形数组</strong>：</p> <ul><li>每一个初始值向量必须封闭在大括号内</li> <li>每一个维度必须嵌套并封闭在大括号内</li> <li>除了初始值，每一个维度的初始化列表和组成部分也必须用逗号分隔开</li></ul> <p>eg:</p> <p><code>int[,] intArray2 = new int[,] { {10, 1}, {2, 10}, {11, 9} };</code> <img src="/Notebook/assets/img/12-8.f39e4bf8.png" alt=""></p> <div class="language- extra-class"><pre class="language-text"><code>int[,,] intArray3 = new int[4, 3, 2] {
+    { {8, 6}, {5, 2}, {12, 9} },
+    { {6, 4}, {3, 9}, {18, 4} },
+    { {7, 1}, {1, 3}, {29, 3} },
+    { {4, 6}, {3, 2}, {23, 8} }
+}
+</code></pre></div><p>注意：当在一条语句中使用声明、数组创建和初始化时，可以<strong>省略</strong>数组的创建表达式部分，只提供初始化部分：</p> <p>eg:</p> <div class="language- extra-class"><pre class="language-text"><code>    int[] arr1 = int[3] {10, 20, 30}; 
+    等价于
+    int[] arr1 =        {10, 20, 30};
+</code></pre></div><p><strong>隐式类型数组</strong>：</p> <ul><li>当初始化数组时，可以让编译器根据初始化语句推断数组类型，只要初始化语句能隐式转换为单个类型</li> <li>和隐式类型的局部变量一样，使用<code>var</code>关键字来替代数组的类型</li> <li>初始化语句中仍需要提供秩说明符</li></ul> <p>eg:</p> <div class="language- extra-class"><pre class="language-text"><code>    var intArr2 = new [] {10, 20,  30, 40 };
+    var intArr4 = new [,] { {10, 1}, {2, 10}, {11, 9} };
+    var sArray1 = new [] { &quot;life&quot;, &quot;liberty&quot;, &quot;pursuit of hanppiness&quot; };
+</code></pre></div><p>综合：
+eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    var arr = new[,] { { 0, 1, 2 }, { 10, 11, 12 } };
+                for(int i = 0; i &lt; 2; i++)
+                {
+                    for(int j = 0; j&lt;3; j++)
+                   {
+                       Console.WriteLine(&quot;Element [{0}, {1}] is  {2}&quot;, i, j, arr[i, j]);
+                    }
+                }
+// Element [0, 0] is  0
+// Element [0, 1] is  1
+// Element [0, 2] is  2
+// Element [1, 0] is  10
+// Element [1, 1] is  11
+// Element [1, 2] is  12
+</code></pre></div><h3 id="交错数组"><a href="#交错数组" aria-hidden="true" class="header-anchor">#</a> 交错数组</h3> <p><strong>交错数组</strong>：与矩形数组相比，交错数组的子数组元素个数可以不同</p> <p>eg:
+<code>int[][] jagArr = new int[3][]; // 一个二维的3个int数组的交错数组</code> <img src="/Notebook/assets/img/12-10.c2444999.png" alt=""></p> <p><strong>声明交错数组</strong>：</p> <ul><li>每一个维度都有一对独立的方括号，方括号数决定了数组的秩</li> <li>交错数组的维度可以是大于1的任意整数</li> <li>和矩形数组一样，维度长度不能包括在数组类型的声明部分</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    int[][] someArr;
+    int[][][] otherArr;
+</code></pre></div><p><strong>实例化交错数组</strong>：</p> <ul><li>首先，实例化顶层数组，不能在声明语句中初始化顶层数组之外的数组</li> <li>其次，实例化每一个子数组，把新建数组的引用赋给它们所属数组的合适元素</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    int[][] jagArr = new int[3][]; // 1. 正确
+    int[][] jagArr = new int[3][4]; // 1. 编译错误
+
+    jagArr[0] = new int[] {10, 20, 30}; //2. 
+    jagArr[1] = new int[] {40, 50, 60, 70}; // 3. 
+    jagArr[2] = new int[] {80, 90, 100, 110, 120}; // 4.
+</code></pre></div><p><img src="/Notebook/assets/img/12-12.99c86ca1.png" alt=""></p> <p><strong>交错数组中的子数组</strong>：由于子数组本身就是数组，可能包含矩形数组
+<img src="/Notebook/assets/img/12-13.758b11c6.png" alt=""></p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    int[][,] Arr;
+    Arr = new int[3][,];
+    Arr[0] = new int[,] { { 10, 20 }, { 100, 200 } };
+    Arr[1] = new int[,] { { 30, 40, 50 }, { 300, 400, 500 } };
+    Arr[2] = new int[,] { { 60, 70, 80, 90 }, { 600, 700, 800, 900 } };
+    for (int i = 0; i &lt; Arr.GetLength(0); i++) // 获取Arr维度0的长度 3 i&lt;3
+    {
+        for (int j = 0; j &lt; Arr[i].GetLength(0); j++) // 获取Arr[0]、Arr[1]、Arr[2]维度0的长度 都为2 j&lt;2
+        {
+            for (int k = 0; k &lt; Arr[i].GetLength(1); k++) // 获取Arr[0]、Arr[1]、Arr[2]维度1的长度 为2、3、4 k&lt;2、k&lt;3、k&lt;4
+            {
+            
+                Console.WriteLine(&quot;[{0},{1},{2}] = {3}&quot;, i, j, k, Arr[i][j, k]);
+            }
+            Console.WriteLine(&quot;&quot;);
+
+        }
+        Console.WriteLine(&quot;&quot;);
+
+    }
+// [0,0,0] = 10  // [0,1,0] = 100
+// [0,0,1] = 20  // [0,1,1] = 200
+ 
+// [1,0,0] = 30  // [1,1,0] = 300
+// [1,0,1] = 40  // [1,1,1] = 400
+// [1,0,2] = 50  // [1,1,2] = 500
+
+// [2,0,0] = 60  // [2,1,0] = 600
+// [2,0,1] = 70  // [2,1,1] = 700
+// [2,0,2] = 80  // [2,1,2] = 800
+// [2,0,3] = 90  // [2,1,3] = 900
+
+</code></pre></div><h3 id="比较矩形数组和交错数组"><a href="#比较矩形数组和交错数组" aria-hidden="true" class="header-anchor">#</a> 比较矩形数组和交错数组</h3> <p>一个3*3的矩形数组和一个长度为3的一维数组构成的交错数组比较：</p> <ul><li>两个数组都保存了9个整数，但结构不同</li> <li>矩形数组只有单个的数组对象，而交错数组有4个数组对象
+<img src="/Notebook/assets/img/12-14.b653b3df.png" alt=""></li></ul> <h3 id="foreach语句"><a href="#foreach语句" aria-hidden="true" class="header-anchor">#</a> foreach语句</h3> <p><code>foreach</code>语句允许我们连续访问数组中的每一个元素：</p> <ul><li>迭代变量时临时的，并和数组中元素的类型相同</li> <li>Type 是数组中元素的类型，可以显式提供它的类型，也可以用 <code>var</code>隐式声明，让编译器推断数组类型</li> <li>Identifier 是迭代变量的名字</li> <li>ArrayName 是数组的名字</li> <li>Statement 是要为数组中的每一个元素执行一次单条语句或语句块
+<img src="/Notebook/assets/img/12-15.0053f190.png" alt=""></li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    int[] arr1 = { 10, 11, 12, 13 };
+    foreach(int item in arr1)
+    {
+        Console.WriteLine(&quot;Item value: {0}&quot;, item);
+    }
+</code></pre></div><p><strong>迭代变量是只读的</strong>：</p> <ul><li>由于迭代变量是只读的，所以不能改变</li> <li>对于值类型数组，我们不能改变迭代变量</li> <li>对于引用型数组，我们可以通过改变迭代变量进而改变数据</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class Example12
+    {
+        public int MyFiled = 0;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Example12[] exArray = new Example12[4]; // 创建数组
+            for(int i = 0; i&lt;4;i++)
+            {
+                exArray[i] = new Example12(); // 创建类对象
+                exArray[i].MyFiled = i; // 设置字段
+            }
+            foreach(Example12 item in exArray)
+            {
+                item.MyFiled += 10; // 改变数据
+            }
+            foreach(Example12 item in exArray)
+            {
+                Console.WriteLine(&quot;{0}&quot;, item.MyFiled); // 10 11 12 13
+            }
+    }
+</code></pre></div><p><strong>多维数组与foreach语句示例</strong>：
+eg:矩形数组</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Program
+    {
+        static void Main(string[] args)
+        {
+            int total = 0;
+            int[,] arr1 = { { 10, 11 }, { 12, 13 } };
+            foreach(var element in arr1)
+            {
+                total += element;
+                Console.WriteLine(&quot;Element: {0}, current total: {1}&quot;, element, total);
+                // 10 11 12 13
+            }
+        }
+    }
+            
+</code></pre></div><p>eg:交错数组（每一个维度使用独立的foreach语句）</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Program
+    {
+        static void Main(string[] args)
+        {
+        int total = 0;
+        int[][] arr1 = new int[2][];
+        arr1[0] = new int[] { 10, 11 };
+        arr1[1] = new int[] { 12, 13, 14 };
+        foreach(int[] array in arr1)
+        {
+            Console.WriteLine(&quot;Starting new array&quot;);
+            foreach(int item in array)
+            {
+                total += item;
+                Console.WriteLine(&quot;Item: {0}, Current total: {1}&quot;, item, total);
+            }
+        }
+    }
+// Starting new array
+// Item: 10, Current total: 10
+// Item: 11, Current total: 21
+// Starting new array
+// Item: 12, Current total: 33
+// Item: 13, Current total: 46
+// Item: 14, Current total: 60
+</code></pre></div><h3 id="数组协变"><a href="#数组协变" aria-hidden="true" class="header-anchor">#</a> 数组协变</h3> <p><strong>数组协变</strong>：以下情况下，即使某个对象不是数组的基类型，也可以把它赋值给数组元素，这种属性就叫做数组协变</p> <ul><li>数组是引用类型数组</li> <li>在赋值的对象类型和数组基类型之间有隐式或显式转换（由于派生类和基类之间总是有隐式转换，所以总是可以将一个派生类的对象赋值给为基类声明的数组）</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class A { ... }
+    class B : A { ... }
+    class Program {
+        static void Main() {
+            A[] AArray1 = new A[3];
+            A[] AArray2 = new A[3];
+
+            // 普通：将A类型的对象赋值给A类型的数组
+            AArray1[0] = new A();
+            AArray1[1] = new A();
+            AArray1[2] = new A();
+
+            // 协变：将B类型的对象赋值给A类型的数组
+            AArray2[0] = new B();
+            AArray2[1] = new B();
+            AArray2[2] = new B();
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/12-15-1.7a4a66f8.png" alt=""></p> <h3 id="数组继承的有用成员"><a href="#数组继承的有用成员" aria-hidden="true" class="header-anchor">#</a> 数组继承的有用成员</h3> <p>数组继承很多有用的属性和方法：</p> <p><img src="/Notebook/assets/img/12-16.d142a755.png" alt=""></p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Program
+    {
+        public static void PrintArray(int[] a)
+        {
+            foreach( var x in a)
+            {
+                Console.WriteLine(&quot;{0}&quot;, x);
+            }
+            Console.WriteLine(&quot;&quot;);
+            }
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 15, 20, 5, 25, 10 };
+            PrintArray(arr);
+
+            Array.Sort(arr);
+            PrintArray(arr);
+
+            Array.Reverse(arr);
+            PrintArray(arr);
+
+            Console.WriteLine();
+            Console.WriteLine(&quot;Rank = {0}, length = {1}&quot;, arr.Rank, arr.Length); // Rank = 1 Length = 5
+            Console.WriteLine(&quot;GetLength(0) = {0}&quot;, arr.GetLength(0)); // 5
+            Console.WriteLine(&quot;GetType() = {0}&quot;, arr.GetType()); // System/Int32[] 
+    }
+</code></pre></div><p><strong>Clone方法</strong>：为数组进行浅复制，只创建了数组本身的克隆，如果是引用类型的数组，它不会复制元素引用的对象</p> <ul><li>克隆值类型数组会产生两个独立数组</li> <li>克隆引用类型数组会产生指向相同对象的两个数组</li> <li>克隆方法返回Object类型的引用，它必须被强制转换成数组类型</li></ul> <p><img src="/Notebook/assets/img/12-17.0fbe94e5.png" alt=""></p> <div class="language-cs extra-class"><pre class="language-text"><code>    class A {
+        public int Value = 5;
+    }
+    class Program {
+        static void Main() {
+            A[] AArray1 = new A[3] { new A(), new A(), new A()};
+            A[] AArray2 = (A[]) AArray1.Clone();
+            AArray2[0].Value = 100;
+            AArray2[1].Value = 200;
+            AArray2[2].Value = 300;
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/12-17-1.1578d1e5.png" alt=""></p> <h3 id="比较数组的类型"><a href="#比较数组的类型" aria-hidden="true" class="header-anchor">#</a> 比较数组的类型</h3> <p><img src="/Notebook/assets/img/12-18.30017a90.png" alt=""></p> <h2 id="十三-委托"><a href="#十三-委托" aria-hidden="true" class="header-anchor">#</a> 十三.委托</h2> <h3 id="什么是委托"><a href="#什么是委托" aria-hidden="true" class="header-anchor">#</a> 什么是委托</h3> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate void MyDel(int value); // 声明一个委托类型
+    class Program
+    {
+        void PrintLow(int value)
+        {
+            Console.WriteLine(&quot;{0} - Low Value&quot;, value);
+        }
+        void PrintHigh(int value)
+        {
+            Console.WriteLine(&quot;{0} - High Value&quot;, value);
+        }
+            static void Main(string[] args)
+            {
+                Program program = new Program();
+                MyDel del; // 声明委托变量
+                Random rand = new Random(); // 创建随机整数生成器对象，并得到0至99之间的一个随机数
+                int randValue = rand.Next(99);
+                // 创建一个包含PrintLow或PrintHigh的委托对象并将其赋值给del变量
+                del = randValue &lt; 50 ? new MyDel(program.PrintLow) : new MyDel(program.PrintHigh);
+                del(randValue); // 执行委托
+            }
+    }
+</code></pre></div><h3 id="委托概述"><a href="#委托概述" aria-hidden="true" class="header-anchor">#</a> 委托概述</h3> <p><strong>委托</strong>与类一样，是一种用户自定义的类型；但类表示的是数据和方法的集合，而委托则持有一个或多个方法，以及一系列预定义操作</p> <p><img src="/Notebook/assets/img/13-1.47f4d7df.png" alt=""></p> <p>也可以将<em>委托</em>看作一个包含有序方法列表的对象，这些方法有相同的签名和返回类型：</p> <ul><li>方法的列表称为调用列表</li> <li>委托保存的方法可以来自任何类或结构，只要它们符合以下两点：
+<ul><li>委托的返回类型</li> <li>委托的签名（包括ref和out修饰符）</li></ul></li> <li>调用列表中的方法可以是实例方法也可以是静态方法</li> <li>在调用委托时，会执行其调用列表中的所有方法</li></ul> <p><img src="/Notebook/assets/img/13-2.d7c5d37d.png" alt=""></p> <h3 id="声明委托类型"><a href="#声明委托类型" aria-hidden="true" class="header-anchor">#</a> 声明委托类型</h3> <p><strong>声明委托类型</strong>：委托类型的声明与方法声明很相似，有<em>返回类型</em>和<em>签名</em>，返回类型和签名指定了委托接受的方法的形式</p> <ul><li>以<code>delegate</code>关键字开头</li> <li>没有方法主体</li> <li>不需要在类型内部声明，因为委托也是一种类型</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>delegate void MyDel(int x); // 声明了一个只会接受不返回值并且有单个int参数的方法的MyDel类型委托
+</code></pre></div><h3 id="创建委托对象"><a href="#创建委托对象" aria-hidden="true" class="header-anchor">#</a> 创建委托对象</h3> <p>委托时<strong>引用类型</strong>，所以也有引用和对象。在委托类型声明之后，可以声明变量并创建委托对象，有以下两种方式：</p> <ul><li>第一种使用带<code>new</code>运算符的对象创建表达式：<code>delVar = new MyDel(myInstObj.MyM1)</code> <ul><li>委托类型名</li> <li>一组圆括号，包含作为调用列表中第一个成员的方法名字，可以是实例方法，也可以是静态方法</li></ul></li> <li>第二种是快捷语法，仅由方法说明符构成：<code>delVAr = SClass.OtherM2</code> <ul><li>因为方法名称和其对应的委托类型之间存在隐式转换，所以能够使用快捷语法</li></ul></li></ul> <p><img src="/Notebook/assets/img/13-4.b2af2068.png" alt=""></p> <h3 id="给委托赋值"><a href="#给委托赋值" aria-hidden="true" class="header-anchor">#</a> 给委托赋值</h3> <p>因为委托是引用类型，可以通过给它<strong>赋值</strong>来改变包含在委托变量中的引用，旧的委托对象会被垃圾回收器回收</p> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate void MyDel(int x);
+    MyDel = myInstObj.MyM1;
+    ...
+    MyDel = SClass.OtherM2;
+</code></pre></div><p><img src="/Notebook/assets/img/13-5.76577053.png" alt=""></p> <h3 id="组合委托"><a href="#组合委托" aria-hidden="true" class="header-anchor">#</a> 组合委托</h3> <p>委托可以使用<strong>额外的运算符</strong>来<strong>组合</strong>：这个运算符最终会创建一个新的委托，其调用列表连接了作为操作数的两个委托的调用列表副本</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    MyDel delA = myInstObj.MyM1;
+    MyDel delB = CSlass.otherM2;
+    MyDel delC = delA + delB; // 组合调用列表
+</code></pre></div><p>注意：委托是<strong>恒定</strong>的，委托对象被创建后不能再被改变，所以作为操作数的委托没有被改变</p> <p><img src="/Notebook/assets/img/13-6.f8c6b0a4.png" alt=""></p> <h3 id="为委托添加方法"><a href="#为委托添加方法" aria-hidden="true" class="header-anchor">#</a> 为委托添加方法</h3> <p>使用+=运算符为委托<strong>添加</strong>方法：实际上是创建了一个新的委托，其调用列表是左边的委托加上右边的方法的组合，然后将这个新的委托赋值给delVar</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    MyDel delVar = inst.MyM1; // 创建并初始化
+    delVar += SCl.m3; // 增加方法
+    delVar += X.Act; // 增加方法
+</code></pre></div><p><img src="/Notebook/assets/img/13-7.164e9ec2.png" alt=""></p> <h3 id="为委托移除方法"><a href="#为委托移除方法" aria-hidden="true" class="header-anchor">#</a> 为委托移除方法</h3> <p>使用-=运算符为委托<strong>移除</strong>方法：实际上也是创建了一个新的委托。新的委托是旧委托的副本，只是没有了已移除方法的引用，注意的是：</p> <ul><li>如果在调用列表中的方法有多个实例，-=运算符会从列表最后开始搜索，并移除第一个与方法匹配的实例</li> <li>试图删除委托中不存在的方法是没有效果</li> <li>试图调用空委托会抛出异常，可以通过把委托和null进行比较来判断委托的调用列表是否为空，如果为空则委托是null</li></ul> <p><img src="/Notebook/assets/img/13-8.f106f6e1.png" alt=""></p> <h3 id="调用委托"><a href="#调用委托" aria-hidden="true" class="header-anchor">#</a> 调用委托</h3> <p>可以像调用方法一样简单地调用委托：用于调用委托的参数将会调用调用列表中的每一个方法（除非有输出参数），如果一个方法在调用列表中出现多次，当委托被调用时，每次在列表中遇到这个方法时它都会被调用一次</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    MyDel delVar = inst.MyM1;
+    delVar += SCl.m3;
+    delVar += X.Axt;
+    ...
+    delVar(55); // 调用委托
+</code></pre></div><p><img src="/Notebook/assets/img/13-9.db29ec99.png" alt=""></p> <h3 id="委托的示例"><a href="#委托的示例" aria-hidden="true" class="header-anchor">#</a> 委托的示例</h3> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Test
+    {
+        public void Print1()
+        {
+            Console.WriteLine(&quot;Print1 -- instance&quot;);
+        }
+        public static void Print2()
+        {
+            Console.WriteLine(&quot;Print2 -- static&quot;);
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+        {
+            Test t = new Test();
+            PrintFunction pf;
+            pf = t.Print1;
+            pf += Test.Print2;
+            pf += t.Print1;
+            pf += Test.Print2;
+
+            if (null != pf)
+                pf();
+            else
+                Console.WriteLine(&quot;Delegate is empty&quot;);
+
+                // Print1 -- instance
+                // Print2 -- static
+                // Print1 -- instance
+                // Print2 -- static
+        }
+    }
+</code></pre></div><h3 id="调用带返回值的委托"><a href="#调用带返回值的委托" aria-hidden="true" class="header-anchor">#</a> 调用带返回值的委托</h3> <p>如果委托有返回值且调用列表中的方法有一个以上，会出现：</p> <ul><li>调用列表中执行到最后一个方法返回的值就是委托调用返回的值</li> <li>调用列表中所有其他方法的返回值都会被忽略</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate int MyDel();
+    class Example13
+    {
+        int IntValue = 5;
+        public int Add2()
+        {
+            IntValue += 2;
+            return IntValue;
+        }
+        public int Add3()
+        {
+            IntValue += 3;
+            return IntValue;
+        }
+    }
+    class Program() {
+        static void Main() {
+            Example13 ex = new Example13();
+            MyDel mDel = ex.Add2;
+            mDel += ex.Add3;
+            mDel += ex.Add2;
+            Console.WriteLine(&quot;Value {0}&quot;, mDel()); // 12
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/13-10.5a1007e9.png" alt=""></p> <h3 id="调用带引用参数的委托"><a href="#调用带引用参数的委托" aria-hidden="true" class="header-anchor">#</a> 调用带引用参数的委托</h3> <p>如果委托有<strong>引用参数</strong>,参数值会根据调用列表中的一个或多个方法的返回值而改变.即在调用委托列表中的下一个方法时,参数的新值会传给下一个方法.</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate void MyDel(ref int x); // 注意是 void 类型
+    class CatchArg
+    {
+        public void Add2(ref int x)
+        {
+            x += 2;
+        }
+        public void Add3(ref int x)
+        {
+            x += 3;
+        }
+    }
+    class Program {
+        static void Main() {
+            CatchArg cg = new CatchArg();
+            MyDel mDel = cg.Add2;
+            mDel += cg.Add3;
+            mDel += cg.Add2;
+
+            int x = 5;
+            mDel(ref x);
+            Console.WriteLine(&quot;Value {0}&quot;, x); // 12
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/13-11.17c37081.png" alt=""></p> <h3 id="匿名方法"><a href="#匿名方法" aria-hidden="true" class="header-anchor">#</a> 匿名方法</h3> <p><strong>匿名方法</strong>是在初始化委托时内联声明的方法</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Program {
+        delegate int OtherDel(int InParam);
+        static void Main() {
+            OtherDel del = delegate(int x) {
+                return x + 20;
+            }
+            Console.WriteLine(&quot;{0}&quot;, del(5)); // 25
+            Console.WriteLine(&quot;{0}&quot;, del(6)); // 26
+        }
+    }
+</code></pre></div><p><strong>匿名方法用于</strong>:</p> <ul><li>声明委托变量时作为初始化表达式</li> <li>组合委托时在赋值语句右边</li> <li>为委托增加事件时在赋值语句的右边</li></ul> <p><strong>基础语法</strong>:</p> <ul><li>使用<code>delegate</code>关键字</li> <li>参数列表,如果语句块没有使用任何参数且没有任何out参数则可以省略(使用空括号或省略括号),如有则需在三方面与委托匹配:
+<ul><li>参数数量</li> <li>参数类型及位置</li> <li>修饰符</li></ul></li> <li>语句块,包含了匿名方法的代码</li> <li>不需要显式声明返回值类型</li> <li>如果参数列表含有params参数,则委托声明时指定最后一个参数为params参数,需使用params关键字,但匿名方法的参数列表省略params关键字
+eg:</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate void SomeDel(int x, params int[] y);
+    SomeDel mDel = delegate(int x, int[] y) {
+        ...
+    }
+</code></pre></div><p><strong>变量和参数的作用域</strong>:</p> <ul><li>参数和声明在匿名方法内部的局部变量的作用域都在实现方法的主体之内,主体结束后局部变量就会消失</li> <li>与委托的具名方法不同,匿名方法可以访问到它们外围作用域的局部变量(也叫<em>外部变量</em>)和环境,这种方式称为<em>被方法捕获</em></li> <li>只要捕获方法还是委托的一部分,即使外部变量已经离开作用域,捕获的外部变量也会一致有效</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate OtherDel();
+    class Program {
+        static void Main() {
+            OtherDel oDel;
+            {
+                int x = 5;
+                oDel = delegate ()
+                {
+                    Console.WriteLine(&quot;Value of x: {0}&quot;, x); //捕获x变量
+                };
+            };
+            oDel(); // 5
+        }
+    }
+</code></pre></div><h3 id="lambda表达式"><a href="#lambda表达式" aria-hidden="true" class="header-anchor">#</a> Lambda表达式</h3> <p><strong>Lambda表达式</strong>替代匿名方法,简化语法</p> <ul><li>删除<code>delegate</code>关键字</li> <li>在参数列表和匿名方法主题之间放Lambda运算符=&gt;,读作goes to</li> <li>因为编译器能从委托声明中知道委托参数类型,Lambda表达式还能省略类型参数</li> <li>如果语句块只包含一个返回语句,可以将语句块替换成return关键字后的表达式</li> <li>参数列表中的参数必须在数量,类型和位置上与委托的匹配
+<ul><li>参数不一定包含参数类型(隐式类型),但如果委托有ref或out参数时,此时必须标注参数类型</li> <li>如果只有一个参数,并且是隐式类型的,周围圆括号可以被省略,否者必须有括号</li> <li>如果没有参数,必须使用空括号</li></ul></li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate double MyDel(int par)
+    class Program {
+        static void Main() {
+            MyDel del = delegate(int x) {
+                return x + 1;
+            };
+            // 等价于
+            MyDel del = (int x) =&gt; { return x + 1; };
+            // 等价于
+            MyDel del = x =&gt; x + 1;
+        }
+    }
+</code></pre></div><h2 id="十四-事件"><a href="#十四-事件" aria-hidden="true" class="header-anchor">#</a> 十四.事件</h2> <h3 id="发布者和订阅者"><a href="#发布者和订阅者" aria-hidden="true" class="header-anchor">#</a> 发布者和订阅者</h3> <ul><li>发布者: 发布某个事件的类或结构,其他的类可以在该事件发生时得到通知</li> <li>订阅者: 注册并在事件发生时得到通知的类或结构</li> <li>事件处理程序: 由订阅者注册到事件的方法,在发布者触发事件时执行</li> <li>触发事件: 调用或触发事件的术语,当事件触发时,所有注册到它的方法都会依次被调用</li></ul> <p><img src="/Notebook/assets/img/14-1.35e1a2db.png" alt=""></p> <p>eg: 一个叫InCrementer的类,它按照某种方式进行计数</p> <ul><li>InCrementer定义了一个CountedADozen事件,每次累积到12个项时将会触发该事件</li> <li>订阅者类Dozens和SomeOtherClass各有一个注册到CountedADozen事件的事件处理程序</li> <li>每当触发事件时,都会调用这些处理程序</li></ul> <p><img src="/Notebook/assets/img/14-3.9d61b685.png" alt=""></p> <h3 id="源代码组件概览"><a href="#源代码组件概览" aria-hidden="true" class="header-anchor">#</a> 源代码组件概览</h3> <p><strong>事件</strong>中使用的代码有5部分:</p> <ul><li>委托类型声明: 事件和事件处理程序必须有共同的签名和返回类型,它们通过委托类型进行描述</li> <li>事件处理程序声明: 订阅者类中会在事件触发时执行的方法声明.它们不一定是有显式命名的方法,还可以是匿名方法或Lanbda表达式</li> <li>事件声明: 发布者类必须声明一个订阅者类可以注册的事件成员.当声明的事件为public时,称为<strong>发布了</strong>事件</li> <li>事件注册: 订阅者必须订阅事件才能在它被触发时得到通知</li> <li>触发事件的代码: 发布者类中<strong>触发</strong>事件并导致调用注册的所有事件处理程序的代码</li></ul> <p><img src="/Notebook/assets/img/14-4.94e293f5.png" alt=""></p> <h3 id="声明事件"><a href="#声明事件" aria-hidden="true" class="header-anchor">#</a> 声明事件</h3> <p>是发布者(InCrementer)必须提供的事件对象(CountedADozen):</p> <ul><li>事件声明在一个类中,使用<code>event</code>关键字</li> <li>需要委托类型名称,任何附加到事件(如注册)的处理程序都必须与委托类型的签名和返回类型匹配</li> <li>使用<code>public</code>关键字声明,目的是其他类和结构可以在它上面注册事件处理程序</li> <li>不能使用对象创建表达式(即 new表达式)来创建它的对象</li> <li>可以使用<code>static</code>关键字使事件变成<strong>静态</strong></li> <li>可以通过逗号分隔的列表在一个声明语句中声明一个以上的事件
+(声明事件不需要写参数, 但触发事件的参数列表必须与事件的委托类型相匹配)</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class InCrementer {
+                        ↓委托类型   ↓事件名
+        public event EventHandler CountedADozen;
+
+        public event EventHandler MyEvent1, MyEvent2, MyEvent3;
+
+        public static event EventHandler CountedADozen;
+    }
+</code></pre></div><p><strong>注意,事件是成员</strong></p> <ul><li>事件是类或结构的成员</li> <li>不能在一段可执行代码中声明事件,必须声明在类或结构中</li> <li>事件成员被隐式自动初始化为null</li> <li>事件声明需要委托类型的名字,可以声明一个委托类型或使用已存在的,如果声明一个委托类型,必须指定事件保存的方法的签名和返回类型</li></ul> <h3 id="订阅事件"><a href="#订阅事件" aria-hidden="true" class="header-anchor">#</a> 订阅事件</h3> <p>是订阅者向事件添加事件处理程序:</p> <ul><li>必须具有与事件的委托相同的返回类型和签名</li> <li>使用+=运算符为事件增加事件处理程序</li> <li>事件处理程序位于+=运算符右边
+<ul><li>实例方法的名称</li> <li>静态方法的名称</li> <li>匿名方法</li> <li>Lambda表达式</li></ul></li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    Incrementer.CountedADozen += IncrenmenrDozensCount; // 方法形式的实例方法
+    Incrementer.CountedADozen += ClassB.CounterHandlerB; // 方法形式的静态方法
+    mc.CountedADozen += new EventHandler(cc.CounterHanlerC); // 委托形式的实例方法
+    Incrementer.CountedADozen += () =&gt; DozensCount++; // Lambda表达式形式
+    Incrementer.CountedADozen += delegate { DozensCount++; }; // 匿名方法形式
+</code></pre></div><h3 id="触发事件"><a href="#触发事件" aria-hidden="true" class="header-anchor">#</a> 触发事件</h3> <p>触发事件的代码:</p> <ul><li>在触发事件之前需要和null比较,查看是否存在事件处理程序,如果事件是null,表示没有则不能执行</li> <li>触发事件,即使用事件名称,后面跟的参数列表包含在圆括号内,参数列表必须与事件的委托类型相匹配</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    if(CountedADozen != null) 
+        CountedADozen(source, args); // 触发事件
+</code></pre></div><p><strong>一个完整的栗子</strong>:</p> <p><img src="/Notebook/assets/img/14-5.9e06b383.png" alt=""></p> <h3 id="标准事件的用法"><a href="#标准事件的用法" aria-hidden="true" class="header-anchor">#</a> 标准事件的用法</h3> <p>事件使用的标准模式的<strong>根本</strong>是System命名空间声明的<code>EventHandler</code>委托类型:</p> <ul><li>第一个参数用来保存触发事件的对象的引用,由于是<code>object</code>类型,所以可以匹配任何类型的实例</li> <li>第二个参数用来保存状态信息,指明什么类型适用于该应用程序</li> <li>返回类型是void</li> <li>第二个参数是<code>EventArgs</code>类的对象,它声明在<code>System</code>命名空间中.
+<ul><li>因为<code>EventArgs</code>设计为不能传递任何数据,它用于不需要传递数据的事件处理程序(通常会被忽略)</li> <li>如果希望传递数据,必须声明一个派生自<code>EventArgs</code>的类,使用合适的字段来保存需要传递的数据</li></ul></li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    public delegate void EventHandler(object sender, EventArgs e);
+</code></pre></div><p>eg:修改上面栗子为<strong>使用<code>EventHandler</code></strong></p> <p><img src="/Notebook/assets/img/14-6.0e9ba435.png" alt=""></p> <p><strong>通过扩展<code>EventArgs</code>来传递数据</strong></p> <p>eg: 使用一个派生自<code>EventArgs</code>的类</p> <div class="language-cs extra-class"><pre class="language-text"><code>    public class IncrementEventArgs: EventArgs
+    {
+        public int IterationCount { get;  set; }
+    }
+    class Incrementer
+    {
+        public event EventHandler&lt;IncrementEventArgs&gt; CountedADozen; // 创建事件并发布
+        public void DoCount()
+        {
+            IncrementEventArgs args = new IncrementEventArgs();
+            for(int i=1; i&lt;100; i++)
+            {
+                if (i % 12 == 0 &amp;&amp; CountedADozen != null)
+                {
+                    args.IterationCount = i; // 设置值
+                    CountedADozen(this, args); // 传递参数
+                }
+
+            }
+        }
+    }
+    class Dozens
+    {
+        public int DozensCount { get; private set; }
+        void IncrementDozensCount(object source, IncrementEventArgs e) // 修改为自定义类
+        {
+            Console.WriteLine(&quot;Incremented at iteration: {0} in {1}&quot;, e.IterationCount, source.ToString()); // 获取参数值
+            DozensCount++;
+            
+        }
+        public Dozens(Incrementer incrementer)
+        {
+            DozensCount = 0;
+            incrementer.CountedADozen += IncrementDozensCount;
+        }
+        
+
+    }
+    class Program {
+        static void Main(string[] args)
+        {
+            Incrementer incrementer = new Incrementer();
+            Dozens dozensCounter = new Dozens(incrementer);
+            incrementer.DoCount();
+            Console.WriteLine(&quot;Number of dozens = {0}&quot;, dozensCounter.DozensCount);
+        }
+    }
+// Incremented at iteration: 12 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 24 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 36 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 48 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 60 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 72 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 84 in ClassDemo.Example.Incrementer
+// Incremented at iteration: 96 in ClassDemo.Example.Incrementer
+// Number of dozens = 8
+</code></pre></div><p><strong>移除事件处理程序</strong>: 使用<code>-=</code>运算符</p> <p>如果一个处理程序向事件注册了多次,那么当执行命令移除处理程序时,只会将列表中该处理程序的最后一个实例移除</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Publisher {
+        public event Eventhandler SimpleEvent;
+        public void RaiseTheEvent() {
+            SimpleEvent(this, null);
+        }
+    }
+    class Subscriber {
+        public void MethodA(object o, EventAgrs e) {
+            Console.WriteLine(&quot;AAA&quot;);
+        }
+        public void MethodB(object o, EventAgrs e) {
+            Console.WriteLine(&quot;BBB&quot;);
+        }
+    }
+    class Program {
+        static void Main() {
+            Publisher p = new Publisher();
+            Subscriber s = new Subscriber();
+            p.SimpleEvent += s.MethodA;
+            p.SimpleEvent += s.MethodB;
+            p.RaiseTheEvent();
+            Console.WriteLine(&quot;Remove MethodB&quot;);
+            p.SimpleEvent -= s.MethodB;
+            p.RaiseTheEvent();
+        }
+    }
+    // AAA
+    // BBB
+    // Remove MethodB
+    // AAA
+</code></pre></div><h3 id="事件访问器"><a href="#事件访问器" aria-hidden="true" class="header-anchor">#</a> 事件访问器</h3> <p><code>+=</code>和<code>-=</code>是事件允许的唯二运算符,但这些运算符有预定义的行为,我们可以通过修改这些运算符的行为,让事件执行任何我们希望的自定义代码,要改变这两个运算符的操作,可以<strong>为事件定义事件访问器</strong>:</p> <ul><li>有两个访问器: add和remove</li> <li>声明是将访问器看上去和声明一个属性差不多</li> <li>两个访问器都有叫做value的隐式值参数,它接受实例或静态方法的引用</li> <li>声明事件访问器之后,事件不包含任何内嵌委托对象,需要我们自己实现来来存储和移除事件注册的方法</li> <li>事件访问器表现为void方法,不能包含返回值的return语句</li></ul> <h2 id="十五-接口"><a href="#十五-接口" aria-hidden="true" class="header-anchor">#</a> 十五.接口</h2> <h3 id="什么是接口"><a href="#什么是接口" aria-hidden="true" class="header-anchor">#</a> 什么是接口</h3> <p><strong>接口</strong>是指定一组函数成员而不实现它们的引用类型,只能类和结构来实现接口</p> <p>eg: 使用接口IInfo使PrintInfo方法用于多个类</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IInfo
+    {
+        string GetName();
+        string GetAge();
+    }
+    class CA: IInfo
+    {
+        public string Name;
+        public int Age;
+        public string GetName()
+        {
+            return Name;
+        }
+        public string GetAge()
+        {
+            return Age.ToString();
+        }
+    }
+    class CB: IInfo
+    {
+        public string First;
+        public string Last;
+        public double PersonsAge;
+        public string GetName()
+        {
+            return First + &quot; &quot; + Last;
+        }
+        public string GetAge()
+        {
+            return PersonsAge.ToString();
+        }
+    }
+    class Program {
+        static void PrintInfo(IInfo item)
+        {
+            Console.WriteLine(&quot;Name: {0}, Age: {1}&quot;, item.GetName(), item.GetAge());
+        }
+        static void Main(string[] args)
+            {
+            CA a = new CA() { Age = 35, Name = &quot;John Doe&quot; };
+            CB b = new CB() { First = &quot;Jane&quot;, Last = &quot;Doe&quot;, PersonsAge = 33 };
+            PrintInfo(a); // Name: John Doe, Age: 35
+            PrintInfo(b); // Name: Jane Doe, Age: 33
+            }
+    }
+</code></pre></div><p>eg: 2</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class CC: IComparable
+    {
+        public int TheValue;
+        public int CompareTo(object obj)
+        {
+            CC c = (CC)obj; // 暂时没明白这一行代表什么
+            if (this.TheValue &lt; c.TheValue) return -1;
+            if (this.TheValue &gt; c.TheValue) return 1;
+            return 0;
+        }
+    }
+    class Program {
+        static void PrintOut(string s, CC[] mc)
+        {
+            Console.Write(s);
+            foreach (var m in mc)
+                Console.Write(&quot;{0} &quot;, m.TheValue);
+            Console.WriteLine(&quot;&quot;);
+        }
+        static void Main(string[] args)
+            {
+            var myInt = new[] { 20, 4, 16, 9, 2 };
+            CC[] cArr = new CC[5]; // 创建一个CC类型的数组
+            for(int i = 0; i&lt; 5; i++ )
+            {
+                cArr[i] = new CC(); // 创建类对象 即实例化每一个元素
+                cArr[i].TheValue = myInt[i];
+            }
+            PrintOut(&quot;Initial Order: &quot;, cArr); // Initial Order: 20 4 16 9 2
+            Array.Sort(cArr);
+            PrintOut(&quot;Sorted Order: &quot;, cArr); // Sorted Order: 2 4 9 16 20
+            }
+    }
+</code></pre></div><h3 id="声明接口"><a href="#声明接口" aria-hidden="true" class="header-anchor">#</a> 声明接口</h3> <p><strong>声明接口</strong>:</p> <ul><li>声明接口不能包含数据成员和静态成员</li> <li>只能包含以下类型的非静态成员函数: 方法、属性、事件、索引器</li> <li>以上函数成员的声明不能包含任何实现代码,必须以分号结尾</li> <li>按照惯例,接口名称必须从大写的<strong>I</strong>开始</li> <li>与类和结构一样,接口声明还可以分隔成分部接口声明</li> <li>接口声明可以由任何的访问修饰符如: public、protected、internal或private</li> <li>但接口的成员是<strong>隐式public</strong>,不允许有任何访问修饰符</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IMyInterface {
+        int DoStuff (int nVar1, long lVar2);
+        double DoOtherStuff(string s, long x);
+    }
+</code></pre></div><h3 id="实现接口"><a href="#实现接口" aria-hidden="true" class="header-anchor">#</a> 实现接口</h3> <p><strong>只有类和结构能实现接口</strong>,且类和结构必须:</p> <ul><li>在基类列表中包含接口名称</li> <li>为每一个接口的成员提供实现</li> <li>基类列表中除了接口外的基类名称必须放在所有接口之前</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class Derived: MyBaseClass, IIfc1, IEnumerable, IComparable {
+        ...
+    }
+</code></pre></div><h3 id="接口是引用类型"><a href="#接口是引用类型" aria-hidden="true" class="header-anchor">#</a> 接口是引用类型</h3> <p><strong>接口是引用类型</strong>, 不能直接通过类对象的成员访问接口, 但可以通过<strong>把类对象引用强制转换为接口类型</strong>来获取指向<strong>接口的引用</strong></p> <div class="language-cs extra-class"><pre class="language-text"><code>     ↓接口        ↓转换为接口
+    IIfc1 ifc = (IIfc1) mc;          // 获取接口的引用
+          ↑接口引用      ↑类对象引用
+
+    ifc.PrintOut(&quot;interface&quot;);       // 使用接口的引用调用方法
+</code></pre></div><p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IIfc1
+    {
+        void PrintOut(string s);
+    }
+    class CD: IIfc1
+    {
+        public void PrintOut(string s)
+        {
+            Console.WriteLine(&quot;Calling through: {0}&quot;, s);
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+            {
+            CD cd = new CD();
+            cd.PrintOut(&quot;object&quot;); // Calling through: object
+            IIfc1 ifc = (IIfc1)cd; // 将类对象的引用转换为接口类型的引用
+            ifc.PrintOut(&quot;interface&quot;); // Calling through: interface
+            }
+    }
+</code></pre></div><h3 id="接口和as运算符"><a href="#接口和as运算符" aria-hidden="true" class="header-anchor">#</a> 接口和as运算符</h3> <p>如果将类对象的引用强制转换为<strong>类未实现的接口</strong>的引用,强制转换操作会抛出异常,但使用<code>as</code>运算符可以避免这个问题:</p> <ul><li>如果类实现了接口, 表达式返回指向接口的引用</li> <li>如果类未实现接口, 表达式返回 null 而不是抛出异常</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    // IIfc1 ifc = (IIfc1) mc;
+    IIfc1 ifc = mc as IIfc1;
+</code></pre></div><h3 id="实现多个接口"><a href="#实现多个接口" aria-hidden="true" class="header-anchor">#</a> 实现多个接口</h3> <ul><li>类或结构可以实现任意数量的接口</li> <li>所有实现的接口必须列在基类列表并以逗号分隔(如果有基类名称, 必须放在基类后面)</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IDataRetrieve
+    {
+        int GetData();
+    }
+    interface IDataStore
+    {
+        void SetData(int x);
+    }
+    class MyDataInt: IDataRetrieve, IDataStore
+    {
+        int Mem1;
+        public int GetData()
+        {
+            return Mem1;
+        }
+        public void SetData(int x)
+        {
+            Mem1 = x;
+        }
+    }
+    class Program {
+        static void Main(string[] args)
+            {
+            MyDataInt data = new MyDataInt();
+            data.SetData(5);
+            Console.WriteLine(&quot;Value = {0}&quot;, data.GetData()); // Value = 5
+            }
+    }
+</code></pre></div><h3 id="实具有重复成员的接口"><a href="#实具有重复成员的接口" aria-hidden="true" class="header-anchor">#</a> 实具有重复成员的接口</h3> <p>如果类实现的多个接口中, 有两个接口成员都有相同的签名和返回类型, 那么类可以<strong>实现单个成员</strong>来满足所有包含重复成员的接口:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IIfc1 {
+        void PrintOut(string s);
+    }
+    interface IIfc2 {
+        void PrintOut(string s);
+    }
+    class MyClass: IIfc1, IIfc2
+    {
+        public void PrintOut(string s) {
+            Console.WriteLine(&quot;Calling through: {0}&quot;, s);
+        }
+    }
+</code></pre></div><h3 id="多个接口的引用"><a href="#多个接口的引用" aria-hidden="true" class="header-anchor">#</a> 多个接口的引用</h3> <p>如果类实现了多个接口, 可以获取每一个接口的独立引用:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IIfc1 {
+        void PrintOut(string s);
+    }
+    interface IIfc2 {
+        void PrintOut(string s);
+    }
+    class CF: IIfc1, IIfc2
+    {
+        public void PrintOut(string s) {
+            Console.WriteLine(&quot;Calling through: {0}&quot;, s);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            CF cf = new CF();
+            IIfc1 ifc1 = cf as IIfc1;
+            IIfc2 ifc2 = cf as IIfc2;
+            cf.PrintOut(&quot;object&quot;);       // Calling through: object
+            ifc1.PrintOut(&quot;interface1&quot;); // Calling through: interface1
+            ifc2.PrintOut(&quot;interface2&quot;); // Calling through: interface2
+            }
+    }
+</code></pre></div><h3 id="派生成员实现"><a href="#派生成员实现" aria-hidden="true" class="header-anchor">#</a> 派生成员实现</h3> <p>实现接口的类可以从它的基类<strong>继承</strong>实现的代码:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IIfc1{
+        void PrintOut(string s);
+    }
+    class BaseClass
+    {
+        public void PrintOut(string s)
+        {
+            Console.WriteLine(&quot;Calling through: {0}&quot;, s);
+        }
+    }
+    class DerviedClass : BaseClass, IIfc1
+    { }
+    class Program 
+    {
+        static void Main(string[] args)
+        {
+            DerviedClass dc = new DerviedClass();
+            dc.PrintOut(&quot;object&quot;); // Calling through: object
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/15-8.d4a38fb5.png" alt=""></p> <h3 id="显式接口成员实现"><a href="#显式接口成员实现" aria-hidden="true" class="header-anchor">#</a> 显式接口成员实现</h3> <p>如果希望每一个接口分离实现，可以创建<strong>显式接口成员实现</strong>：</p> <ul><li>与所有接口实现相似</li> <li>使用<strong>限定接口名称</strong>声明，由接口名称和成员名称以及它们中间的点分隔符号构成</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyClass : IIfc1, IIfc2
+    {
+        // 注意 没有类级别的实现
+        void IIfc1.PrintOut(string s) {
+            // 显式接口成员实现
+        }
+        void IIFc2.PrintOut(string s) {
+            // 显式接口成员实现
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/15-9.0ec2ab73.png" alt=""></p> <p>有<strong>三种</strong>实现场景：</p> <ul><li>类级别实现</li> <li>显式接口成员实现</li> <li>类级别和显式接口成员实现</li></ul> <p><strong>显式接口成员实现只能通过指向接口的引用来访问</strong>，其他的类成员都不可以直接访问它们</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyClass: IIfc1
+    {
+        void IIfc1.PrintOut(string s) {
+            Console.WriteLine(&quot;IIfc1&quot;);
+        }
+        public void Method1() {
+            PrintOut(&quot;...&quot;); // 编译错误 不可直接访问
+            this.PrintOut(&quot;...&quot;); // 编译错误
+            ((IIfc1)this).PrintOut(&quot;...&quot;); // IIfc1
+               ↑转换为接口的引用
+        }
+    }
+</code></pre></div><h3 id="接口可以继承接口"><a href="#接口可以继承接口" aria-hidden="true" class="header-anchor">#</a> 接口可以继承接口</h3> <p>接口本身可以从一个或多个接口<strong>继承</strong></p> <ul><li>指定某个接口继承其他接口，应在接口声明中把基接口以逗号分隔的列表形式放在接口名称的冒号之后</li> <li>与类不同，类在继承接口时，基类列表中只能有一个类名，而接口可以在基接口列表中由任意多个接口
+<ul><li>列表中的接口本身也可以继承其他接口</li> <li>结果接口包含它声明的所有接口和所有基接口成员</li></ul></li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IDataRetrieve
+    {
+        int GetData();
+    }
+    interface IDataStore
+    {
+        void SetData(int x);
+    }
+    interface IDataIO : IDataRetrieve, IDataStore
+    {}
+    class MyDataIO: IDataIO
+    {
+        int nPrivateData;
+        public int GetData()
+        {
+            return nPrivateData;
+        }
+        public void SetData(int x)
+        {
+            nPrivateData = x;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyDataIO md = new MyDataIO();
+            md.SetData(5);
+            Console.WriteLine(&quot;{0}&quot;, md.GetData());
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/15-11.5cb7dfe9.png" alt=""></p> <h3 id="不同类实现同一个接口的示例"><a href="#不同类实现同一个接口的示例" aria-hidden="true" class="header-anchor">#</a> 不同类实现同一个接口的示例</h3> <div class="language-cs extra-class"><pre class="language-text"><code>    interface ILiveBirth
+    {
+        string BabyCalled();
+    }
+    class Animal
+    {
+
+    }
+    class Cat: Animal, ILiveBirth
+    {
+        string ILiveBirth.BabyCalled()
+        {
+            return &quot;kitten&quot;;
+        }
+    }
+    class Dog: Animal, ILiveBirth
+    {
+        string ILiveBirth.BabyCalled()
+        {
+            return &quot;puppy&quot;;
+        }
+    }
+    class Bird: Animal
+    {
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Animal[] animalArray = new Animal[3];
+            animalArray[0] = new Cat();
+            animalArray[1] = new Bird();
+            animalArray[2] = new Dog();
+            foreach( Animal a in animalArray)
+            {
+                ILiveBirth b = a as ILiveBirth;
+                if(b != null)
+                {
+                    Console.WriteLine(&quot;Baby is called: {0}&quot;, b.BabyCalled());
+                    // Baby is called: kitten
+                    // Baby is called: puppy
+                }
+            }
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/15-12.b29a26ea.png" alt=""></p> <h2 id="十六-转换"><a href="#十六-转换" aria-hidden="true" class="header-anchor">#</a> 十六.转换</h2> <h3 id="什么是转换"><a href="#什么是转换" aria-hidden="true" class="header-anchor">#</a> 什么是转换</h3> <p><strong>类型转换</strong>：</p> <ul><li>转换是接受一个类型的值并使用它作为另一个类型的等价值的过程</li> <li>转换后的值应该和源值一样的，但其类型为目标类型</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    short varl = 5;
+    sbyte var2 = 10;
+    var2 = (sbyte) var1; // 把 var1 值强制转换为sbyte类型
+</code></pre></div><p><img src="/Notebook/assets/img/16-2.ae0efad7.png" alt=""></p> <h3 id="隐式转换"><a href="#隐式转换" aria-hidden="true" class="header-anchor">#</a> 隐式转换</h3> <p><strong>隐式转换</strong>是指有些类型的转化不会丢失数据或精度：</p> <ul><li>语言会自动做这些转换，叫做隐式转换</li> <li>从位数更少的源转换为位数更多的目标类型时，目标中多出来的位需要用0或1填充</li> <li>当从更小的无符号类型转换为更大的无符号类型时，目标类型多出来的最高位都以0进行填充，这叫做<strong>零扩展</strong></li> <li>对于有符号类型的转换，额外的高位用源表达式的符号位进行填充，保证被转换值得正确符号和大小，这叫做<strong>符号扩展</strong></li></ul> <p><img src="/Notebook/assets/img/16-3.bb53b363.png" alt=""> <img src="/Notebook/assets/img/16-4.ef8500ff.png" alt=""></p> <h3 id="显式转换和强制转换"><a href="#显式转换和强制转换" aria-hidden="true" class="header-anchor">#</a> 显式转换和强制转换</h3> <p>如果要把长类型转换为短类型，目标类型很可能无法在不损失数据的情况下提供源值</p> <p><img src="/Notebook/assets/img/16-5.8b95d06a.png" alt=""></p> <p>对于预定义类型，在那些从源类型到目标类型不会发生数据丢失的情况下，C#会自动将一个数据类型转换为另一个数据类型；如果会出现数据丢失，语言是不会提供自动转换，必须使用<strong>显式转换</strong>。也叫做<strong>强制转换表达式</strong>：</p> <ul><li>一对圆括号，里面时目标类型</li> <li>目标类型后是源表达式</li></ul> <p>注意：使用强制转换表达式意味着要承担执行操作可能引起丢失数据的后果</p> <p>eg: 将两个ushort类型的值转换为byte类型</p> <div class="language-cs extra-class"><pre class="language-text"><code>    ushort sh1 = 10;
+    byte sb1 = (byte) sh1;
+    Console.WriteLine(&quot;sb: {0} = 0x{0:X}&quot;, sb1); // sb: 10 = 0xA
+
+    ushort sh2 = 1365;
+    byte sb2 = (byte) sh2;
+    Console.WriteLine(&quot;sb: {0} = 0x{0:X}&quot;, sb2); // sb: 85 = 0x55
+</code></pre></div><p><img src="/Notebook/assets/img/16-6.23272910.png" alt=""></p> <h3 id="转换的类型"><a href="#转换的类型" aria-hidden="true" class="header-anchor">#</a> 转换的类型</h3> <p><strong>转换的类型</strong>有很多种：</p> <ul><li>除了标准转换，还可以为自定义类型定义隐式转换和显式转换</li> <li>还有一个预定义的转换类型，叫做<strong>装箱</strong>，可以将任何值类型转换为：
+<ul><li>object类型</li> <li>System.ValueType类型</li></ul></li> <li>拆箱可以将一个装箱的值转换为原始类型</li></ul> <p><img src="/Notebook/assets/img/16-7.1ce788e6.png" alt=""></p> <h3 id="数字的转换"><a href="#数字的转换" aria-hidden="true" class="header-anchor">#</a> 数字的转换</h3> <p><img src="/Notebook/assets/img/16-8.da5c7787.png" alt=""></p> <p>任何数字类型都可以转换为其他数字类型</p> <p><strong>1. 隐式数字转换</strong>：</p> <ul><li>少位的数字类型可以隐式转换为多位的数字类型</li> <li>下图中有路径的都是隐式转换，无路径的必须使用显式转换</li></ul> <p><img src="/Notebook/assets/img/16-9.f9703422.png" alt=""></p> <p>对于整数类型，C#提供了选择运行时是否在进行类型转换时<strong>检测结果溢出</strong>的能力，通过使用<code>checked</code>和<code>unchecked</code>运算符实现：</p> <ul><li>代码片段是否被检查称作<strong>溢出检测上下文</strong> <ul><li>如果指定一个表达式或一段代码为checked，CLR会在转换溢出时抛出一个OverFlowException异常</li> <li>如果代码是unchecked，转换会一直执行而不管是否会溢出</li></ul></li> <li>默认情况下溢出检测上下文是<strong>unchecked</strong></li></ul> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    ushort sh = 2000;
+    byte sb;
+    sb = unchecked((byte) sh); // 大多数位丢失了 会进行显式转换不报错
+    Console.WriteLine(&quot;sb: {0}&quot;, sb);
+ 
+    sb = checked((byte) sh); // 会抛出OverFlowException异常
+    Console.WriteLine(&quot;sb: {0}&quot;, sb);
+</code></pre></div><p><code>checked</code>和<code>unchecked</code>运算符用于<strong>圆括号</strong>内的单个表达式，而<code>checked</code>和<code>unchecked</code>语句控制的是<strong>一块代码中的所有转换</strong>：</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    byte sb;
+    ushort sh = 2000;
+    unchecked {
+        sb = unchecked((byte) sh);
+        Console.WriteLine(&quot;sb: {0}&quot;, sb);
+    }
+    checked {
+        sb = checked((byte) sh);
+        Console.WriteLine(&quot;sb: {0}&quot;, sb);    
+    }
+</code></pre></div><p><strong>2. 显式数字转换</strong></p> <p><img src="/Notebook/assets/img/16-10.a08e1ab3.png" alt=""></p> <p>2-1. <strong>整数</strong>类型到<strong>整数</strong>类型</p> <p><img src="/Notebook/assets/img/16-11.25ab9f42.png" alt=""></p> <p>2-2. <strong>float或double</strong>类型到<strong>整数</strong>类型</p> <p><img src="/Notebook/assets/img/16-12.d136f69e.png" alt=""></p> <p>2-3. <strong>decimal</strong>到<strong>整数</strong>类型</p> <p><img src="/Notebook/assets/img/16-13.8f1b05ed.png" alt=""></p> <p>2-4. <strong>double</strong>到<strong>float</strong></p> <ul><li>float类型值占32位，double类型值占64位</li></ul> <p><img src="/Notebook/assets/img/16-14.166f2fcb.png" alt=""></p> <p>2-5. <strong>float或double</strong>类型到<strong>decimal</strong></p> <p><img src="/Notebook/assets/img/16-15.215ee929.png" alt=""></p> <p>2-6. <strong>decimal</strong>到<strong>float或double</strong></p> <ul><li>从decimal类型到float类型总会成功，但可能会损失精度</li></ul> <p><img src="/Notebook/assets/img/16-16.de7c9c94.png" alt=""></p> <h3 id="引用转换"><a href="#引用转换" aria-hidden="true" class="header-anchor">#</a> 引用转换</h3> <p>引用类型的对象由内存中的两部分组成：引用和数据</p> <ul><li>由引用保存的那部分信息是它指向的数据类型</li> <li><strong>引用类型转换</strong>接受源引用并返回一个指向堆中同一位置的引用，但是把引用“标记”为其他类型</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        static void Main() {
+            B myVar1 = new B();
+            A myVar2 = (A) myVar1; // 引用转换
+            Console.WriteLine(&quot;{0}&quot;, myVar2.Field1); // 正常
+            Console.WriteLine(&quot;{0}&quot;, myVar2.Field2); // 编译错误 Field2对myVar2不可见
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/16-17.5d05c808.png" alt=""></p> <p><strong>隐式引用转换</strong>：</p> <ul><li>所有引用类型可以被隐式转换为object类型</li> <li>任何类型可以隐式转换到它继承的接口</li> <li>类可以隐式转换到：
+<ul><li>它继承链中的任何类（如上例中的B到A）</li> <li>它实现的任何接口</li></ul></li> <li>委托可以隐式转换到下图中的.NET BCL类和接口</li> <li>Array数组，其中元素是Ts类型的，可以隐式转换到
+<ul><li>下图中的.NET BCL类和接口</li> <li>另一个数组ArrayT，其中元素是Tt类型，满足以下条件：
+<ul><li>两个数组维度一样</li> <li>元素类型Ts和Tt都是引用类型，不是值类型</li> <li>在类型Ts和Tt中存在隐式转换
+<img src="/Notebook/assets/img/16-19.2e39c7c3.png" alt=""></li></ul></li></ul></li></ul> <p><strong>显式引用转换</strong>：从一个普通类型到一个更精确类型的引用转换</p> <ul><li>显式转换包括：
+<ul><li>从object到任何引用类型的转换</li> <li>从基类到从它继承的类的转换</li></ul></li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        static void Main() {
+            A myVar1 = new A();
+            B myVar2 = (B) myVar1; // 不正确的强制转换 抛出InvalidCastException异常
+            Console.WriteLine(&quot;{0}&quot;, myVar2.Field2); // 错误，Field2不在内存中
+        }
+    }
+</code></pre></div><p>进行<strong>有效显式引用转换</strong>：有三种</p> <ul><li>从衍生类到基类，没必要进行显式转换，因为会自动进行隐式转换（如B到A）</li> <li>源引用是null，此时从基类到衍生类还是允许的，不会报错（如A到B）</li> <li>由源引用指向的实际数据可以被安全地进行隐式转换，见下例</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class A {
+        public int Field1;
+    }
+    class B: A {
+        public int Field2;
+    }
+    class Program {
+        B myVar1 = new B();
+        A myVar2 = myVar1; // 将B类引用myVar1隐式转换为A类
+        B myVar3 = (B) myVar2; // 该转换是允许地，因为数据是B类型的
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/16-21.52f6e892.png" alt=""></p> <h3 id="装箱转换"><a href="#装箱转换" aria-hidden="true" class="header-anchor">#</a> 装箱转换</h3> <p>包括值类型在内的所有C#类型都派生自object类型，而值类型是高效轻量的类型，默认情况下堆上不包括它们的对象组件。</p> <p><strong>装箱</strong>是一种隐式转换，它接受值类型的值，根据这个值在堆上创建一个完整的引用类型对象并返回对象引用</p> <p>eg:</p> <ul><li><code>int i = 12; object oi = null; oi = i;</code></li> <li>我们希望把变量i的值赋给oi，但oi是引用类型的变量，我们必须在堆上分配一个对象的引用，然而变量i是值类型，不存在指向堆上某对象的引用</li> <li>系统将i的值<strong>装箱</strong>：
+<ul><li>在堆上创建了int类型的对象</li> <li>将i的值复制到int对象</li> <li>返回int对象的引用，让oi作为引用保存
+<img src="/Notebook/assets/img/16-22.e77ab28d.png" alt=""></li></ul></li></ul> <p><strong>装箱</strong>是创建副本，并不是在原始项上进行操作，装箱返回的是值的<strong>引用类型副本</strong>，装箱后，该值有两份副本————原始值类型和引用类型副本，每一个都可以独立操作</p> <p>eg：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    int i = 10;
+    object oi = i;
+    Console.WriteLine(&quot;i: {0}, oi: {1}&quot;, i, oi); // i: 10 oi: 10
+
+    i = 12;
+    oi = 15;
+    Console.WriteLine(&quot;i: {0}, oi: {1}&quot;, i, oi); // i: 12 oi: 15
+</code></pre></div><p><img src="/Notebook/assets/img/16-23.f945e4fc.png" alt=""></p> <p><strong>装箱是值类型到引用类型的隐式转换</strong>：任何值类型ValueTypeS都可以被隐式转换为object类型、System.ValueType或InterfaceT（如果ValueTypeS实现了InterfaceT）</p> <h3 id="拆箱转换"><a href="#拆箱转换" aria-hidden="true" class="header-anchor">#</a> 拆箱转换</h3> <p><strong>拆箱</strong>是把装箱后的对象转换回值类型的过程</p> <ul><li>拆箱是<strong>显式转换</strong></li> <li>系统把值拆箱成ValueTypeT时执行以下步骤：
+<ul><li>它检测到要拆箱的对象实际是ValueTypeT的装箱值</li> <li>它把对象的值复制到变量</li></ul></li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>static void Main() {
+    int i = 10;
+    onject oi = i; // 装箱
+    int j = (int) oi; // 拆箱
+    Console.WriteLine(&quot;i: {0}, oi: {1}, j: {2}&quot;, i, oi, j); // 10 10 10
+}
+</code></pre></div><h3 id="用户自定义转换"><a href="#用户自定义转换" aria-hidden="true" class="header-anchor">#</a> 用户自定义转换</h3> <p>除了标准转换，还可以为类和结构定义隐式转换和显式转换，即<strong>用户自定义转换</strong>：</p> <ul><li>使用<code>implicit</code>（隐式）和<code>explicit</code>（显式）关键字</li> <li>需要<code>public</code>和<code>static</code>修饰符</li> <li>需要<code>operator</code>运算符</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    public static implicit operator int(Person p) {
+        return p.age;
+    }
+</code></pre></div><p>用户自定义转换的<strong>约束</strong>：</p> <ul><li>只可以为类和结构定义用户自定义转换</li> <li>不能重定义标准隐式转换或显式转换</li> <li>对于源类型S和目标类型T，如下命题为真：
+<ul><li>S和T必须是不同类型</li> <li>S和T不能通过继承关联，即S不能继承T，T也不能继承S</li> <li>S和T都不能是接口类型或object类型</li> <li>转换运算符必须是S或T的成员</li></ul></li> <li>对于相同源和目标类型，不能声明隐式或显式转换</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Person
+    {
+        public string Name;
+        public int Age;
+        public Person (string name, int age)
+        {
+            Name = name;
+            Age = age;
+        }
+        public static implicit operator int(Person p)
+        {
+            return p.Age;
+        }
+        public static implicit operator Person(int i)
+        {
+            return new Person(&quot;Nemo&quot;, i);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Person bill = new Person(&quot;bill&quot;, 25);
+            int age = bill;
+            Console.WriteLine(&quot;Person Info: {0}, {1}&quot;, bill.Name, age); // Person Info: bill 25
+            Person anon = 35;
+            Console.WriteLine(&quot;Person Info: {0}, {1}&quot;, anon.Name, anon.Age); //Person Info: Nemo 35
+        }
+    }
+
+</code></pre></div><p><strong>注意</strong>，如果使用<code>explicit</code>运算符定义相同的转换，则需要强制转换表达式来进行转换：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    public static explicit operator int(Person p) {
+        return p.Age;
+    }
+    static void Main() {
+        ...
+        int age = (int) bill; // 使用强制转换表达式
+    }
+</code></pre></div><p><strong>用户自定义转换</strong>在完整转换中最多可以有三个步骤：</p> <ul><li>预备标准转换</li> <li>用户自定义转换</li> <li>后续标准转换</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class Employee : Person { }
+    class Person
+    {
+        public string Name;
+        public int Age;
+        public static implicit operator int(Person p)
+        {
+            return p.Age;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            bill.Name = &quot;William&quot;;
+            bill.Age = 25;
+            float fVar = bill;
+            Console.WriteLine(&quot;Person Info: {0}, {1}&quot;, bill.Name, fVar); // Person Info: William 25
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/16-28.67cf5c41.png" alt=""></p> <h3 id="is运算符"><a href="#is运算符" aria-hidden="true" class="header-anchor">#</a> is运算符</h3> <p>通过使用<strong>is</strong>运算符来检查转换是否会成功完成，从而避免抛出异常，语法如下：</p> <div class="language-cs extra-class"><pre class="language-text"><code>Expr is TargetType // 返回 bool
+ ↑源表达式     ↑目标类型
+</code></pre></div><p>如果Expr可以通过以下方式成功转换为目标类型，则运算符返回true：</p> <ul><li>引用转换</li> <li>装箱转换</li> <li>拆箱转换</li> <li>不能用于用户自定义转换
+eg:</li></ul> <div class="language-cs extra-class"><pre class="language-text"><code>    class Employee : Person { }
+    class Person
+    {
+        public string Name = &quot;Anonymous&quot;;
+        public int Age = 25;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            Person p;
+            if (bill is Person) {
+                p = bill;
+                Console.WriteLine(&quot;Person Info: {0}, {1}&quot;, p.Name, p.Age); // Person Info: Anonymous 25
+            }
+            
+        }
+    }
+</code></pre></div><h3 id="as运算符"><a href="#as运算符" aria-hidden="true" class="header-anchor">#</a> as运算符</h3> <p><strong>as</strong>运算符与强制转换运算符相似，但它遇到转换失败不会抛出异常，而是返回null，语法如下：</p> <div class="language-cs extra-class"><pre class="language-text"><code>Expr as TargetType // TargetType必须是引用类型，返回的是引用表达式
+</code></pre></div><p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Employee : Person { }
+    class Person
+    {
+        public string Name = &quot;Anonymous&quot;;
+        public int Age = 25;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee bill = new Employee();
+            Person p;
+            p = bill as Person;
+            if (p != null) {
+                Console.WriteLine(&quot;Person Info: {0}, {1}&quot;, p.Name, p.Age); // Person Info: Anonymous 25
+            }
+            
+        }
+    }
+</code></pre></div><p>注意，as运算符只能用于引用转换和装箱转换，不能用于用户自定义转换或到值类型转换</p> <h2 id="十七-泛型"><a href="#十七-泛型" aria-hidden="true" class="header-anchor">#</a> 十七.泛型</h2> <h3 id="什么是泛型"><a href="#什么是泛型" aria-hidden="true" class="header-anchor">#</a> 什么是泛型</h3> <p>通过<strong>泛型</strong>，我们可以重构代码并且增加一个抽象层，使之应用到它们编码的数据类型上或其他类型。这是专门为多段代码在不同的数据类型上执行相同指令的情况专门设计的</p> <h3 id="c-中的泛型"><a href="#c-中的泛型" aria-hidden="true" class="header-anchor">#</a> C#中的泛型</h3> <p><strong>泛型</strong>特性提供了一种更优雅的方式让多个类型共享一组代码。泛型允许我们声明<strong>类型参数化</strong>的代码，可以用不同的类型进行实例化。注意，<strong>类型不是对象而是对象的模板，泛型类型也不是类型而是类型的模板</strong></p> <p>C#提供了<strong>5种</strong>泛型：类、结构、接口、委托和方法（前4个是类型，方法是成员）</p> <p>eg: 创建一个泛型类</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyStack &lt;T&gt; // 在类型后放置 &lt;T&gt;
+    {
+        int StackPointer = 0;
+        T [] StackArray;
+        public void Push(T x) {...}
+        public Pop() {...}
+    }
+</code></pre></div><h3 id="泛型类"><a href="#泛型类" aria-hidden="true" class="header-anchor">#</a> 泛型类</h3> <p>创建和使用常规的、非泛型的类有两个步骤：声明类和创建类型实例；但<strong>泛型类</strong>不是实际的类而是类的模板，所以使用上有些差别：先构建实际的类类型、再创建这个构建后的类类型的实例</p> <ul><li>在某些类型上使用占位符来声明一个类</li> <li>为占位符提供真实类型，该类型称为<strong>构造类型</strong></li> <li>创建构造类型的实例</li></ul> <p><img src="/Notebook/assets/img/17-3.da9fdf78.png" alt=""></p> <h3 id="声明泛型类"><a href="#声明泛型类" aria-hidden="true" class="header-anchor">#</a> 声明泛型类</h3> <p>声明一个泛型类：</p> <ul><li>在类名后放置一组尖括号(区分泛型类和普通类的标志)</li> <li>在尖括号中用逗号分隔的占位符字符串表示希望提供的类型，这叫做<strong>类型参数</strong></li> <li>在泛型类声明的主体中使用类型参数来表示应该替代的类型</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class SomClass &lt;T1, T2&gt;
+    {
+        public T1 SomeVar = new T1();
+        public T2 OtherVar = new T2();
+    }
+</code></pre></div><h3 id="创建构造类型"><a href="#创建构造类型" aria-hidden="true" class="header-anchor">#</a> 创建构造类型</h3> <p>创建构造类型的语法：列出类名并在尖括号中提供真实类型来替代类型参数，替代类型参数的真实类型叫做<strong>类型实参</strong></p> <p><img src="/Notebook/assets/img/17-4.10ba377e.png" alt=""></p> <h3 id="创建变量和实例"><a href="#创建变量和实例" aria-hidden="true" class="header-anchor">#</a> 创建变量和实例</h3> <p><strong>类对象的创建</strong>：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    // 普通非泛型类型对象的创建
+    MyNonGenClass myNGC = new MyNonGenClass();
+    // 泛型类型对象的创建
+    SomeClass&lt;short, int&gt; mySc1 = new SomeClass&lt;short, int&gt;();
+    // 或者使用 var，让编译器使用类型引用
+    var mySc2 = new SomeClass&lt;short, int&gt;();
+</code></pre></div><p><img src="/Notebook/assets/img/17-6.e9bebcf6.png" alt=""></p> <p>使用泛型的栈的栗子：</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyStack&lt;T&gt;
+    {
+        T[] StackArray;
+        int StackPointer = 0;
+        public void Push(T x)
+        {
+            if (!IsStackFull)
+                StackArray[StackPointer++] = x;
+        }
+        public T Pop()
+        {
+            return (!IsStackEmpty) ? StackArray[--StackPointer] : StackArray[0];
+        }
+        const int MaxStack = 10;
+        bool IsStackFull
+        {
+            get
+            {
+                return StackPointer &gt;= MaxStack;
+            }
+        }
+        bool IsStackEmpty
+        {
+            get
+            {
+                return StackPointer &lt;= 0;
+            }
+        }
+        public MyStack()
+        {
+            StackArray = new T[MaxStack];
+        }
+        public void Print()
+        {
+            for (int i = StackPointer - 1; i &gt;= 0; i--)
+                Console.WriteLine(&quot; Value: {0}&quot;, StackArray[i]);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyStack&lt;int&gt; StackInt = new MyStack&lt;int&gt;();
+            MyStack&lt;string&gt; StackString = new MyStack&lt;string&gt;();
+
+            StackInt.Push(3);
+            StackInt.Push(5);
+            StackInt.Push(7);
+            StackInt.Push(9);
+            StackInt.Print();
+
+            StackString.Push(&quot;This is fun&quot;);
+            StackString.Push(&quot;Hi here&quot;);
+            StackString.Print();
+            // Value: 9
+            // Value: 7
+            // Value: 5
+            // Value: 3
+            // Value: Hi here
+            // Value: This is fun
+        }    
+    }
+</code></pre></div><p>比较：</p> <p><img src="/Notebook/assets/img/17-8.f179fa94.png" alt=""></p> <h3 id="类型参数的约束"><a href="#类型参数的约束" aria-hidden="true" class="header-anchor">#</a> 类型参数的约束</h3> <p>从泛型栈的示例可以看出，它没有尝试添加、比较或做其他任何需要用到项本身的运算符的事情，因为泛型栈不知道它要保存的项的类型是什么，不会知道这些类型实现的成员。但所有的C#对象最终都从<code>object</code>类继承，栈可以确定的是，它保存的项都实现了<code>object</code>的成员，包括<code>ToString</code>、<code>Equals</code>和<code>GetType</code>等等</p> <p>只要代码不访问它处理的一些类型的对象（或者它始终是<code>object</code>的成员），泛型类就能处理任何类型。符合约束的类型参数叫做<strong>未绑定的类型参数</strong>，如果代码尝试使用其他成员，编译器会产生一个错误</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Simple&lt;T&gt;
+    {
+        static public bool LessThan(T i1, T i2)
+        {
+            return i1 &lt; i2; // 错误 不是所有的类都实现了小于运算符
+        }
+    }
+</code></pre></div><p>要让泛型更有用，需要提供额外的信息让编译器知道参数可以接受哪些类型，这些额外的信息叫做<strong>约束</strong>。只有符合约束的类型才能替代给定的类型参数，来产生构造类型</p> <p>约束使用<strong>where</strong>子句列出：</p> <ul><li>每一个约束的类型参数有自己的where子句</li> <li>如果形参有多个约束，它们在where子句中使用逗号分隔</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    where TypeParam : constraint, contraint, ... 
+                             ↑约束列表
+</code></pre></div><p>where子句需要注意：</p> <ul><li>子句在类型参数列表的关闭尖括号后列出</li> <li>子句不使用逗号或其他符号分隔</li> <li>子句可以以任何次序列出</li> <li>子句中的约束必须有特定顺序
+<ul><li>最多只能有一个主约束，如果有则必须放在第一位</li> <li>可以有任意多的接口约束</li> <li>如果有构造函数约束，必须放在最后</li></ul></li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyClass &lt;T1, T2, T3&gt;
+        where T2: Customer
+        where T3: IComparable
+    {
+        ...
+    }
+</code></pre></div><p>有<strong>5种</strong>类型的约束</p> <p><img src="/Notebook/assets/img/17-2.c2d115fc.png" alt=""></p> <p>它们的顺序：</p> <p><img src="/Notebook/assets/img/17-9.26976608.png" alt=""></p> <h3 id="泛型方法"><a href="#泛型方法" aria-hidden="true" class="header-anchor">#</a> 泛型方法</h3> <p><strong>泛型方法</strong>可以在泛型和非泛型类以及结构和接口中声明</p> <p><strong>声明泛型方法</strong>：具有类型参数列表和可选的约束</p> <ul><li>泛型方法有两个参数列表
+<ul><li>封闭在圆括号内的方法参数列表</li> <li>封闭在尖括号内的类型参数列表</li></ul></li> <li>在方法名称后和方法参数列表之前放置类型参数列表</li> <li>在方法参数列表后放置可选的约束子句</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>                            ↓类型参数列表     ↓约束子句
+    public void PrintData&lt;S, T&gt; (S p, T t) where S: Person
+    {                              ↑方法参数列表
+        ...                        
+    }
+</code></pre></div><p><strong>调用类型参数列表</strong>：需要在调用方法时提供<strong>类型实参</strong></p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    void DoStuff &lt;T1, T2&gt; (T1 t1, T2 t2)
+    {
+        T1 someVar = t1;
+        T2 otherVar = t2;
+    }
+    DoStuff &lt;short, int&gt; (sVal, iVal);
+    DoStuff &lt;int, long&gt; (iVal, lVal);
+</code></pre></div><p>当传入方法参数时，编译器可以通过方法参数推断出泛型方法的类型形参的类型，因此可以省略类型参数和调用中的尖括号</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    int myInt = 5;
+    MyMethod &lt;int&gt; (myInt);
+    =
+    MyMethod(myInt);
+</code></pre></div><p>eg：在一个非泛型类中声明一个泛型方法</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class MyMethod
+    {
+        static public void ReverseAndPrint&lt;T&gt; (T[] arr)
+        {
+            Array.Reverse(arr);
+            foreach (T item in arr)
+                Console.Write(&quot;{0}, &quot;, item.ToString());
+            Console.WriteLine(&quot;&quot;);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 创建各种类型的数组
+            var intArray = new int[] { 3, 5, 7, 9, 11 };
+            var stringArray = new string[] { &quot;first&quot;, &quot;second&quot;, &quot;third&quot; };
+            var doubleArray = new double[] { 3.567, 7.891, 2.345 };
+
+            MyMethod.ReverseAndPrint&lt;int&gt;(intArray); // 11, 9, 7, 5, 3,
+            MyMethod.ReverseAndPrint&lt;string&gt;(stringArray); // third, second, first,
+            MyMethod.ReverseAndPrint&lt;double&gt;(doubleArray); // 2.345, 7.891, 3.567,
+
+            MyMethod.ReverseAndPrint(intArray); // 3, 5, 7, 9, 11,
+            MyMethod.ReverseAndPrint(stringArray); // first, second, third,
+            MyMethod.ReverseAndPrint(doubleArray); // 3.567, 7.891, 2.345,
+        }
+    }
+</code></pre></div><h3 id="扩展方法和泛型类"><a href="#扩展方法和泛型类" aria-hidden="true" class="header-anchor">#</a> 扩展方法和泛型类</h3> <p>扩展方法与泛型类结合使用，允许将类中静态方法关联到不同的泛型类上，还允许像调用类构造方法一样来调用方法</p> <p><strong>泛型类的扩展方法</strong>：</p> <ul><li>必须声明为<code>static</code></li> <li>必须是静态类的成员</li> <li>第一个参数类型中必须有关键字<code>this</code>,后面是扩展的泛型类的名字</li></ul> <p>eg:一个叫做Print的扩展方法，扩展了叫做<code>Holder&lt;T&gt;</code>的泛型类</p> <div class="language-cs extra-class"><pre class="language-text"><code>    static class ExtendHolder
+    {
+        public static void Print&lt;T&gt;(this Holder&lt;T&gt; h)
+        {
+            T[] vals = h.GetValues();
+            Console.WriteLine(&quot;{0},\t{1},\t{2}&quot;, vals[0], vals[1], vals[2]);
+        }
+    }
+    class Holder&lt;T&gt;
+    {
+        T[] Vals = new T[3];
+        public Holder (T v0, T v1, T v2)
+        {
+            Vals[0] = v0;
+            Vals[1] = v1;
+            Vals[2] = v2;
+        }
+        public T[] GetValues()
+        {
+            return Vals;
+        }
+    }
+    class Program 
+    {
+        static void Main(string[] args)
+            {
+            var intHolder = new Holder&lt;int&gt;(3, 5, 7);
+            var stringHolder = new Holder&lt;string&gt;(&quot;a1&quot;, &quot;a2&quot;, &quot;a3&quot;);
+            intHolder.Print(); // 3  5  7
+            stringHolder.Print();// a1  a2  a3
+            }
+    }
+</code></pre></div><h3 id="泛型结构"><a href="#泛型结构" aria-hidden="true" class="header-anchor">#</a> 泛型结构</h3> <p>与泛型类相似，<strong>泛型结构</strong>可以有类型参数和约束</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    struct PieceOfData&lt;T&gt;
+    {
+        public PieceOfData(T value)
+        {
+            _data = value;
+        }
+        private T _data;
+        public T Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            var intData = new PieceOfData&lt;int&gt;(10);
+            var stringData = new PieceOfData&lt;string&gt;(&quot;Hi here&quot;);
+            Console.WriteLine(&quot;intData = {0}&quot;, intData.Data);
+            Console.WriteLine(&quot;stringData = {0}&quot;, stringData.Data);
+            }
+    }
+</code></pre></div><h3 id="泛型委托"><a href="#泛型委托" aria-hidden="true" class="header-anchor">#</a> 泛型委托</h3> <p><strong>声明泛型委托</strong>：</p> <ul><li>在委托名后、委托参数列表之前的尖括号中放置类型参数列表</li> <li>有两个参数列表：委托形参列表和类型参数列表</li> <li>类型参数列表的范围包括：
+<ul><li>返回值</li> <li>形参列表</li> <li>约束子句</li></ul></li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>                             ↓类型参数列表  
+    delegate  R  MyDelegate&lt;T, R&gt;(T value);
+              ↑返回类型             ↑委托形参
+</code></pre></div><p>eg: 在Main中，泛型委托MyDelegate使用string类型的实参实例化，并且用PrintString方法初始化</p> <div class="language-cs extra-class"><pre class="language-text"><code>    delegate void MyDelegate&lt;T&gt;(T value); // 泛型委托
+    class SimplePrint
+    {
+        static public void PrintString(string s) // 方法匹配委托
+        {
+            Console.WriteLine(s);
+        }
+        static public void PrintUpperString(string s) // 方法匹配委托
+        {
+            Console.WriteLine(&quot;{0}&quot;, s.ToUpper());
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+            {
+            var myDel = new MyDelegate&lt;string&gt;(SimplePrint.PrintString); // 创建委托的实例
+            myDel += SimplePrint.PrintUpperString; // 向委托添加方法
+            myDel(&quot;Hi here&quot;);
+            // Hi here
+            // HI HERE
+            }
+    }
+</code></pre></div><h3 id="泛型接口"><a href="#泛型接口" aria-hidden="true" class="header-anchor">#</a> 泛型接口</h3> <p>泛型接口允许我们编写参数和接口成员返回类型是泛型类型参数的接口，泛型接口的声明与非泛型接口相似，只是多了尖括号和类型参数</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IMyIfc&lt;T&gt; // 泛型接口
+    {
+        T ReturnIt(T inValue);
+    }
+    class SimpleDervied&lt;S&gt;: IMyIfc&lt;S&gt; // 泛型类
+    {
+        public S ReturnIt(S inValue)
+        {
+            return inValue;
+        }
+    }
+    class Program
+    {
+        static void Main()
+        {
+            var trivInt = new SimpleDervied&lt;int&gt;();
+            var trivString = new SimpleDervied&lt;string&gt;();
+            Console.WriteLine(&quot;{0}&quot;, trivInt.ReturnIt(5));
+            Console.WriteLine(&quot;{0}&quot;, trivString.ReturnIt(&quot;Hi here&quot;));
+        }
+    }
+</code></pre></div><p><strong>泛型接口的实现必须唯一</strong>，必须保证类型实参组合不会在类型中产生两个重复接口</p> <p>eg: 错误示例</p> <div class="language-cs extra-class"><pre class="language-text"><code>    interface IMyIfc&lt;T&gt; // 泛型接口
+    {
+        T ReturnIt(T inValue);
+    }
+    class SimpleDervied&lt;S&gt;: IMyIfc&lt;int&gt;, IMyIfc&lt;S&gt; // 错误
+    {
+        public int ReturnIt(int inValue) // 实现第一个接口
+        {
+            return inValue;
+        }
+        public S ReturnIt(S inValue) // 实现第二个接口
+        {                            // 如果把int作为类型参数来替代第二个接口中的S，则会有两个相同类型的接口，这是不允许的
+            return inValue;
+        }
+    }
+</code></pre></div><h3 id="协变"><a href="#协变" aria-hidden="true" class="header-anchor">#</a> 协变</h3> <p><strong>可变性</strong>：协变、逆变、不变</p> <p><strong>赋值兼容性</strong>：将派生类对象的实例赋值给基类的变量</p> <p>eg: 将派生类Dog的对象，赋值给基类Animal类型的变量</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Animal
+    {
+        public int NumberOfLegs = 4;
+    }
+    class Dog: Animal
+    {
+    }
+    class Program
+    {
+        static void Main()
+        {
+            Animal a1 = new Animal();
+            Animal a2 = new Dog();
+            Console.WriteLine(&quot;Number of dog legs: {0}&quot;, a2.NumberOfLegs);
+        }
+    }
+</code></pre></div><p><img src="/Notebook/assets/img/17-12.601e02c0.png" alt=""></p> <p>eg:示例2</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Animal
+    {
+        public int NumberOfLegs = 4;
+    }
+    class Dog: Animal
+    {
+    }
+    delegate T Factory&lt;T&gt;();
+    class Program
+    {
+        static DogS MakeDog()
+        {
+            return new DogS();
+        }
+        static void Main(string[] args)
+            {
+            Factory&lt;DogS&gt; dogMaker = MakeDog; // 创建委托对象
+            Factory&lt;AnimalS&gt; animalMaker = dogMaker; // 尝试赋值委托对象 报错
+            Console.WriteLine(animalMaker().NumberOfLegs.ToString());
+            }
+    }
+</code></pre></div><p><strong>报错分析</strong>：看上去由派生类构造的委托应该可以赋值给由基类构造的委托，为什么会报错呢？赋值兼容性不成立了吗？</p> <p>不是，这个原则还是成立的，在这里不生效的原因是：尽管DogS是AnimalS的派生类，但委托<code>Factory&lt;DogS&gt;</code>没有从<code>Factory&lt;AniamlS&gt;</code>派生，这两个委托是同级的，之间没有派生关系，所以赋值兼容性不适用</p> <p>如果<strong>派生类</strong>只是用于<strong>输出值</strong>，那么这种结构化的委托有效性之间的常数关系叫做<strong>协变</strong>，使用<code>out</code>关键字标记委托声明中的类型参数，就能让编译器知道这个是我们的期望，就能解决报错了</p> <p>更改为<code>delegate T Factory&lt;out T&gt;();</code></p> <p><img src="/Notebook/assets/img/17-14.f39633f3.png" alt=""></p> <h3 id="逆变"><a href="#逆变" aria-hidden="true" class="header-anchor">#</a> 逆变</h3> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class Program
+    {
+        delegate void Action1&lt;in T&gt;(T a);
+        static void ActOnAnimal(AnimalS a)
+        {
+            Console.WriteLine(a.NumberOfLegs);
+        }
+        static void Main(string[] args)
+            {
+            Action1&lt;AnimalS&gt; act1 = ActOnAnimal;
+            Action1&lt;DogS&gt; dog1 = act1;
+            dog1(new DogS());
+            }
+    }
+</code></pre></div><p>如果类型参数只用作委托中方法的<strong>输入参数</strong>，即使调用代码传入了一个更高程度的派生类的引用，委托中的方法也只期望一个程度低一些的派生类的引用.</p> <p>这种在期望传入基类时允许传入派生类对象的特性叫做<strong>协变</strong>，逆变允许更高程度的派生类作为输入参数</p> <p><img src="/Notebook/assets/img/17-15.ddd0881b.png" alt=""></p> <p><strong>比较协变和逆变</strong></p> <p><img src="/Notebook/assets/img/17-16.505895f1.png" alt=""></p> <p><strong>接口的协变和逆变</strong>：可以在声明接口时使用<code>out</code>和<code>in</code>关键字</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class AnimalS
+    {
+        public string Name;
+    }
+    class DogS : AnimalS
+    {
+    }
+
+    interface IMyIfcS&lt;out T&gt; // 声明泛型接口 out关键字制定了类型参数时协变的
+    {
+        T GetFirst();
+    }
+    class SimpleReturn&lt;Y&gt;: IMyIfcS&lt;Y&gt;
+    {
+        public Y[]  items =  new Y[2];
+        public Y GetFirst() // 泛型类实现了泛型接口
+        {
+            return items[0];
+        }
+    }
+    class Program
+    {
+        static void DoSomething(IMyIfcS&lt;AnimalS&gt; returner) // 方法接受由AnimalS类型构建的泛型接口IMyIfcS作为参数
+        {
+            Console.WriteLine(returner.GetFirst().Name);
+        }
+        static void Main(string[] args)
+        {
+            SimpleReturn&lt;DogS&gt; dogReturner = new SimpleReturn&lt;DogS&gt;();
+            dogReturner.items[0] = new DogS() { Name = &quot;Avonlea&quot; }; // 使用DogS类创建并初始化了泛型类SimpleReturn的示例
+            IMyIfcS&lt;AnimalS&gt; animalReturner = dogReturner; // 因为使用了out 所以成立
+            DoSomething(dogReturner); // 实现接口的构造协变类调用了DoSomething方法
+        }
+    }
+</code></pre></div><p>以上栗子都是显式的协变和逆变，有些情况下编译器可以自动识别某个已构建的委托是协变还是逆变，从而进行<strong>类型的强制转换</strong>，这通常发生在没有为对象的类型赋值的时候：</p> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>    class AnimalS
+    {
+        public string Name;
+    }
+    class DogS : AnimalS
+    {
+    }
+    class Program
+    {
+        delegate T Factory&lt;T&gt;();
+        static DogS MakeDog()
+        {
+            return new DogS()
+        }
+        static void Main()
+        {
+
+            Factory&lt;AnimalS&gt; animalMaker = MakeDog; // 隐式强制转换 不需要out
+
+            Factory&lt;DogS&gt; dogMaker = MakeDog;
+            Factory&lt;AnimalS&gt; animalMaker = dogMaker; // 已为对象的类型赋值 需要out 
+
+            Factory&lt;AnimalS&gt; animalMaker = new Factory&lt;DogS&gt; (MakeDog) // 需要out
+        }
+    }
+
+</code></pre></div><p><strong>总结</strong></p> <ul><li>变化处理的是使用派生类替换基类的安全情况，即只适用引用类型，所以不适用于从值类型派生其他类型</li> <li>显式变化使用<code>in</code>和<code>out</code>关键字只适用于委托和接口，不适用于类、结构和方法</li> <li>不包括<code>in</code>和<code>out</code>关键字的委托和接口类型参数叫做<strong>不变</strong>，这些类型参数不能同于协变和逆变</li></ul> <h2 id="十八-枚举器和迭代器"><a href="#十八-枚举器和迭代器" aria-hidden="true" class="header-anchor">#</a> 十八.枚举器和迭代器</h2> <h3 id="枚举器和可枚举类型"><a href="#枚举器和可枚举类型" aria-hidden="true" class="header-anchor">#</a> 枚举器和可枚举类型</h3> <p>为什么数组可以通过<code>foreach</code>方法列举出每一项的值？原因是数组可以按需提供一个叫做<strong>枚举器</strong>的对象。枚举器可以一次返回请求的数组中的元素。对于有枚举器的类型而言，获取一个对象枚举器的方法是调用对象的<code>GetEnumerator</code>方法。实现<code>GetEnumerator</code>方法的类型叫做<strong>可枚举类型</strong></p> <p><img src="/Notebook/assets/img/18-1.f7a9212b.png" alt=""></p> <p><code>foreach</code>结构设计用来和可枚举类型一起使用。只要给它的遍历对象是可枚举类型，就会执行以下行为：</p> <ul><li>通过调用<code>GetEnumerator</code>方法获取对象的枚举器</li> <li>从枚举器中请求每一项并且把它作为<strong>迭代变量</strong>，代码可以读取该变量但不可以改变</li></ul> <p>eg:</p> <div class="language-cs extra-class"><pre class="language-text"><code>                              ↓必须是可枚举变量
+    foreach(Type VarName in EnumerableObject)
+    {
+        ...
+    }
+</code></pre></div><h3 id="ienumerator接口"><a href="#ienumerator接口" aria-hidden="true" class="header-anchor">#</a> IEnumerator接口</h3> <p>实现<code>IEnumerator</code>接口的枚举器包含3个函数成员：Current、MoveNext和Reset</p> <ul><li>Current是返回序列中当前位置项的属性
+<ul><li>它是只读属性</li> <li>它返回object类型的引用，所以可以返回任何类型</li></ul></li> <li>MoveNext是把枚举器位置前进到集合中下一项的方法，它也返回布尔值，指示新的位置是否有效
+<ul><li>如果新的位置有效，则返回true</li> <li>如果新的位置无效（比如到达了尾部），则返回false</li> <li>枚举器的原始位置为-1，因此MoveNext必须再第一次使用Current前调用</li></ul></li> <li>Reset是把位置重置为原始状态的方法</li></ul> <p><img src="/Notebook/assets/img/18-3.be2458f3.png" alt=""></p> <p>eg: 模仿 foreach 实现遍历数组</p> <div class="language-cs extra-class"><pre class="language-text"><code>    static void Main() {
+        int[] MyArray = { 10, 11, 12, 14, 15 };
+        IEnumerator ie = MyArray.GetEnumerator();
+        while (ie.MoveNext())
+        {
+            int i = (int) ie.Current;
+            Console.WriteLine(&quot;{0}&quot;, i);
+        }
+    }
+</code></pre></div><h3 id="ienumerable接口"><a href="#ienumerable接口" aria-hidden="true" class="header-anchor">#</a> IEnumerable接口</h3> <h3 id="泛型枚举接口"><a href="#泛型枚举接口" aria-hidden="true" class="header-anchor">#</a> 泛型枚举接口</h3> <h3 id="迭代器"><a href="#迭代器" aria-hidden="true" class="header-anchor">#</a> 迭代器</h3> <h3 id="常见迭代器模式"><a href="#常见迭代器模式" aria-hidden="true" class="header-anchor">#</a> 常见迭代器模式</h3> <h3 id="产生多个可枚举类型"><a href="#产生多个可枚举类型" aria-hidden="true" class="header-anchor">#</a> 产生多个可枚举类型</h3> <h3 id="将迭代器作为属性"><a href="#将迭代器作为属性" aria-hidden="true" class="header-anchor">#</a> 将迭代器作为属性</h3> <h3 id="迭代器的实质"><a href="#迭代器的实质" aria-hidden="true" class="header-anchor">#</a> 迭代器的实质</h3></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">3/29/2020, 5:30:47 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/Notebook/assets/js/app.fae3116e.js" defer></script><script src="/Notebook/assets/js/3.8a90166b.js" defer></script><script src="/Notebook/assets/js/2.e3a9cac0.js" defer></script>
+  </body>
+</html>
