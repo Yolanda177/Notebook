@@ -1757,6 +1757,27 @@ import(/* webpackChunkName: "xxx" */ "src/xxx");
 - 缩小打包作用域：尽可能使用 alias、exclude/include 确定 loader 规则范围
 - 合理配置 chunk 缓存化
 
+### Tree-Shaking 原理
+
+概念：Tree-Shaking 是一种优化 JS 代码的技术，专用于构建过程中通过移除无用代码来减小最终输出文件的体积，从而提高应用的加载速度和性能。
+
+原理：基于 ES6 的模块系统 import 和 export 的静态分析
+
+**核心实现**：
+
+1. **静态分析**：编译时分析 JS 文件，查找哪些代码块是未被使用的
+   - ES6 的 import 和 export 是静态的，意味着编译时就能确定模块的依赖关系（区别于 CommonJs 模块，依赖运行时计算）
+
+2. **死代码移除**：通过静态分析，标记所有未被使用的“死代码”，构建过程中移除
+
+**限制**
+
+1. **副作用**：当一个模块有副作用（如修改全局变量或调用外部 API）
+   - 即使该模块的某些代码未被使用，Tree-Shaking 也无法移除
+
+2. **动态 import()**：动态导入无法完全实现静态分析，因为是在运行时解析的
+
+
 ## 网络
 
 20240726
@@ -2892,7 +2913,7 @@ CSRF 攻击的其中一个特点，就是攻击者只是使用 Cookie 信息，�
 示例：
 1. 用户访问网站 A（https://exampleA.com），服务端生成一个 CSRF Token，通过 Cookie 返回（或者单独接口返回）
 2. 前端获取 Token 并将其添加到请求头：
-   ```
+```
    fetch('https://exampleA.com/submit', {
     method: 'POST',
     headers: {
@@ -2902,7 +2923,8 @@ CSRF 攻击的其中一个特点，就是攻击者只是使用 Cookie 信息，�
     body: JSON.stringify({ data: 'test' }),
   });
 
-   ```javascript
+```
+
 3. 攻击者尝试诱导用户点击 ```<img src="https://example.com/submit?data=test">```
 4. 因为 CSRF Token只有网站 A能读取，因此从攻击者网站发起的跨域请求无法读取附加到请求上（第三方网站无法通过 JavaScript 获取用户的 Cookie 或 HTML 中的 CSRF Token）
 5. 服务器验证 CSRF Token，空或不匹配就会拒绝请求，防御成功
